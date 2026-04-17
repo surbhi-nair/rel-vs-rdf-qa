@@ -1,8 +1,4 @@
-User's active file:
-
-This document describes the repository layout and the role of key folders and files. Use it as a quick map to locate code, data, configs, and experiment outputs.
-
----
+# Repository Structure
 
 ## Top-level files
 
