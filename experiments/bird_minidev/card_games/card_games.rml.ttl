@@ -1,0 +1,411 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix cg:   <http://cardgames.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) Rulings mapping
+######################################################################
+<#RulingsMapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT id, date,
+     REPLACE(REPLACE(text, '"', ''''), '\n', '\\n') AS text, 
+     uuid FROM rulings
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://cardgames.org/ruling/{id}" ; rr:class cg:Ruling ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Ruling {id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:rulingText ; rr:objectMap [ rml:reference "text" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:rulingDate ; rr:objectMap [ rml:reference "date"  ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:rulingUUID ; rr:objectMap [ rml:reference "uuid" ] ] .
+
+######################################################################
+# 2) Legalities mapping
+######################################################################
+<#LegalitiesMapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT id, format, status, uuid FROM legalities
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://cardgames.org/legality/{id}" ; rr:class cg:Legality ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Legality {id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:format ; rr:objectMap [ rml:reference "format" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:status ; rr:objectMap [ rml:reference "status" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:legalityUUID ; rr:objectMap [ rml:reference "uuid" ] ] .
+
+######################################################################
+# 3) Sets mapping
+######################################################################
+<#SetsMapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      id,
+      baseSetSize,
+      block,
+      booster,
+      code,
+      CASE isFoilOnly WHEN 1 THEN 'Yes' ELSE 'No' END AS foilOnly,
+      CASE isForeignOnly WHEN 1 THEN 'Yes' ELSE 'No' END AS foreignOnly,
+      CASE isNonFoilOnly WHEN 1 THEN 'Yes' ELSE 'No' END AS nonFoilOnly,
+      CASE isOnlineOnly WHEN 1 THEN 'Yes' ELSE 'No' END AS onlineOnly,
+      CASE isPartialPreview WHEN 1 THEN 'Yes' ELSE 'No' END AS partialPreview,
+      keyruneCode,
+      CASE WHEN typeof(mcmId) = 'integer' THEN mcmId ELSE NULL END AS mcmId,
+      CASE WHEN typeof(mcmIdExtras) = 'integer' THEN mcmIdExtras ELSE NULL END AS mcmIdExtras,
+      mcmName,
+      CASE 
+        WHEN mtgoCode IS NULL OR mtgoCode = '' THEN 'Unavailable on MTGO'
+        ELSE mtgoCode
+      END AS mtgoCode,
+      name,
+      parentCode,
+      releaseDate,
+      CASE WHEN typeof(tcgplayerGroupId) = 'integer' THEN tcgplayerGroupId ELSE NULL END AS tcgplayerGroupId,
+      totalSetSize,
+      type
+    FROM sets
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://cardgames.org/set/{id}" ; rr:class cg:Set ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name} ({code})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:setCode ; rr:objectMap [ rml:reference "code" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:setName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:block ; rr:objectMap [ rml:reference "block" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:releaseDate ; rr:objectMap [ rml:reference "releaseDate"  ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:foilOnly ; rr:objectMap [ rml:reference "foilOnly" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:foreignOnly ; rr:objectMap [ rml:reference "foreignOnly" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:nonFoilOnly ; rr:objectMap [ rml:reference "nonFoilOnly" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:onlineOnly ; rr:objectMap [ rml:reference "onlineOnly" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:partialPreview ; rr:objectMap [ rml:reference "partialPreview" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mtgoCode ; rr:objectMap [ rml:reference "mtgoCode" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:parentCode ; rr:objectMap [ rml:reference "parentCode" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:type ; rr:objectMap [ rml:reference "type" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:baseSetSize ; rr:objectMap [ rml:reference "baseSetSize" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:booster ; rr:objectMap [ rml:reference "booster" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:keyruneCode ; rr:objectMap [ rml:reference "keyruneCode" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mcmId ; rr:objectMap [ rml:reference "mcmId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mcmIdExtras ; rr:objectMap [ rml:reference "mcmIdExtras" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mcmName ; rr:objectMap [ rml:reference "mcmName" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:tcgplayerGroupId ; rr:objectMap [ rml:reference "tcgplayerGroupId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:totalSetSize ; rr:objectMap [ rml:reference "totalSetSize" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 4) Set translations mapping
+######################################################################
+<#SetTranslationsMapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT id, language, setCode, translation FROM set_translations
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://cardgames.org/settranslation/{id}" ; rr:class cg:SetTranslation ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{translation} ({language})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:language ; rr:objectMap [ rml:reference "language" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:setCode ; rr:objectMap [ rml:reference "setCode" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:translationText ; rr:objectMap [ rml:reference "translation" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:forSet ; rr:objectMap [ rr:template "http://cardgames.org/set/{setCode}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 5) Cards mapping
+######################################################################
+<#CardsMapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      id,
+      REPLACE(REPLACE(artist, '"', ''''), '\n', '\\n') AS artist,
+      asciiName,
+      availability,
+      borderColor,
+      cardKingdomFoilId,
+      cardKingdomId,
+      colorIdentity,
+      colorIndicator,
+      colors,
+      convertedManaCost,
+      duelDeck,
+      CASE WHEN typeof(edhrecRank) = 'integer' THEN edhrecRank ELSE NULL END AS edhrecRank,
+      faceConvertedManaCost,
+      faceName,
+      flavorName,
+      REPLACE(REPLACE(flavorText, '"', ''''), '\n', '\\n') AS flavorText,
+      frameEffects,
+      frameVersion,
+      hand,
+      CASE 
+        WHEN hasAlternativeDeckLimit = 1 THEN 'Allow' 
+        WHEN hasAlternativeDeckLimit = 0 THEN 'Disallow'
+        ELSE 'Unknown' 
+      END AS hasAlternativeDeckLimit,
+      CASE 
+        WHEN hasContentWarning = 1 THEN 'Yes' 
+        WHEN hasContentWarning = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS hasContentWarning,
+      CASE 
+        WHEN hasFoil = 1 THEN 'Yes' 
+        WHEN hasFoil = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS hasFoil,
+      CASE 
+        WHEN hasNonFoil = 1 THEN 'Yes' 
+        WHEN hasNonFoil = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS hasNonFoil,
+      CASE 
+        WHEN isAlternative = 1 THEN 'Yes' 
+        WHEN isAlternative = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isAlternative,
+      CASE 
+        WHEN isFullArt = 1 THEN 'Yes' 
+        WHEN isFullArt = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isFullArt,
+      CASE 
+        WHEN isOnlineOnly = 1 THEN 'Yes' 
+        WHEN isOnlineOnly = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isOnlineOnly,
+      CASE 
+        WHEN isOversized = 1 THEN 'Yes' 
+        WHEN isOversized = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isOversized,
+      CASE 
+        WHEN isPromo = 1 THEN 'Yes' 
+        WHEN isPromo = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isPromo,
+      CASE 
+        WHEN isReprint = 1 THEN 'Yes' 
+        WHEN isReprint = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isReprint,
+      CASE 
+        WHEN isReserved = 1 THEN 'Yes' 
+        WHEN isReserved = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isReserved,
+      CASE 
+        WHEN isStarter = 1 THEN 'Yes' 
+        WHEN isStarter = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isStarter,
+      CASE 
+        WHEN isStorySpotlight = 1 THEN 'Yes' 
+        WHEN isStorySpotlight = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isStorySpotlight,
+      CASE 
+        WHEN isTextless = 1 THEN 'Yes' 
+        WHEN isTextless = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isTextless,
+      CASE 
+        WHEN isTimeshifted = 1 THEN 'Yes' 
+        WHEN isTimeshifted = 0 THEN 'No'
+        ELSE 'Unknown' 
+      END AS isTimeshifted,
+      keywords,
+      layout,
+      leadershipSkills,
+      life,
+      loyalty,
+      manaCost,
+      mcmId,
+      mcmMetaId,
+      mtgArenaId,
+      mtgjsonV4Id,
+      mtgoFoilId,
+      mtgoId,
+      multiverseId,
+      REPLACE(REPLACE(name, '"', ''''), '\n', '\\n') AS name, 
+      number,
+      originalReleaseDate,
+      REPLACE(REPLACE(originalText, '"', ''''), '\n', '\\n') AS originalText, 
+      originalType,
+      otherFaceIds,
+      CASE 
+        WHEN power IS NULL OR power = '*' THEN 'Unknown'
+        WHEN power = '∞' THEN 'Infinity'
+        ELSE power
+      END AS power,
+      printings,
+      promoTypes,
+      purchaseUrls,
+      rarity,
+      scryfallId,
+      scryfallIllustrationId,
+      scryfallOracleId,
+      setCode,
+      side,
+      subtypes,
+      supertypes,
+      tcgplayerProductId,
+      REPLACE(REPLACE(text, '"', ''''), '\n', '\\n') AS text,
+      toughness,
+      type,
+      types,
+      uuid,
+      variations,
+      watermark
+    FROM cards
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://cardgames.org/card/{id}" ; rr:class cg:Card ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name} ({setCode})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:cardName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:setCode ; rr:objectMap [ rml:reference "setCode" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:artist ; rr:objectMap [ rml:reference "artist" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:manaCost ; rr:objectMap [ rml:reference "manaCost" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:convertedManaCost ; rr:objectMap [ rml:reference "convertedManaCost" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:colorIdentity ; rr:objectMap [ rml:reference "colorIdentity" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:flavorText ; rr:objectMap [ rml:reference "flavorText" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:rarity ; rr:objectMap [ rml:reference "rarity" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:uuid ; rr:objectMap [ rml:reference "uuid" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:forSet ; rr:objectMap [ rr:template "http://cardgames.org/set/{setCode}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:asciiName ; rr:objectMap [ rml:reference "asciiName" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:availability ; rr:objectMap [ rml:reference "availability" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:borderColor ; rr:objectMap [ rml:reference "borderColor" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:cardKingdomFoilId ; rr:objectMap [ rml:reference "cardKingdomFoilId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:cardKingdomId ; rr:objectMap [ rml:reference "cardKingdomId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:colorIndicator ; rr:objectMap [ rml:reference "colorIndicator" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:colors ; rr:objectMap [ rml:reference "colors" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:duelDeck ; rr:objectMap [ rml:reference "duelDeck" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:edhrecRank ; rr:objectMap [ rml:reference "edhrecRank" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:faceConvertedManaCost ; rr:objectMap [ rml:reference "faceConvertedManaCost" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:faceName ; rr:objectMap [ rml:reference "faceName" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:flavorName ; rr:objectMap [ rml:reference "flavorName" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:frameEffects ; rr:objectMap [ rml:reference "frameEffects" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:frameVersion ; rr:objectMap [ rml:reference "frameVersion" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:hand ; rr:objectMap [ rml:reference "hand" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:hasAlternativeDeckLimit ; rr:objectMap [ rml:reference "hasAlternativeDeckLimit" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:hasContentWarning ; rr:objectMap [ rml:reference "hasContentWarning" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:hasFoil ; rr:objectMap [ rml:reference "hasFoil" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:hasNonFoil ; rr:objectMap [ rml:reference "hasNonFoil" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isAlternative ; rr:objectMap [ rml:reference "isAlternative" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isFullArt ; rr:objectMap [ rml:reference "isFullArt" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isOnlineOnly ; rr:objectMap [ rml:reference "isOnlineOnly" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isOversized ; rr:objectMap [ rml:reference "isOversized" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isPromo ; rr:objectMap [ rml:reference "isPromo" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isReprint ; rr:objectMap [ rml:reference "isReprint" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isReserved ; rr:objectMap [ rml:reference "isReserved" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isStarter ; rr:objectMap [ rml:reference "isStarter" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isStorySpotlight ; rr:objectMap [ rml:reference "isStorySpotlight" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isTextless ; rr:objectMap [ rml:reference "isTextless" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:isTimeshifted ; rr:objectMap [ rml:reference "isTimeshifted" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:keywords ; rr:objectMap [ rml:reference "keywords" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:layout ; rr:objectMap [ rml:reference "layout" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:leadershipSkills ; rr:objectMap [ rml:reference "leadershipSkills" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:life ; rr:objectMap [ rml:reference "life" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:loyalty ; rr:objectMap [ rml:reference "loyalty" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mcmId ; rr:objectMap [ rml:reference "mcmId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mcmMetaId ; rr:objectMap [ rml:reference "mcmMetaId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mtgArenaId ; rr:objectMap [ rml:reference "mtgArenaId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mtgjsonV4Id ; rr:objectMap [ rml:reference "mtgjsonV4Id" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mtgoFoilId ; rr:objectMap [ rml:reference "mtgoFoilId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:mtgoId ; rr:objectMap [ rml:reference "mtgoId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:multiverseId ; rr:objectMap [ rml:reference "multiverseId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:number ; rr:objectMap [ rml:reference "number" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:originalReleaseDate ; rr:objectMap [ rml:reference "originalReleaseDate"  ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:originalText ; rr:objectMap [ rml:reference "originalText" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:originalType ; rr:objectMap [ rml:reference "originalType" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:otherFaceIds ; rr:objectMap [ rml:reference "otherFaceIds" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:power ; rr:objectMap [ rml:reference "power" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:printings ; rr:objectMap [ rml:reference "printings" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:promoTypes ; rr:objectMap [ rml:reference "promoTypes" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:purchaseUrls ; rr:objectMap [ rml:reference "purchaseUrls" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:scryfallId ; rr:objectMap [ rml:reference "scryfallId" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:scryfallIllustrationId ; rr:objectMap [ rml:reference "scryfallIllustrationId" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:scryfallOracleId ; rr:objectMap [ rml:reference "scryfallOracleId" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:side ; rr:objectMap [ rml:reference "side" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:subtypes ; rr:objectMap [ rml:reference "subtypes" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:supertypes ; rr:objectMap [ rml:reference "supertypes" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:tcgplayerProductId ; rr:objectMap [ rml:reference "tcgplayerProductId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:text ; rr:objectMap [ rml:reference "text" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:toughness ; rr:objectMap [ rml:reference "toughness" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:type ; rr:objectMap [ rml:reference "type" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:types ; rr:objectMap [ rml:reference "types" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:variations ; rr:objectMap [ rml:reference "variations" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:watermark ; rr:objectMap [ rml:reference "watermark" ] ] .
+
+######################################################################
+# 6) Foreign data mapping
+######################################################################
+<#ForeignDataMapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT id,
+      REPLACE(REPLACE(flavorText, '"', ''''), '\n', '\\n') AS flavorText,
+      CASE WHEN typeof(multiverseid) = 'integer' THEN multiverseid ELSE NULL END AS multiverseid,  
+      REPLACE(REPLACE(name, '"', ''''), '\n', '\\n') AS name, 
+      REPLACE(REPLACE(text, '"', ''''), '\n', '\\n') AS text, 
+      type, uuid, language FROM foreign_data
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://cardgames.org/foreign/{id}" ; rr:class cg:ForeignCardData ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name} ({language})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:flavorText ; rr:objectMap [ rml:reference "flavorText" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:language ; rr:objectMap [ rml:reference "language" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:multiverseId ; rr:objectMap [ rml:reference "multiverseid" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:foreignName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:foreignText ; rr:objectMap [ rml:reference "text" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:foreignType ; rr:objectMap [ rml:reference "type" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:foreignUUID ; rr:objectMap [ rml:reference "uuid" ] ] ;
+  rr:predicateObjectMap [ rr:predicate cg:forCard ; rr:objectMap [ rr:template "http://cardgames.org/card/{id}" ; rr:termType rr:IRI ] ] .
+
+
+
+# Property-level comments for adding commonsense evidence
+cg:mcmId rdfs:comment "The Magic Card Marketset identifier." .
+cg:mcmIdExtras rdfs:comment "The split Magic Card Market set identifier if a set is printed in two sets. This identifier represents the second set's identifier." .
+cg:mtgoCode rdfs:comment "if the value is null or empty, then it doesn't appear on Magic: The Gathering Online" .
+cg:cardKingdomId rdfs:comment "A list of all the colors in the color indicator" .
+cg:cardKingdomFoilId rdfs:comment "cardKingdomId, when paired with cardKingdomFoilId that is not Null, is incredibly powerful" .
+cg:convertedManaCost rdfs:comment "The converted mana cost of the card. Use the manaValue property.	if value is higher, it means that this card cost more converted mana" .
+cg:faceConvertedManaCost rdfs:comment "The converted mana cost or mana value for the face for either half or part of the card.	if value is higher, it means that this card cost more converted mana for the face" .
+cg:flavorName rdfs:comment "The promotional card name printed above the true card name on special cards that has no game function." .
+cg:flavorText rdfs:comment "The italicized text found below the rules text that has no game function." .
+cg:hand rdfs:comment "The starting maximum hand size total modifier.	A + or - character precedes an integer.positive maximum hand size: +1, +2 etc. negative maximum hand size: -1 etc. neural maximum hand size: 0 ." .
+cg:hasContentWarning rdfs:comment "If the card marked by Wizards of the Coast for having sensitive content. See this official article for more information. Cards with this property may have missing or degraded properties and values." .
+cg:isReserved rdfs:comment "If the card is on the Magic, it will appear in The Gathering Reserved List" .
+cg:isTimeshifted rdfs:comment "If the card is 'timeshifted', a feature of certain sets where a card will have a different frameVersion." .
+cg:loyalty rdfs:comment "The starting loyalty value of the card.	Used only on cards with 'Planeswalker' in its types. empty means unkown" .
+cg:manaCost rdfs:comment "The mana cost of the card wrapped in brackets for each value.	manaCost is unconverted mana cost" .
+cg:name rdfs:comment "Cards with multiple faces, like 'Split' and 'Meld' cards are given a delimiter." .
+cg:originalReleaseDate rdfs:comment "The original release date in ISO 8601(opens new window) format for a promotional card printed outside of a cycle window, such as Secret Lair Drop promotions." .
+cg:otherFaceIds rdfs:comment "A list of card UUID's to this card's counterparts, such as transformed or melded faces." .
+cg:side rdfs:comment "The identifier of the card side.	Used on cards with multiple faces on the same card. If this value is empty, then it means this card doesn't have multiple faces on the same card." .
+cg:subtypes rdfs:comment "A list of card subtypes found after em-dash." .
+cg:supertypes rdfs:comment "A list of card supertypes found before em-dash. List of all types should be the union of subtypes and supertypes" .
+cg:types rdfs:comment "A list of all card types of the card, including Un‑sets and gameplay variants." .

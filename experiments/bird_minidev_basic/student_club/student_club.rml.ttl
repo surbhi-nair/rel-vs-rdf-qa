@@ -1,0 +1,438 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://student_club.org/> .
+
+######################################################################
+# Table: event
+######################################################################
+<#event_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "event_id", "event_name", "event_date", "type", "notes", "location", "status" FROM "event"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/event/event_id={event_id}" ;
+    rr:class <http://student_club.org/event>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "event {event_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#event_id> ;
+    rr:objectMap [ rml:reference "event_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#event_name> ;
+    rr:objectMap [ rml:reference "event_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#event_date> ;
+    rr:objectMap [ rml:reference "event_date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#notes> ;
+    rr:objectMap [ rml:reference "notes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#location> ;
+    rr:objectMap [ rml:reference "location" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/event#status> ;
+    rr:objectMap [ rml:reference "status" ]
+  ]
+ .
+
+######################################################################
+# Table: major
+######################################################################
+<#major_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "major_id", "major_name", "department", "college" FROM "major"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/major/major_id={major_id}" ;
+    rr:class <http://student_club.org/major>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "major {major_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/major#major_id> ;
+    rr:objectMap [ rml:reference "major_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/major#major_name> ;
+    rr:objectMap [ rml:reference "major_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/major#department> ;
+    rr:objectMap [ rml:reference "department" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/major#college> ;
+    rr:objectMap [ rml:reference "college" ]
+  ]
+ .
+
+######################################################################
+# Table: zip_code
+######################################################################
+<#zip_code_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "zip_code", "type", "city", "county", "state", "short_state" FROM "zip_code"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/zip_code/zip_code={zip_code}" ;
+    rr:class <http://student_club.org/zip_code>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "zip_code {zip_code}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/zip_code#zip_code> ;
+    rr:objectMap [ rml:reference "zip_code" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/zip_code#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/zip_code#city> ;
+    rr:objectMap [ rml:reference "city" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/zip_code#county> ;
+    rr:objectMap [ rml:reference "county" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/zip_code#state> ;
+    rr:objectMap [ rml:reference "state" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/zip_code#short_state> ;
+    rr:objectMap [ rml:reference "short_state" ]
+  ]
+ .
+
+######################################################################
+# Table: attendance
+######################################################################
+<#attendance_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "link_to_event", "link_to_member" FROM "attendance"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/attendance/link_to_event={link_to_event};link_to_member={link_to_member}" ;
+    rr:class <http://student_club.org/attendance>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "attendance {link_to_event}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/attendance#link_to_event> ;
+    rr:objectMap [ rml:reference "link_to_event" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/attendance#ref-link_to_event> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/event/event_id={link_to_event}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/attendance#link_to_member> ;
+    rr:objectMap [ rml:reference "link_to_member" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/attendance#ref-link_to_member> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/member/member_id={link_to_member}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: budget
+######################################################################
+<#budget_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "budget_id", "category", "spent", "remaining", "amount", "event_status", "link_to_event" FROM "budget"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/budget/budget_id={budget_id}" ;
+    rr:class <http://student_club.org/budget>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "budget {budget_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#budget_id> ;
+    rr:objectMap [ rml:reference "budget_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#category> ;
+    rr:objectMap [ rml:reference "category" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#spent> ;
+    rr:objectMap [ rml:reference "spent" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#remaining> ;
+    rr:objectMap [ rml:reference "remaining" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#amount> ;
+    rr:objectMap [ rml:reference "amount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#event_status> ;
+    rr:objectMap [ rml:reference "event_status" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#link_to_event> ;
+    rr:objectMap [ rml:reference "link_to_event" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/budget#ref-link_to_event> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/event/event_id={link_to_event}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: expense
+######################################################################
+<#expense_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "expense_id", "expense_description", "expense_date", "cost", "approved", "link_to_member", "link_to_budget" FROM "expense"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/expense/expense_id={expense_id}" ;
+    rr:class <http://student_club.org/expense>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "expense {expense_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#expense_id> ;
+    rr:objectMap [ rml:reference "expense_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#expense_description> ;
+    rr:objectMap [ rml:reference "expense_description" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#expense_date> ;
+    rr:objectMap [ rml:reference "expense_date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#cost> ;
+    rr:objectMap [ rml:reference "cost" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#approved> ;
+    rr:objectMap [ rml:reference "approved" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#link_to_member> ;
+    rr:objectMap [ rml:reference "link_to_member" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#ref-link_to_member> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/member/member_id={link_to_member}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#link_to_budget> ;
+    rr:objectMap [ rml:reference "link_to_budget" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/expense#ref-link_to_budget> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/budget/budget_id={link_to_budget}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: income
+######################################################################
+<#income_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/income/income_id={income_id}" ;
+    rr:class <http://student_club.org/income>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "income {income_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#income_id> ;
+    rr:objectMap [ rml:reference "income_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#date_received> ;
+    rr:objectMap [ rml:reference "date_received" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#amount> ;
+    rr:objectMap [ rml:reference "amount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#source> ;
+    rr:objectMap [ rml:reference "source" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#notes> ;
+    rr:objectMap [ rml:reference "notes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#link_to_member> ;
+    rr:objectMap [ rml:reference "link_to_member" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/income#ref-link_to_member> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/member/member_id={link_to_member}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: member
+######################################################################
+<#member_Mapping>
+  rml:logicalSource [
+    rml:source "student_club.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://student_club.org/member/member_id={member_id}" ;
+    rr:class <http://student_club.org/member>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "member {member_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#member_id> ;
+    rr:objectMap [ rml:reference "member_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#first_name> ;
+    rr:objectMap [ rml:reference "first_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#last_name> ;
+    rr:objectMap [ rml:reference "last_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#email> ;
+    rr:objectMap [ rml:reference "email" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#position> ;
+    rr:objectMap [ rml:reference "position" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#t_shirt_size> ;
+    rr:objectMap [ rml:reference "t_shirt_size" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#phone> ;
+    rr:objectMap [ rml:reference "phone" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#zip> ;
+    rr:objectMap [ rml:reference "zip" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#ref-zip> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/zip_code/zip_code={zip}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#link_to_major> ;
+    rr:objectMap [ rml:reference "link_to_major" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://student_club.org/member#ref-link_to_major> ;
+    rr:objectMap [
+      rr:template "http://student_club.org/major/major_id={link_to_major}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .

@@ -1,0 +1,10 @@
+{
+  "ef": "<http://europeanfootball.org/schema#",
+  "efc": "<http://europeanfootball.org/country#",
+  "efl": "<http://europeanfootball.org/league#",
+  "eft": "<http://europeanfootball.org/team#",
+  "efp": "<http://europeanfootball.org/player#",
+  "efpa": "<http://europeanfootball.org/playerAttributes#",
+  "efta": "<http://europeanfootball.org/teamAttributes#",
+  "eftm": "<http://europeanfootball.org/match#"
+}

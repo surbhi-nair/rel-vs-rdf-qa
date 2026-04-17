@@ -1,0 +1,107 @@
+[
+    {
+        "question_id": 1457,
+        "db_id": "student_club",
+        "question": "Give the full name and contact number of members who had to spend more than average on each expense.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold asks for members who had any expense with cost > overall average cost across all expenses, returning distinct members (3 rows). Pred A computes for each member the AVG(e.cost) and checks if the member's average expense > overall average expense. This is a different predicate: gold checks per-expense cost > overall average, Pred A checks per-member average > overall average. Because of that semantic mismatch Pred A returns 2 members (Sacha and Elijah) and omits Phillip who in the gold result had at least one individual expense above the overall average. Therefore Pred A is semantically incorrect relative to the gold query.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B uses a subquery computing AVG(?c) grouped by expense description (?desc) and then selects expenses whose cost > the average for that description. Gold requires comparing each expense cost to the overall average across all expenses (no grouping by description). Thus Pred B is using the wrong aggregation scope (per-description average instead of global average). The SPARQL returns multiple rows per member/expense description and duplicates members across different descriptions; although the schema predicates used (firstName, lastName, phoneNumber, cost, etc.) appear consistent with the DB context, the core logic is incorrect. This is a logic error rather than a schema mismatch or syntax error.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions use the wrong comparison: SQL aggregates per-member avg, SPARQL aggregates per-description avg, while the gold compares each expense to the global average; therefore both are incorrect.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 1239,
+        "db_id": "thrombosis_prediction",
+        "question": "Name the ID and age of patient with two or more laboratory examinations which show their hematoclit level exceeded the normal range.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The SQL returns the correct set of patient IDs (2307640, 3182521, 4007151) matching the gold result counts and membership. However, it has two semantic issues: (1) it uses T2.HCT > 52 instead of >= 52 (minor threshold difference), and (2) it computes age as the difference between the year of MAX(T2.Date) and the birth year rather than using the current year as in the gold query. Because the age values do not match the gold computation, the overall result values are not semantically equivalent to the gold answer.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL result set is quite different from the gold. It returns 10 patients (not 3) and uses logic that differs from the gold in multiple ways: (1) it applies sex-specific HCT thresholds (male>52, female>48) instead of the gold's single threshold HCT >= 52 for all, (2) it computes age from firstVisitDate minus birthDate rather than current year minus birth year, and (3) many returned patients are not present in the gold result. The query therefore demonstrates a logic mismatch rather than a mere schema or syntax issue.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions are incorrect; the SQL returns the correct patient IDs but computes ages incorrectly and uses a strict > threshold, while the SPARQL returns many incorrect patients and applies different logic (sex-based thresholds and wrong age source).",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 1031,
+        "db_id": "european_football_2",
+        "question": "At present, calculate for the player's age who have a sprint speed of no less than 97 between 2013 to 2015.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold returns a single distinct age value (36). Pred A returns 23 rows all with age = 35. Problems: (1) Pred A does not use DISTINCT so it returns one row per matching Player_Attributes row instead of a single distinct age \u2014 producing 23 rows rather than 1. (2) The computed age value is 35, not 36 as in the gold output (off by one), so the numeric result does not match. These differences mean the predicted SQL does not match the gold semantics (both wrong row count and wrong value).",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "SPARQL returns a single row for one player (Mathis Bolly) with age = 35, matching the gold in row count (one) and identifying a specific player. However, the gold age value is 36 while the SPARQL age is 35 (off by one). There is no indication of schema mismatch or syntax error \u2014 the query logic and predicates appear correct but the computed age disagrees with the gold result (likely a date/rounding or calculation difference). Therefore it is not semantically equivalent to the gold output.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions fail to match the gold: the SQL returns many duplicate rows and the wrong age, the SPARQL returns a single row but with the incorrect age.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 801,
+        "db_id": "superhero",
+        "question": "Find the ratio between male superheroes and female superheroes.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The predicted SQL computes SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END) and SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END) and divides them (casting numerator to FLOAT and guarding denominator with NULLIF). This is semantically equivalent to counting male and female superhero ids and taking their ratio as in the gold query. The numeric result matches the gold output (2.5566502463054186). The use of NULLIF only affects division-by-zero safety and does not change correctness for this dataset.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL query attempts to count male and female superheroes and compute their ratio, which is the correct intention. However the returned counts are maleCount = 750 and femaleCount = 750 giving ratio = 1.0, which does not match the gold ratio (~2.55665). The query appears to bind specific IRIs for genders (<.../gender/1> and <.../gender/2>) and therefore likely mis-maps or uses incorrect gender identifiers relative to the SQL dataset, resulting in incorrect counts and ratio. This is a logic/data-mapping error rather than a pure syntax or empty-result/schema problem.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction is semantically correct and matches the gold ratio; the SPARQL prediction returns incorrect counts/ratio (logic/mapping error).",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 486,
+        "db_id": "card_games",
+        "question": "What is the percentage of the cards with a converted mana cost of 7 in the set Coldsnap?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The predicted SQL computes 100 * SUM(CASE WHEN convertedManaCost = 7 THEN 1 ELSE 0 END) / COUNT(*) for rows in the set named 'Coldsnap' by joining sets to cards. This matches the Gold query's logic (count cards with convertedManaCost = 7 divided by total cards in Coldsnap, multiplied by 100). The numeric output (7.741935483870968) is identical to the Gold output, and NULLIF only protects against division by zero without changing the result here. Therefore the SQL is semantically correct.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL returns a total of 166 cards, 12 with convertedManaCost = 7, and percentage 7.22892. The Gold result indicates a percentage of 7.741935... (which corresponds to a different numerator/denominator). The SPARQL produced a non-empty result but its numeric percentage does not match the Gold answer. The query appears to use the setCode value \"CSP\" to identify Coldsnap and checks CMC = 7, but the resulting counts differ from the Gold SQL's counts. Because the result is present but incorrect, this is a logic/data-matching error rather than a schema/syntax issue.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction exactly matches the Gold result; the SPARQL returns an incorrect percentage (wrong counts), so the SQL is the winner.",
+                "winner": "SQL"
+            }
+        }
+    }
+]

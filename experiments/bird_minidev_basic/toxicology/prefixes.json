@@ -1,0 +1,7 @@
+{
+  "toxicology_db": "<http://toxicology.org/>",
+  "atom": "<http://toxicology.org/atom/>",
+  "bond": "<http://toxicology.org/bond/>",
+  "connected": "<http://toxicology.org/connected/>",
+  "molecule": "<http://toxicology.org/molecule/>"
+}

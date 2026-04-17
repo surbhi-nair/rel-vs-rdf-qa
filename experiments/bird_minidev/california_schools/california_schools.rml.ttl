@@ -1,0 +1,321 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix cs:   <http://calischools.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) School mapping (ALL columns included; semantic conversions via CASE WHEN)
+######################################################################
+<#SchoolMapping>
+  rml:logicalSource [ rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      CDSCode,
+      NCESDist,
+      NCESSchool,
+      StatusType,
+      REPLACE(County, '"', '''') AS County,
+      REPLACE(District, '"', '''') AS District,
+      REPLACE(School, '"', '''') AS School,
+      REPLACE(Street, '"', '''') AS Street,
+      REPLACE(StreetAbr, '"', '''') AS StreetAbr,
+      REPLACE(City, '"', '''') AS City,
+      Zip,
+      State,
+      REPLACE(MailStreet, '"', '''') AS MailStreet,
+      REPLACE(MailStrAbr, '"', '''') AS MailStrAbr,
+      REPLACE(MailCity, '"', '''') AS MailCity,
+      MailZip,
+      MailState,
+      Phone,
+      Ext,
+      Website,
+      OpenDate,
+      ClosedDate,
+      CASE Charter WHEN 1 THEN 'Yes' WHEN 0 THEN 'No' ELSE 'Unknown' END AS charter_status,
+      CharterNum,
+      FundingType,
+      DOC,
+      DOCType,
+      SOC,
+      SOCType,
+      EdOpsCode,
+      EdOpsName,
+      EILCode,
+      EILName,
+      GSoffered,
+      GSserved,
+      CASE
+        WHEN Virtual = 'F' THEN 'Exclusively Virtual'
+        WHEN Virtual = 'V' THEN 'Primarily Virtual'
+        WHEN Virtual = 'C' THEN 'Primarily Classroom'
+        WHEN Virtual = 'N' THEN 'Not Virtual'
+        WHEN Virtual = 'P' THEN 'Partially Virtual'
+        ELSE 'Unknown'
+      END AS virtual_type,
+      CASE Magnet WHEN 1 THEN 'Yes' WHEN 0 THEN 'No' ELSE 'Unknown' END AS magnet_status,
+      Latitude,
+      Longitude,
+      AdmFName1,
+      AdmLName1,
+      AdmEmail1,
+      AdmFName2,
+      AdmLName2,
+      AdmEmail2,
+      AdmFName3,
+      AdmLName3,
+      AdmEmail3,
+      LastUpdate
+    FROM schools
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://calischools.org/school/{CDSCode}" ; rr:class cs:School ] ;
+
+  # human-friendly label for GRASP
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [   rr:template " School {School} (CDSCode {CDSCode})" ;   rr:termType rr:Literal ]
+  ] ;
+
+  # core identifiers
+  rr:predicateObjectMap [ rr:predicate cs:cdsCode ; rr:objectMap [ rml:reference "CDSCode" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:ncesDistrict ; rr:objectMap [ rml:reference "NCESDist" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:ncesSchool ; rr:objectMap [ rml:reference "NCESSchool" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:statusType ; rr:objectMap [ rml:reference "StatusType" ; rr:termType rr:Literal ] ] ;
+
+  # location / address
+  rr:predicateObjectMap [ rr:predicate cs:county ; rr:objectMap [ rml:reference "County" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:districtName ; rr:objectMap [ rml:reference "District" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:schoolName ; rr:objectMap [ rml:reference "School" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:street ; rr:objectMap [ rml:reference "Street" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:streetAbbrev ; rr:objectMap [ rml:reference "StreetAbr" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:city ; rr:objectMap [ rml:reference "City" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:zip ; rr:objectMap [ rml:reference "Zip" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:state ; rr:objectMap [ rml:reference "State" ; rr:termType rr:Literal ] ] ;
+
+  # mailing address
+  rr:predicateObjectMap [ rr:predicate cs:mailStreet ; rr:objectMap [ rml:reference "MailStreet" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:mailStreetAbbrev ; rr:objectMap [ rml:reference "MailStrAbr" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:mailCity ; rr:objectMap [ rml:reference "MailCity" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:mailZip ; rr:objectMap [ rml:reference "MailZip" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:mailState ; rr:objectMap [ rml:reference "MailState" ; rr:termType rr:Literal ] ] ;
+
+  # contact
+  rr:predicateObjectMap [ rr:predicate cs:phone ; rr:objectMap [ rml:reference "Phone" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:phoneExt ; rr:objectMap [ rml:reference "Ext" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:website ; rr:objectMap [ rml:reference "Website" ; rr:termType rr:Literal ] ] ;
+
+  # dates
+  rr:predicateObjectMap [ rr:predicate cs:openDate ; rr:objectMap [ rml:reference "OpenDate" ; rr:datatype xsd:date ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:closedDate ; rr:objectMap [ rml:reference "ClosedDate" ; rr:datatype xsd:date ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:lastUpdate ; rr:objectMap [ rml:reference "LastUpdate" ; rr:datatype xsd:date ; rr:termType rr:Literal ] ] ;
+
+  # charter / funding / codes (semantic conversions)
+  rr:predicateObjectMap [ rr:predicate cs:isCharter ; rr:objectMap [ rml:reference "charter_status" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:charterNumber ; rr:objectMap [ rml:reference "CharterNum" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:fundingType ; rr:objectMap [ rml:reference "FundingType" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:docCode ; rr:objectMap [ rml:reference "DOC" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:docType ; rr:objectMap [ rml:reference "DOCType" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:socCode ; rr:objectMap [ rml:reference "SOC" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:socType ; rr:objectMap [ rml:reference "SOCType" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:edOpsCode ; rr:objectMap [ rml:reference "EdOpsCode" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:edOpsName ; rr:objectMap [ rml:reference "EdOpsName" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:eilCode ; rr:objectMap [ rml:reference "EILCode" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:eilName ; rr:objectMap [ rml:reference "EILName" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:gradesOffered ; rr:objectMap [ rml:reference "GSoffered" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:gradesServed ; rr:objectMap [ rml:reference "GSserved" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:virtualType ; rr:objectMap [ rml:reference "virtual_type" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:isMagnet ; rr:objectMap [ rml:reference "magnet_status" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:latitude ; rr:objectMap [ rml:reference "Latitude" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:longitude ; rr:objectMap [ rml:reference "Longitude" ; rr:datatype xsd:decimal ; rr:termType rr:Literal] ] .
+
+######################################################################
+# 2) Administrator mapping (flattened list via UNION ALL; maps all AdmFName/LName/Email 1..3)
+######################################################################
+<#AdministratorMapping>
+  rml:logicalSource [
+    rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT CDSCode, REPLACE(AdmFName1, '"', '''') AS first_name, REPLACE(AdmLName1, '"', '''') AS last_name, AdmEmail1 AS email, 1 AS admin_idx FROM schools WHERE AdmFName1 IS NOT NULL OR AdmLName1 IS NOT NULL OR AdmEmail1 IS NOT NULL
+    UNION ALL
+    SELECT CDSCode, REPLACE(AdmFName2, '"', '''') AS first_name, REPLACE(AdmLName2, '"', '''') AS last_name, AdmEmail2 AS email, 2 AS admin_idx FROM schools WHERE AdmFName2 IS NOT NULL OR AdmLName2 IS NOT NULL OR AdmEmail2 IS NOT NULL
+    UNION ALL
+    SELECT CDSCode, REPLACE(AdmFName3, '"', '''') AS first_name, REPLACE(AdmLName3, '"', '''') AS last_name, AdmEmail3 AS email, 3 AS admin_idx FROM schools WHERE AdmFName3 IS NOT NULL OR AdmLName3 IS NOT NULL OR AdmEmail3 IS NOT NULL
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://calischools.org/admin/{CDSCode}_{admin_idx}" ; rr:class cs:Administrator ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [   rr:template "{first_name} {last_name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:firstName ; rr:objectMap [ rml:reference "first_name" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:lastName ; rr:objectMap [ rml:reference "last_name" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:email ; rr:objectMap [ rml:reference "email" ; rr:termType rr:Literal ] ] ;
+
+  # link admin to school
+rr:predicateObjectMap [
+  rr:predicate cs:administratorOf ;
+  rr:objectMap [
+    rr:parentTriplesMap <#SchoolMapping> ;
+    rr:joinCondition [
+      rr:child "CDSCode" ;
+      rr:parent "CDSCode" ;
+    ] ;
+  ] ;
+] .
+
+######################################################################
+# 3) FRPM mapping (all columns considered; computed rates; linked to School)
+######################################################################
+<#FRPMMapping>
+  rml:logicalSource [
+    rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      CDSCode,
+      [Academic Year] AS academic_year,
+      [County Code] AS county_code,
+      [District Code] AS district_code,
+      [School Code] AS school_code,
+      [County Name] AS county_name,
+      [District Name] AS district_name,
+      [School Name] AS school_name,
+      [District Type] AS district_type,
+      [School Type] AS school_type,
+      [Educational Option Type] AS edu_option_type,
+      [NSLP Provision Status] AS nslp_provision_status,
+      [Charter School (Y/N)] AS charter_flag,
+      [Charter School Number] AS charter_school_number,
+      [Charter Funding Type] AS charter_funding_type,
+      [IRC] AS irc,
+      [Low Grade] AS low_grade,
+      [High Grade] AS high_grade,
+      [Enrollment (K-12)] AS enrollment_k12,
+      [Free Meal Count (K-12)] AS free_meal_k12,
+      [Percent (%) Eligible Free (K-12)] AS percent_free_k12,
+      [FRPM Count (K-12)] AS frpm_k12,
+      [Percent (%) Eligible FRPM (K-12)] AS percent_frpm_k12,
+      [Enrollment (Ages 5-17)] AS enrollment_5_17,
+      [Free Meal Count (Ages 5-17)] AS free_meal_5_17,
+      [Percent (%) Eligible Free (Ages 5-17)] AS percent_free_5_17,
+      [FRPM Count (Ages 5-17)] AS frpm_5_17,
+      [Percent (%) Eligible FRPM (Ages 5-17)] AS percent_frpm_5_17,
+      [2013-14 CALPADS Fall 1 Certification Status] AS cert2013_14
+    FROM frpm
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://calischools.org/frpm/{CDSCode}/{academic_year}" ; rr:class cs:FRPMRecord ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [   rr:template "FRPM record for school {school_name} (CDSCode {CDSCode}) in {academic_year}" ;   rr:termType rr:Literal ]] ;
+
+  rr:predicateObjectMap [
+    rr:predicate cs:forSchool ;
+    rr:objectMap [
+      rr:parentTriplesMap <#SchoolMapping> ;
+      rr:joinCondition [
+        rr:child "CDSCode" ;
+        rr:parent "CDSCode" ;
+      ] ;
+    ] ;
+  ] ;
+  rr:predicateObjectMap [ rr:predicate cs:academicYear ; rr:objectMap [ rml:reference "academic_year" ; rr:datatype xsd:string ; rr:termType rr:Literal] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:countyCode ; rr:objectMap [ rml:reference "county_code" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:districtCode ; rr:objectMap [ rml:reference "district_code" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:schoolCode ; rr:objectMap [ rml:reference "school_code" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:countyName ; rr:objectMap [ rml:reference "county_name" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:districtName ; rr:objectMap [ rml:reference "district_name" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:schoolName ; rr:objectMap [ rml:reference "school_name" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:districtType ; rr:objectMap [ rml:reference "district_type" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:schoolType ; rr:objectMap [ rml:reference "school_type" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:educationOptionType ; rr:objectMap [ rml:reference "edu_option_type" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:nslpProvisionStatus ; rr:objectMap [ rml:reference "nslp_provision_status" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:isCharterSchool ; rr:objectMap [ rml:reference "charter_flag" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:charterSchoolNumber ; rr:objectMap [ rml:reference "charter_school_number" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:charterFundingType ; rr:objectMap [ rml:reference "charter_funding_type" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:irc ; rr:objectMap [ rml:reference "irc" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:lowGrade ; rr:objectMap [ rml:reference "low_grade" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:highGrade ; rr:objectMap [ rml:reference "high_grade" ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:enrollmentK12 ; rr:objectMap [ rml:reference "enrollment_k12" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:freeMealCountK12 ; rr:objectMap [ rml:reference "free_meal_k12" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:percentFreeK12 ; rr:objectMap [ rml:reference "percent_free_k12" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:frpmCountK12 ; rr:objectMap [ rml:reference "frpm_k12" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:percentFrpmK12 ; rr:objectMap [ rml:reference "percent_frpm_k12" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:enrollmentAges5_17 ; rr:objectMap [ rml:reference "enrollment_5_17" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:freeMealCountAges5_17 ; rr:objectMap [ rml:reference "free_meal_5_17" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:percentFreeAges5_17 ; rr:objectMap [ rml:reference "percent_free_5_17" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:frpmCountAges5_17 ; rr:objectMap [ rml:reference "frpm_5_17" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:percentFrpmAges5_17 ; rr:objectMap [ rml:reference "percent_frpm_5_17" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate cs:calpads2013_14CertStatus ; rr:objectMap [ rml:reference "cert2013_14" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] .
+  
+######################################################################
+# 4) SAT Scores mapping (all columns; computed excellence rate)
+######################################################################
+<#SATMapping>
+  rml:logicalSource [
+    rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      cds,
+      sname,
+      dname,
+      cname,
+      enroll12,
+      NumTstTakr,
+      AvgScrRead,
+      AvgScrMath,
+      AvgScrWrite,
+      NumGE1500,
+      CASE WHEN NumTstTakr > 0 THEN ROUND(NumGE1500 * 1.0 / NumTstTakr, 4) ELSE NULL END AS excellence_rate
+    FROM satscores
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://calischools.org/sat/{cds}" ; rr:class cs:SATScore ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "SAT Scores for School {sname} (CDSCode {cds})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:schoolName ; rr:objectMap [ rml:reference "sname" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:districtName ; rr:objectMap [ rml:reference "dname" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:countyName ; rr:objectMap [ rml:reference "cname" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:enrollmentK12 ; rr:objectMap [ rml:reference "enroll12" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:numTestTakers ; rr:objectMap [ rml:reference "NumTstTakr" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:avgScoreReading ; rr:objectMap [ rml:reference "AvgScrRead" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:avgScoreMath ; rr:objectMap [ rml:reference "AvgScrMath" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:avgScoreWriting ; rr:objectMap [ rml:reference "AvgScrWrite" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:numGE1500 ; rr:objectMap [ rml:reference "NumGE1500" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:excellenceRate ; rr:objectMap [ rml:reference "excellence_rate" ; rr:datatype xsd:decimal ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cs:forSchool ; rr:objectMap [ rr:parentTriplesMap <#SchoolMapping> ; rr:joinCondition [ rr:child "cds" ; rr:parent "CDSCode" ; ] ; ] ;
+  ] .
+
+
+# Property-level comments for adding commonsense evidence
+cs:statusType rdfs:comment "StatusType indicates whether the district is Active, Closed, Merged, or Pending." .
+cs:gradesOffered rdfs:comment "GSoffered: lowest and highest grade the school offers." .
+cs:gradesServed rdfs:comment "GSserved: actual grade span served based on CALPADS Fall 1 enrollment." .
+cs:virtualType rdfs:comment "Virtual instruction type: F=Exclusively Virtual, V=Primarily Virtual, C=Primarily Classroom, N=Not Virtual, P=Partially Virtual." .
+cs:isMagnet rdfs:comment "Magnet school indicator: 1 = Magnet, 0 = Not Magnet." .
+cs:enrollmentK12 rdfs:comment "Enrollment (K-12): total K-12 students." .
+cs:freeMealCountK12 rdfs:comment "Free Meal Count (K-12): eligible free rate = Free Meal Count / Enrollment." .
+cs:frpmCountK12 rdfs:comment "FRPM Count (K-12): eligible FRPM rate = FRPM / Enrollment." .
+cs:freeMealCountAges5_17 rdfs:comment "Free Meal Count (Ages 5-17): free eligibility rate = Free Meal Count / Enrollment." .
+cs:numTestTakers rdfs:comment "Number of SAT test takers in the school." .
+cs:avgScoreReading rdfs:comment "Average SAT Reading score." .
+cs:avgScoreMath rdfs:comment "Average SAT Math score." .
+cs:avgScoreWriting rdfs:comment "Average SAT Writing score." .
+cs:numGE1500 rdfs:comment "Number of students scoring 1500 or higher; Excellence Rate = NumGE1500 / NumTstTakr." .

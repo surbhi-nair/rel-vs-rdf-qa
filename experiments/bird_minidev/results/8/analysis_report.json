@@ -1,0 +1,484 @@
+{
+    "summary": {
+        "total": 500,
+        "both_correct": 187,
+        "neither_correct": 145,
+        "only_sql_correct": 150,
+        "only_sparql_correct": 18,
+        "sparql_better_count": 29
+    },
+    "only_sparql_correct_details": [
+        {
+            "question_id": 1340,
+            "db_id": "student_club",
+            "question": "Calculate the difference of the total amount spent in all events by the Student_Club in year 2019 and 2020. Context: The first 4 strings of the event_date values in the event table can represent year; The difference of the total amount spent = SUBTRACT(spent where YEAR(event_date) = 2019, spent where YEAR(event_date) = 2020)",
+            "sql_score": 0,
+            "sparql_score": 1.3333333333333333,
+            "generated_sparql": "PREFIX sclub: <http://studentclub.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?sum2019 ?sum2020 ( ?sum2019 - ?sum2020 AS ?difference ) WHERE {\n  {\n    SELECT ( SUM( xsd:decimal ( ?amt ) ) AS ?sum2019 ) WHERE {\n      ?budget sclub:amountSpent ?amt ; sclub:forEvent ?event .\n      ?event sclub:eventDate ?date .\n      FILTER ( STRSTARTS( STR( ?date ) , \"2019\" ) )\n    }\n  }\n  {\n    SELECT ( SUM( xsd:decimal ( ?amt2 ) ) AS ?sum2020 ) WHERE {\n      ?budget2 sclub:amountSpent ?amt2 ; sclub:forEvent ?event2 .\n      ?event2 sclub:eventDate ?date2 .\n      FILTER ( STRSTARTS( STR( ?date2 ) , \"2020\" ) )\n    }\n  }\n}",
+            "generated_sql": "SELECT (COALESCE((SELECT SUM(b.spent) FROM budget AS b INNER JOIN event AS e ON b.link_to_event = e.event_id WHERE STRFTIME('%Y', e.event_date) = '2019' AND (LOWER(e.event_name) LIKE '%student club%' OR LOWER(e.event_name) LIKE '%student_club%' OR (LOWER(e.event_name) LIKE '%student%' AND LOWER(e.event_name) LIKE '%club%') OR LOWER(e.notes) LIKE '%student club%' OR LOWER(e.notes) LIKE '%student_club%' OR (LOWER(e.notes) LIKE '%student%' AND LOWER(e.notes) LIKE '%club%'))),0) - COALESCE((SELECT SUM(b2.spent) FROM budget AS b2 INNER JOIN event AS e2 ON b2.link_to_event = e2.event_id WHERE STRFTIME('%Y', e2.event_date) = '2020' AND (LOWER(e2.event_name) LIKE '%student club%' OR LOWER(e2.event_name) LIKE '%student_club%' OR (LOWER(e2.event_name) LIKE '%student%' AND LOWER(e2.event_name) LIKE '%club%') OR LOWER(e2.notes) LIKE '%student club%' OR LOWER(e2.notes) LIKE '%student_club%' OR (LOWER(e2.notes) LIKE '%student%' AND LOWER(e2.notes) LIKE '%club%'))),0)) AS difference;",
+            "score_diff": 1.3333
+        },
+        {
+            "question_id": 1457,
+            "db_id": "student_club",
+            "question": "Give the full name and contact number of members who had to spend more than average on each expense. Context: full name refers to first_name, last_name; contact number refers to phone; had spent more than average on each expense refers to cost > AVG(cost)",
+            "sql_score": 0.0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX sclub: <http://studentclub.org/schema#>\nSELECT DISTINCT ?member ?firstName ?lastName ?phone WHERE {\n  {\n    SELECT ?expenseDesc ( AVG( ?c ) AS ?avgCost ) WHERE {\n      ?e a sclub:Expense ; sclub:expenseDescription ?expenseDesc ; sclub:cost ?c .\n    }\n    GROUP BY ?expenseDesc\n  }\n  ?exp a sclub:Expense ; sclub:expenseDescription ?expenseDesc ; sclub:cost ?cost ; sclub:incurredBy ?member .\n  FILTER ( ?cost > ?avgCost ) OPTIONAL {\n    ?member sclub:firstName ?firstName\n  }\n  OPTIONAL {\n    ?member sclub:lastName ?lastName\n  }\n  OPTIONAL {\n    ?member sclub:phoneNumber ?phone\n  }\n}\nORDER BY ?member",
+            "generated_sql": "SELECT m.first_name, m.last_name, m.phone FROM member AS m WHERE EXISTS (SELECT 1 FROM expense e1 WHERE e1.link_to_member = m.member_id) AND NOT EXISTS (SELECT 1 FROM expense e2 WHERE e2.link_to_member = m.member_id AND e2.cost <= (SELECT AVG(cost) FROM expense))",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1152,
+            "db_id": "thrombosis_prediction",
+            "question": "What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient? Context: 'SLE' diagnosed patient means Diagnosis = 'SLE'; inpatient refers to Admission = '+'; outpatient refers to Admission = '-'; calculation =  DIVIDE(COUNT(ID) where Diagnosis = 'SLE' and Admission = '+', COUNT(ID) where Diagnosis = 'SLE' and Admission = '-')",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX throm: <http://thrombosis.org/schema#>\nSELECT ?in_count ?out_count ( ?in_count / ?out_count AS ?ratio ) WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?p ) AS ?in_count ) WHERE {\n      ?p throm:diagnosis \"SLE\" .\n      ?p throm:admissionType \"+\" .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?p2 ) AS ?out_count ) WHERE {\n      ?p2 throm:diagnosis \"SLE\" .\n      ?p2 throm:admissionType \"-\" .\n    }\n  }\n}",
+            "generated_sql": "SELECT CASE WHEN SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END)=0 THEN NULL ELSE SUM(CASE WHEN Admission = '-' THEN 1 ELSE 0 END)*1.0 / SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) END AS ratio FROM Patient WHERE Diagnosis = 'SLE';",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1175,
+            "db_id": "thrombosis_prediction",
+            "question": "How old was the patient who had the highest hemoglobin count at the time of the examination, and what is the doctor's diagnosis? Context: How old the patient refers to SUBTRACT(year(`Examination Date`), year(Birthday)); the highest hemoglobin count refers to MAX(HGB)",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX throm: <http://thrombosis.org/schema#>\nSELECT ?labtest ?patient ?hgb ?testDate ?birthDate ?diagnosis ( YEAR( ?testDate ) - YEAR( ?birthDate ) AS ?age ) WHERE {\n  ?labtest a throm:LaboratoryTest ; throm:HGB ?hgb ; throm:testDate ?testDate ; throm:forPatient ?patient .\n  ?patient throm:birthDate ?birthDate ; throm:diagnosis ?diagnosis .\n}\nORDER BY DESC ( ?hgb )\nLIMIT 1",
+            "generated_sql": "SELECT CAST(STRFTIME('%Y', E.\"Examination Date\") AS INTEGER) - CAST(STRFTIME('%Y', P.Birthday) AS INTEGER) AS age, E.Diagnosis FROM Examination AS E INNER JOIN Laboratory AS L ON E.ID = L.ID AND E.\"Examination Date\" = L.Date INNER JOIN Patient AS P ON E.ID = P.ID WHERE L.HGB IS NOT NULL AND E.\"Examination Date\" IS NOT NULL AND P.Birthday IS NOT NULL ORDER BY L.HGB DESC LIMIT 1;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1031,
+            "db_id": "european_football_2",
+            "question": "At present, calculate for the player's age who have a sprint speed of no less than 97 between 2013 to 2015. Context: players age at present = SUBTRACT((DATETIME(), birthday)); sprint speed of no less than 97 refers to sprint_speed > = 97; between 2013 to 2015 refers to YEAR(date) > = '2013' AND YEAR(date) < = '2015';",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX ef: <http://europeanfootball.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT DISTINCT ?player ?playerLabel ( ( xsd:integer ( year( NOW () ) ) - xsd:integer ( year( ?birthDate ) ) ) AS ?age ) WHERE {\n  ?attr a ef:PlayerAttributes ; ef:forPlayer ?player ; ef:sprintSpeed ?sprint ; ef:playerAttributesDate ?attrDate .\n  ?player ef:birthDay ?birthDate .\n  FILTER ( xsd:integer ( ?sprint ) >= 97 ) .\n  FILTER ( xsd:integer ( year( ?attrDate ) ) >= 2013 && xsd:integer ( year( ?attrDate ) ) <= 2015 ) .\n  OPTIONAL {\n    ?player rdfs:label ?playerLabel\n  }\n}\nORDER BY ?player",
+            "generated_sql": "SELECT DISTINCT (CAST(STRFTIME('%Y','now') AS INTEGER) - CAST(STRFTIME('%Y', Player.birthday) AS INTEGER) - (STRFTIME('%m%d','now') < STRFTIME('%m%d', Player.birthday))) AS age FROM Player INNER JOIN Player_Attributes ON Player.player_fifa_api_id = Player_Attributes.player_fifa_api_id WHERE Player_Attributes.sprint_speed IS NOT NULL   AND Player_Attributes.sprint_speed >= 97   AND STRFTIME('%Y', Player_Attributes.date) BETWEEN '2013' AND '2015';",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1032,
+            "db_id": "european_football_2",
+            "question": "Give the name of the league with the highest matches of all time and how many matches were played in the said league. Context: league with highest matches of all time refers to MAX(COUNT(league_id));",
+            "sql_score": 0.6666666666666666,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX ef: <http://europeanfootball.org/schema#>\nSELECT ?league ( COUNT( ?match ) AS ?matches ) ?leagueLabel WHERE {\n  ?match ef:playedInLeague ?league .\n  OPTIONAL {\n    ?league rdfs:label ?leagueLabel\n  }\n}\nGROUP BY ?league ?leagueLabel\nORDER BY DESC ( ?matches )\nLIMIT 1",
+            "generated_sql": "SELECT L.name, COUNT(M.id) AS matches FROM Match AS M INNER JOIN League AS L ON M.league_id = L.id GROUP BY L.name ORDER BY matches DESC LIMIT 1;",
+            "score_diff": 0.3333
+        },
+        {
+            "question_id": 1040,
+            "db_id": "european_football_2",
+            "question": "List the top 10 players' names whose heights are above 180 in descending order of average heading accuracy. Context: heights are above 180 refers to Player.height > 180; average heading accuracy = DIVIDE(SUM(heading_accuracy), COUNT(player_fifa_api_id));",
+            "sql_score": 0.888888888888889,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX ef: <http://europeanfootball.org/schema#>\nSELECT ?player ?playerName ?height ( ( SUM( ?heading ) / COUNT( ?playerFifa ) ) AS ?avgHeadingAccuracy ) WHERE {\n  ?pa a ef:PlayerAttributes .\n  ?pa ef:forPlayer ?player .\n  ?pa ef:headingAccuracy ?heading .\n  ?player ef:playerFifaApiId ?playerFifa .\n  ?player ef:height ?height .\n  OPTIONAL {\n    ?player ef:playerName ?playerName .\n  }\n  FILTER ( ?height > 180 )\n}\nGROUP BY ?player ?playerName ?height\nORDER BY DESC ( ?avgHeadingAccuracy )\nLIMIT 10",
+            "generated_sql": "SELECT P.player_name FROM Player AS P INNER JOIN Player_Attributes AS PA ON P.player_fifa_api_id = PA.player_fifa_api_id WHERE P.height > 180 AND PA.heading_accuracy IS NOT NULL GROUP BY P.player_fifa_api_id, P.player_name ORDER BY AVG(PA.heading_accuracy) DESC LIMIT 10;",
+            "score_diff": 0.1111
+        },
+        {
+            "question_id": 879,
+            "db_id": "formula_1",
+            "question": "For the driver who set the fastest lap speed, what is his nationality? Context: the fastest lap speed refers to (MAX) fastestLapSpeed;",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT DISTINCT ?driver ?nationality ?res ?speed WHERE {\n  ?res a <http://formula1.org/schema#RaceResult> ; <http://formula1.org/schema#fastestLapSpeed> ?speed ; <http://formula1.org/schema#byDriver> ?driver .\n  ?driver <http://formula1.org/schema#nationality> ?nationality .\n  {\n    SELECT ( MAX( ?s ) AS ?maxSpeed ) WHERE {\n      ?r <http://formula1.org/schema#fastestLapSpeed> ?s .\n    }\n  }\n  FILTER ( ?speed = ?maxSpeed )\n}",
+            "generated_sql": "SELECT d.nationality FROM drivers AS d INNER JOIN results AS r ON d.driverId = r.driverId WHERE r.fastestLapSpeed IS NOT NULL AND CAST(r.fastestLapSpeed AS REAL) = (SELECT MAX(CAST(r2.fastestLapSpeed AS REAL)) FROM results AS r2 INNER JOIN drivers AS d2 ON r2.driverId = d2.driverId WHERE r2.fastestLapSpeed IS NOT NULL) LIMIT 1",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 894,
+            "db_id": "formula_1",
+            "question": "What is the best lap time recorded? List the driver and race with such recorded lap time. Context: the best lap time refers to min(milliseconds); List the driver refers to drivers.forename and drivers.surname; List the race refers to races.name",
+            "sql_score": 0.8571428571428571,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?lap ?driver ?driverLabel ?race ?raceName ?ms ?forename ?surname WHERE {\n  {\n    SELECT ( MIN( ?ms2 ) AS ?minMs ) WHERE {\n      ?l2 a <http://formula1.org/schema#LapTime> ; <http://formula1.org/schema#lapMilliseconds> ?ms2 .\n    }\n  }\n  ?lap a <http://formula1.org/schema#LapTime> ; <http://formula1.org/schema#lapMilliseconds> ?ms ; <http://formula1.org/schema#byDriver> ?driver ; <http://formula1.org/schema#forRace> ?race .\n  ?driver rdfs:label ?driverLabel .\n  OPTIONAL {\n    ?race <http://formula1.org/schema#raceName> ?raceName\n  }\n  FILTER ( ?ms = ?minMs ) BIND( REPLACE( STR( ?driverLabel ) , \" [^ ]+$\" , \"\" ) AS ?forename ) BIND( REPLACE( STR( ?driverLabel ) , \"^.* \" , \"\" ) AS ?surname )\n}\nORDER BY ?lap",
+            "generated_sql": "SELECT d.forename, d.surname, r.name FROM lapTimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE lt.milliseconds = (SELECT MIN(milliseconds) FROM lapTimes WHERE milliseconds IS NOT NULL)",
+            "score_diff": 0.1429
+        },
+        {
+            "question_id": 931,
+            "db_id": "formula_1",
+            "question": "What was the fastest lap speed among all drivers in the 2009 Spanish Grand Prix? Context: the fastest lap speed among all refers to max(fastestLapSpeed); Spanish Grand Prix refers to races.name = 'Spanish Grand Prix';",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT ?race ( MAX( ?speed ) AS ?maxSpeed ) WHERE {\n  ?result <http://formula1.org/schema#forRace> <http://formula1.org/race/5> ; <http://formula1.org/schema#fastestLapSpeed> ?speed .\n  BIND( <http://formula1.org/race/5> AS ?race )\n}\nGROUP BY ?race",
+            "generated_sql": "SELECT MAX(CAST(T.fastestLapSpeed AS REAL)) FROM races AS R INNER JOIN results AS T ON R.raceId = T.raceId WHERE R.name = 'Spanish Grand Prix' AND R.year = 2009 AND T.fastestLapSpeed IS NOT NULL",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 750,
+            "db_id": "superhero",
+            "question": "What is the average weight of all female superheroes? Context: female refers to gender = 'Female'; average weight refers to AVG(weight_kg)",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX hero: <http://superhero.org/schema#>\nSELECT ( AVG( ?weight ) AS ?avgWeight ) WHERE {\n  ?hero rdf:type hero:Superhero .\n  ?hero hero:hasGender <http://superhero.org/gender/2> .\n  ?hero hero:weightInKg ?weight .\n}",
+            "generated_sql": "SELECT AVG(T1.weight_kg) FROM superhero AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.id WHERE T2.gender = 'Female' AND T1.weight_kg IS NOT NULL AND T1.weight_kg != 0",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 801,
+            "db_id": "superhero",
+            "question": "Find the ratio between male superheroes and female superheroes. Context: ratio = DIVIDE(SUM(gender_id = 1) / SUM(gender_id = 2)); male superheroes refers to gender = 'Female'; female superheroes refers to gender = 'Male';",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX hero: <http://superhero.org/schema#>\nSELECT ( SUM( IF( ?g = <http://superhero.org/gender/1> , 1 , 0 ) ) AS ?count_gender_1 ) ( SUM( IF( ?g = <http://superhero.org/gender/2> , 1 , 0 ) ) AS ?count_gender_2 ) ( ( SUM( IF( ?g = <http://superhero.org/gender/1> , 1 , 0 ) ) / SUM( IF( ?g = <http://superhero.org/gender/2> , 1 , 0 ) ) ) AS ?ratio ) ( <http://superhero.org/gender/1> AS ?gender1 ) ( <http://superhero.org/gender/2> AS ?gender2 ) WHERE {\n  ?hero hero:hasGender ?g .\n}",
+            "generated_sql": "SELECT 1.0 * SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END) / NULLIF(SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END), 0) AS ratio FROM superhero AS s INNER JOIN gender AS g ON s.gender_id = g.id;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 402,
+            "db_id": "card_games",
+            "question": "What is the percentage of Story Spotlight cards that do not have a text box? List them by their ID. Context: Story Spotlight cards that do not have a text box refers to isStorylight = 1 and isTextless = 0; Percentage = DIVIDE(SUM(count(id) where isStorylight = 1 AND isTextless = 0 ), SUM(count(id))) * 100",
+            "sql_score": 0.0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?percentage ( GROUP_CONCAT( STR( ?card ) ; separator = \", \" ) AS ?ids ) WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?c ) AS ?matchCount ) WHERE {\n      ?c <http://cardgames.org/schema#isStorySpotlight> \"Yes\" ; <http://cardgames.org/schema#isTextless> \"No\" .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?t ) AS ?totalCount ) WHERE {\n      ?t rdf:type <http://cardgames.org/schema#Card> .\n    }\n  }\n  BIND( ( ?matchCount * 100.0 ) / ?totalCount AS ?percentage ) ?card <http://cardgames.org/schema#isStorySpotlight> \"Yes\" ; <http://cardgames.org/schema#isTextless> \"No\" .\n}\nGROUP BY ?percentage",
+            "generated_sql": "SELECT id, ((SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1 AND isTextless = 1) * 100.0 / NULLIF((SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1),0)) AS percentage FROM cards WHERE isStorySpotlight = 1 AND isTextless = 1 ORDER BY id;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 424,
+            "db_id": "card_games",
+            "question": "What proportion of cards do not have a text box with a normal layout? Context: do not have a text box refers to isTextless = 1; proportion refers to DIVIDE(COUNT(Textless = 1 and layout = 'normal'),COUNT(Textless))*100",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT ( COUNT( DISTINCT ?card ) AS ?den ) ( SUM( IF( ( ?isTextless = \"Yes\" && ?layout = \"normal\" ) , 1 , 0 ) ) AS ?num ) ( IF( COUNT( DISTINCT ?card ) = 0 , 0 , ( SUM( IF( ( ?isTextless = \"Yes\" && ?layout = \"normal\" ) , 1 , 0 ) ) * 100 ) / COUNT( DISTINCT ?card ) ) AS ?percent ) WHERE {\n  ?card <http://cardgames.org/schema#isTextless> ?isTextless .\n  OPTIONAL {\n    ?card <http://cardgames.org/schema#layout> ?layout .\n  }\n}",
+            "generated_sql": "SELECT CAST(SUM(CASE WHEN isTextless = 1 AND layout = 'normal' THEN 1 ELSE 0 END) AS REAL) / NULLIF(SUM(CASE WHEN isTextless = 1 THEN 1 ELSE 0 END), 0) * 100 AS proportion FROM cards;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 486,
+            "db_id": "card_games",
+            "question": "What is the percentage of the cards with a converted mana cost of 7 in the set Coldsnap? Context: converted mana cost of 7 refers to convertedManaCost = 7; card set Coldsnap refers to name = 'Coldsnap'; percentage = DIVIDE(SUM(convertedManaCost = 7), SUM(convertedManaCost))*100",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT ( ( SUM( IF( ?cmc = 7 , 1 , 0 ) ) * 100.0 ) / COUNT( DISTINCT ?card ) AS ?percentage ) ( SUM( IF( ?cmc = 7 , 1 , 0 ) ) AS ?count7 ) ( COUNT( DISTINCT ?card ) AS ?total ) WHERE {\n  ?card a <http://cardgames.org/schema#Card> ; <http://cardgames.org/schema#forSet> <http://cardgames.org/set/CSP> ; <http://cardgames.org/schema#convertedManaCost> ?cmc .\n}",
+            "generated_sql": "SELECT CASE WHEN SUM(T1.convertedManaCost) = 0 THEN 0 ELSE 100.0 * SUM(CASE WHEN T1.convertedManaCost = 7 THEN 1 ELSE 0 END) / SUM(T1.convertedManaCost) END FROM cards AS T1 INNER JOIN sets AS T2 ON T1.setCode = T2.code WHERE T2.name = 'Coldsnap'",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 255,
+            "db_id": "toxicology",
+            "question": "What proportion of single bonds are carcinogenic? Please provide your answer as a percentage with five decimal places. Context: single bond refers to bond_type = '-'; label = '+' mean molecules are carcinogenic; proportion = DIVIDE(SUM(label = '+') * 100, COUNT(bond_id)) where bond_type = '-'",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX tox: <http://toxkg.org/schema#>\nSELECT ?total ?carc ?percent ?scaled ?percent_5dp_str WHERE {\n  {\n    SELECT ( COUNT( ?bond ) AS ?total ) WHERE {\n      ?bond a tox:Bond ; tox:bondType \"-\" .\n    }\n  }\n  {\n    SELECT ( COUNT( ?bond2 ) AS ?carc ) WHERE {\n      ?bond2 a tox:Bond ; tox:bondType \"-\" ; tox:partOfMolecule ?mol .\n      ?mol tox:hasCarcinogenicity \"Carcinogenic\" .\n    }\n  }\n  BIND( ( ?carc * 100.0 ) / ?total AS ?percent ) BIND( ROUND( ?percent * 100000.0 ) AS ?scaled ) BIND( FLOOR( ?scaled / 100000 ) AS ?intPart ) BIND( ( ?scaled - ( ?intPart * 100000 ) ) AS ?fracInt ) BIND( STR( ?fracInt ) AS ?fracStr ) BIND( STRLEN( ?fracStr ) AS ?flen ) BIND( IF( ?flen < 5 , SUBSTR( \"00000\" , 1 , ( 5 - ?flen ) ) , \"\" ) AS ?pad ) BIND( CONCAT ( STR( ?intPart ) , \".\" , ?pad , ?fracStr ) AS ?percent_5dp_str )\n}",
+            "generated_sql": "SELECT printf('%.5f', CASE WHEN COUNT(b.bond_id)=0 THEN 0.0 ELSE (SUM(CASE WHEN m.label = '+' THEN 1.0 ELSE 0.0 END) * 100.0) / COUNT(b.bond_id) END) FROM bond AS b INNER JOIN molecule AS m ON b.molecule_id = m.molecule_id WHERE b.bond_type = '-';",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 72,
+            "db_id": "california_schools",
+            "question": "How many students from the ages of 5 to 17 are enrolled at the State Special School school in Fremont for the 2014-2015 academic year? Context: State Special School means EdOpsCode = 'SSS'",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX cs: <http://calischools.org/schema#>\nSELECT ?school ?frpm ?enrollment WHERE {\n  ?school a cs:School ; cs:schoolName ?sname ; cs:edOpsCode \"SSS\" .\n  ?frpm a cs:FRPMRecord ; cs:schoolName ?sname ; cs:academicYear \"2014-2015\" ; cs:enrollmentAges5_17 ?enrollment .\n}",
+            "generated_sql": "SELECT SUM(T1.`Enrollment (Ages 5-17)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.EdOpsCode = 'SSS' AND T2.City = 'Fremont' AND T1.`Academic Year` = '2014-2015' AND T1.`Enrollment (Ages 5-17)` IS NOT NULL",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 128,
+            "db_id": "financial",
+            "question": "List the top nine districts, by descending order, from the highest to the lowest, the number of female account holders. Context: A2 refers to districts; Female refers to gender = 'F'",
+            "sql_score": 0.5,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX fin: <http://financialdb.org/schema#>\nSELECT ?district ( COUNT( DISTINCT ?client ) AS ?femaleCount ) ?districtLabel WHERE {\n  ?client a fin:Client ; fin:gender \"Female\" ; fin:livesInDistrict ?district .\n  ?disp a fin:Disposition ; fin:forClient ?client ; fin:forAccount ?account .\n  OPTIONAL {\n    ?district rdfs:label ?districtLabel\n  }\n}\nGROUP BY ?district ?districtLabel\nORDER BY DESC ( ?femaleCount )\nLIMIT 9",
+            "generated_sql": "SELECT T4.A2, COUNT(DISTINCT T3.client_id) FROM account AS T1 INNER JOIN disp AS T2 ON T1.account_id = T2.account_id INNER JOIN client AS T3 ON T2.client_id = T3.client_id INNER JOIN district AS T4 ON T1.district_id = T4.district_id WHERE T2.type = 'OWNER' AND T3.gender = 'F' GROUP BY T4.A2 ORDER BY COUNT(DISTINCT T3.client_id) DESC LIMIT 9;",
+            "score_diff": 0.5
+        }
+    ],
+    "spectrum_wins_details": [
+        {
+            "question_id": 1340,
+            "db_id": "student_club",
+            "question": "Calculate the difference of the total amount spent in all events by the Student_Club in year 2019 and 2020. Context: The first 4 strings of the event_date values in the event table can represent year; The difference of the total amount spent = SUBTRACT(spent where YEAR(event_date) = 2019, spent where YEAR(event_date) = 2020)",
+            "sql_score": 0,
+            "sparql_score": 1.3333333333333333,
+            "generated_sparql": "PREFIX sclub: <http://studentclub.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?sum2019 ?sum2020 ( ?sum2019 - ?sum2020 AS ?difference ) WHERE {\n  {\n    SELECT ( SUM( xsd:decimal ( ?amt ) ) AS ?sum2019 ) WHERE {\n      ?budget sclub:amountSpent ?amt ; sclub:forEvent ?event .\n      ?event sclub:eventDate ?date .\n      FILTER ( STRSTARTS( STR( ?date ) , \"2019\" ) )\n    }\n  }\n  {\n    SELECT ( SUM( xsd:decimal ( ?amt2 ) ) AS ?sum2020 ) WHERE {\n      ?budget2 sclub:amountSpent ?amt2 ; sclub:forEvent ?event2 .\n      ?event2 sclub:eventDate ?date2 .\n      FILTER ( STRSTARTS( STR( ?date2 ) , \"2020\" ) )\n    }\n  }\n}",
+            "generated_sql": "SELECT (COALESCE((SELECT SUM(b.spent) FROM budget AS b INNER JOIN event AS e ON b.link_to_event = e.event_id WHERE STRFTIME('%Y', e.event_date) = '2019' AND (LOWER(e.event_name) LIKE '%student club%' OR LOWER(e.event_name) LIKE '%student_club%' OR (LOWER(e.event_name) LIKE '%student%' AND LOWER(e.event_name) LIKE '%club%') OR LOWER(e.notes) LIKE '%student club%' OR LOWER(e.notes) LIKE '%student_club%' OR (LOWER(e.notes) LIKE '%student%' AND LOWER(e.notes) LIKE '%club%'))),0) - COALESCE((SELECT SUM(b2.spent) FROM budget AS b2 INNER JOIN event AS e2 ON b2.link_to_event = e2.event_id WHERE STRFTIME('%Y', e2.event_date) = '2020' AND (LOWER(e2.event_name) LIKE '%student club%' OR LOWER(e2.event_name) LIKE '%student_club%' OR (LOWER(e2.event_name) LIKE '%student%' AND LOWER(e2.event_name) LIKE '%club%') OR LOWER(e2.notes) LIKE '%student club%' OR LOWER(e2.notes) LIKE '%student_club%' OR (LOWER(e2.notes) LIKE '%student%' AND LOWER(e2.notes) LIKE '%club%'))),0)) AS difference;",
+            "score_diff": 1.3333
+        },
+        {
+            "question_id": 1457,
+            "db_id": "student_club",
+            "question": "Give the full name and contact number of members who had to spend more than average on each expense. Context: full name refers to first_name, last_name; contact number refers to phone; had spent more than average on each expense refers to cost > AVG(cost)",
+            "sql_score": 0.0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX sclub: <http://studentclub.org/schema#>\nSELECT DISTINCT ?member ?firstName ?lastName ?phone WHERE {\n  {\n    SELECT ?expenseDesc ( AVG( ?c ) AS ?avgCost ) WHERE {\n      ?e a sclub:Expense ; sclub:expenseDescription ?expenseDesc ; sclub:cost ?c .\n    }\n    GROUP BY ?expenseDesc\n  }\n  ?exp a sclub:Expense ; sclub:expenseDescription ?expenseDesc ; sclub:cost ?cost ; sclub:incurredBy ?member .\n  FILTER ( ?cost > ?avgCost ) OPTIONAL {\n    ?member sclub:firstName ?firstName\n  }\n  OPTIONAL {\n    ?member sclub:lastName ?lastName\n  }\n  OPTIONAL {\n    ?member sclub:phoneNumber ?phone\n  }\n}\nORDER BY ?member",
+            "generated_sql": "SELECT m.first_name, m.last_name, m.phone FROM member AS m WHERE EXISTS (SELECT 1 FROM expense e1 WHERE e1.link_to_member = m.member_id) AND NOT EXISTS (SELECT 1 FROM expense e2 WHERE e2.link_to_member = m.member_id AND e2.cost <= (SELECT AVG(cost) FROM expense))",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1152,
+            "db_id": "thrombosis_prediction",
+            "question": "What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient? Context: 'SLE' diagnosed patient means Diagnosis = 'SLE'; inpatient refers to Admission = '+'; outpatient refers to Admission = '-'; calculation =  DIVIDE(COUNT(ID) where Diagnosis = 'SLE' and Admission = '+', COUNT(ID) where Diagnosis = 'SLE' and Admission = '-')",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX throm: <http://thrombosis.org/schema#>\nSELECT ?in_count ?out_count ( ?in_count / ?out_count AS ?ratio ) WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?p ) AS ?in_count ) WHERE {\n      ?p throm:diagnosis \"SLE\" .\n      ?p throm:admissionType \"+\" .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?p2 ) AS ?out_count ) WHERE {\n      ?p2 throm:diagnosis \"SLE\" .\n      ?p2 throm:admissionType \"-\" .\n    }\n  }\n}",
+            "generated_sql": "SELECT CASE WHEN SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END)=0 THEN NULL ELSE SUM(CASE WHEN Admission = '-' THEN 1 ELSE 0 END)*1.0 / SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) END AS ratio FROM Patient WHERE Diagnosis = 'SLE';",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1175,
+            "db_id": "thrombosis_prediction",
+            "question": "How old was the patient who had the highest hemoglobin count at the time of the examination, and what is the doctor's diagnosis? Context: How old the patient refers to SUBTRACT(year(`Examination Date`), year(Birthday)); the highest hemoglobin count refers to MAX(HGB)",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX throm: <http://thrombosis.org/schema#>\nSELECT ?labtest ?patient ?hgb ?testDate ?birthDate ?diagnosis ( YEAR( ?testDate ) - YEAR( ?birthDate ) AS ?age ) WHERE {\n  ?labtest a throm:LaboratoryTest ; throm:HGB ?hgb ; throm:testDate ?testDate ; throm:forPatient ?patient .\n  ?patient throm:birthDate ?birthDate ; throm:diagnosis ?diagnosis .\n}\nORDER BY DESC ( ?hgb )\nLIMIT 1",
+            "generated_sql": "SELECT CAST(STRFTIME('%Y', E.\"Examination Date\") AS INTEGER) - CAST(STRFTIME('%Y', P.Birthday) AS INTEGER) AS age, E.Diagnosis FROM Examination AS E INNER JOIN Laboratory AS L ON E.ID = L.ID AND E.\"Examination Date\" = L.Date INNER JOIN Patient AS P ON E.ID = P.ID WHERE L.HGB IS NOT NULL AND E.\"Examination Date\" IS NOT NULL AND P.Birthday IS NOT NULL ORDER BY L.HGB DESC LIMIT 1;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 1031,
+            "db_id": "european_football_2",
+            "question": "At present, calculate for the player's age who have a sprint speed of no less than 97 between 2013 to 2015. Context: players age at present = SUBTRACT((DATETIME(), birthday)); sprint speed of no less than 97 refers to sprint_speed > = 97; between 2013 to 2015 refers to YEAR(date) > = '2013' AND YEAR(date) < = '2015';",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX ef: <http://europeanfootball.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT DISTINCT ?player ?playerLabel ( ( xsd:integer ( year( NOW () ) ) - xsd:integer ( year( ?birthDate ) ) ) AS ?age ) WHERE {\n  ?attr a ef:PlayerAttributes ; ef:forPlayer ?player ; ef:sprintSpeed ?sprint ; ef:playerAttributesDate ?attrDate .\n  ?player ef:birthDay ?birthDate .\n  FILTER ( xsd:integer ( ?sprint ) >= 97 ) .\n  FILTER ( xsd:integer ( year( ?attrDate ) ) >= 2013 && xsd:integer ( year( ?attrDate ) ) <= 2015 ) .\n  OPTIONAL {\n    ?player rdfs:label ?playerLabel\n  }\n}\nORDER BY ?player",
+            "generated_sql": "SELECT DISTINCT (CAST(STRFTIME('%Y','now') AS INTEGER) - CAST(STRFTIME('%Y', Player.birthday) AS INTEGER) - (STRFTIME('%m%d','now') < STRFTIME('%m%d', Player.birthday))) AS age FROM Player INNER JOIN Player_Attributes ON Player.player_fifa_api_id = Player_Attributes.player_fifa_api_id WHERE Player_Attributes.sprint_speed IS NOT NULL   AND Player_Attributes.sprint_speed >= 97   AND STRFTIME('%Y', Player_Attributes.date) BETWEEN '2013' AND '2015';",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 879,
+            "db_id": "formula_1",
+            "question": "For the driver who set the fastest lap speed, what is his nationality? Context: the fastest lap speed refers to (MAX) fastestLapSpeed;",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT DISTINCT ?driver ?nationality ?res ?speed WHERE {\n  ?res a <http://formula1.org/schema#RaceResult> ; <http://formula1.org/schema#fastestLapSpeed> ?speed ; <http://formula1.org/schema#byDriver> ?driver .\n  ?driver <http://formula1.org/schema#nationality> ?nationality .\n  {\n    SELECT ( MAX( ?s ) AS ?maxSpeed ) WHERE {\n      ?r <http://formula1.org/schema#fastestLapSpeed> ?s .\n    }\n  }\n  FILTER ( ?speed = ?maxSpeed )\n}",
+            "generated_sql": "SELECT d.nationality FROM drivers AS d INNER JOIN results AS r ON d.driverId = r.driverId WHERE r.fastestLapSpeed IS NOT NULL AND CAST(r.fastestLapSpeed AS REAL) = (SELECT MAX(CAST(r2.fastestLapSpeed AS REAL)) FROM results AS r2 INNER JOIN drivers AS d2 ON r2.driverId = d2.driverId WHERE r2.fastestLapSpeed IS NOT NULL) LIMIT 1",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 931,
+            "db_id": "formula_1",
+            "question": "What was the fastest lap speed among all drivers in the 2009 Spanish Grand Prix? Context: the fastest lap speed among all refers to max(fastestLapSpeed); Spanish Grand Prix refers to races.name = 'Spanish Grand Prix';",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT ?race ( MAX( ?speed ) AS ?maxSpeed ) WHERE {\n  ?result <http://formula1.org/schema#forRace> <http://formula1.org/race/5> ; <http://formula1.org/schema#fastestLapSpeed> ?speed .\n  BIND( <http://formula1.org/race/5> AS ?race )\n}\nGROUP BY ?race",
+            "generated_sql": "SELECT MAX(CAST(T.fastestLapSpeed AS REAL)) FROM races AS R INNER JOIN results AS T ON R.raceId = T.raceId WHERE R.name = 'Spanish Grand Prix' AND R.year = 2009 AND T.fastestLapSpeed IS NOT NULL",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 750,
+            "db_id": "superhero",
+            "question": "What is the average weight of all female superheroes? Context: female refers to gender = 'Female'; average weight refers to AVG(weight_kg)",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX hero: <http://superhero.org/schema#>\nSELECT ( AVG( ?weight ) AS ?avgWeight ) WHERE {\n  ?hero rdf:type hero:Superhero .\n  ?hero hero:hasGender <http://superhero.org/gender/2> .\n  ?hero hero:weightInKg ?weight .\n}",
+            "generated_sql": "SELECT AVG(T1.weight_kg) FROM superhero AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.id WHERE T2.gender = 'Female' AND T1.weight_kg IS NOT NULL AND T1.weight_kg != 0",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 801,
+            "db_id": "superhero",
+            "question": "Find the ratio between male superheroes and female superheroes. Context: ratio = DIVIDE(SUM(gender_id = 1) / SUM(gender_id = 2)); male superheroes refers to gender = 'Female'; female superheroes refers to gender = 'Male';",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX hero: <http://superhero.org/schema#>\nSELECT ( SUM( IF( ?g = <http://superhero.org/gender/1> , 1 , 0 ) ) AS ?count_gender_1 ) ( SUM( IF( ?g = <http://superhero.org/gender/2> , 1 , 0 ) ) AS ?count_gender_2 ) ( ( SUM( IF( ?g = <http://superhero.org/gender/1> , 1 , 0 ) ) / SUM( IF( ?g = <http://superhero.org/gender/2> , 1 , 0 ) ) ) AS ?ratio ) ( <http://superhero.org/gender/1> AS ?gender1 ) ( <http://superhero.org/gender/2> AS ?gender2 ) WHERE {\n  ?hero hero:hasGender ?g .\n}",
+            "generated_sql": "SELECT 1.0 * SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END) / NULLIF(SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END), 0) AS ratio FROM superhero AS s INNER JOIN gender AS g ON s.gender_id = g.id;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 402,
+            "db_id": "card_games",
+            "question": "What is the percentage of Story Spotlight cards that do not have a text box? List them by their ID. Context: Story Spotlight cards that do not have a text box refers to isStorylight = 1 and isTextless = 0; Percentage = DIVIDE(SUM(count(id) where isStorylight = 1 AND isTextless = 0 ), SUM(count(id))) * 100",
+            "sql_score": 0.0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nSELECT ?percentage ( GROUP_CONCAT( STR( ?card ) ; separator = \", \" ) AS ?ids ) WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?c ) AS ?matchCount ) WHERE {\n      ?c <http://cardgames.org/schema#isStorySpotlight> \"Yes\" ; <http://cardgames.org/schema#isTextless> \"No\" .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?t ) AS ?totalCount ) WHERE {\n      ?t rdf:type <http://cardgames.org/schema#Card> .\n    }\n  }\n  BIND( ( ?matchCount * 100.0 ) / ?totalCount AS ?percentage ) ?card <http://cardgames.org/schema#isStorySpotlight> \"Yes\" ; <http://cardgames.org/schema#isTextless> \"No\" .\n}\nGROUP BY ?percentage",
+            "generated_sql": "SELECT id, ((SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1 AND isTextless = 1) * 100.0 / NULLIF((SELECT COUNT(*) FROM cards WHERE isStorySpotlight = 1),0)) AS percentage FROM cards WHERE isStorySpotlight = 1 AND isTextless = 1 ORDER BY id;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 424,
+            "db_id": "card_games",
+            "question": "What proportion of cards do not have a text box with a normal layout? Context: do not have a text box refers to isTextless = 1; proportion refers to DIVIDE(COUNT(Textless = 1 and layout = 'normal'),COUNT(Textless))*100",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT ( COUNT( DISTINCT ?card ) AS ?den ) ( SUM( IF( ( ?isTextless = \"Yes\" && ?layout = \"normal\" ) , 1 , 0 ) ) AS ?num ) ( IF( COUNT( DISTINCT ?card ) = 0 , 0 , ( SUM( IF( ( ?isTextless = \"Yes\" && ?layout = \"normal\" ) , 1 , 0 ) ) * 100 ) / COUNT( DISTINCT ?card ) ) AS ?percent ) WHERE {\n  ?card <http://cardgames.org/schema#isTextless> ?isTextless .\n  OPTIONAL {\n    ?card <http://cardgames.org/schema#layout> ?layout .\n  }\n}",
+            "generated_sql": "SELECT CAST(SUM(CASE WHEN isTextless = 1 AND layout = 'normal' THEN 1 ELSE 0 END) AS REAL) / NULLIF(SUM(CASE WHEN isTextless = 1 THEN 1 ELSE 0 END), 0) * 100 AS proportion FROM cards;",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 486,
+            "db_id": "card_games",
+            "question": "What is the percentage of the cards with a converted mana cost of 7 in the set Coldsnap? Context: converted mana cost of 7 refers to convertedManaCost = 7; card set Coldsnap refers to name = 'Coldsnap'; percentage = DIVIDE(SUM(convertedManaCost = 7), SUM(convertedManaCost))*100",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "SELECT ( ( SUM( IF( ?cmc = 7 , 1 , 0 ) ) * 100.0 ) / COUNT( DISTINCT ?card ) AS ?percentage ) ( SUM( IF( ?cmc = 7 , 1 , 0 ) ) AS ?count7 ) ( COUNT( DISTINCT ?card ) AS ?total ) WHERE {\n  ?card a <http://cardgames.org/schema#Card> ; <http://cardgames.org/schema#forSet> <http://cardgames.org/set/CSP> ; <http://cardgames.org/schema#convertedManaCost> ?cmc .\n}",
+            "generated_sql": "SELECT CASE WHEN SUM(T1.convertedManaCost) = 0 THEN 0 ELSE 100.0 * SUM(CASE WHEN T1.convertedManaCost = 7 THEN 1 ELSE 0 END) / SUM(T1.convertedManaCost) END FROM cards AS T1 INNER JOIN sets AS T2 ON T1.setCode = T2.code WHERE T2.name = 'Coldsnap'",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 255,
+            "db_id": "toxicology",
+            "question": "What proportion of single bonds are carcinogenic? Please provide your answer as a percentage with five decimal places. Context: single bond refers to bond_type = '-'; label = '+' mean molecules are carcinogenic; proportion = DIVIDE(SUM(label = '+') * 100, COUNT(bond_id)) where bond_type = '-'",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX tox: <http://toxkg.org/schema#>\nSELECT ?total ?carc ?percent ?scaled ?percent_5dp_str WHERE {\n  {\n    SELECT ( COUNT( ?bond ) AS ?total ) WHERE {\n      ?bond a tox:Bond ; tox:bondType \"-\" .\n    }\n  }\n  {\n    SELECT ( COUNT( ?bond2 ) AS ?carc ) WHERE {\n      ?bond2 a tox:Bond ; tox:bondType \"-\" ; tox:partOfMolecule ?mol .\n      ?mol tox:hasCarcinogenicity \"Carcinogenic\" .\n    }\n  }\n  BIND( ( ?carc * 100.0 ) / ?total AS ?percent ) BIND( ROUND( ?percent * 100000.0 ) AS ?scaled ) BIND( FLOOR( ?scaled / 100000 ) AS ?intPart ) BIND( ( ?scaled - ( ?intPart * 100000 ) ) AS ?fracInt ) BIND( STR( ?fracInt ) AS ?fracStr ) BIND( STRLEN( ?fracStr ) AS ?flen ) BIND( IF( ?flen < 5 , SUBSTR( \"00000\" , 1 , ( 5 - ?flen ) ) , \"\" ) AS ?pad ) BIND( CONCAT ( STR( ?intPart ) , \".\" , ?pad , ?fracStr ) AS ?percent_5dp_str )\n}",
+            "generated_sql": "SELECT printf('%.5f', CASE WHEN COUNT(b.bond_id)=0 THEN 0.0 ELSE (SUM(CASE WHEN m.label = '+' THEN 1.0 ELSE 0.0 END) * 100.0) / COUNT(b.bond_id) END) FROM bond AS b INNER JOIN molecule AS m ON b.molecule_id = m.molecule_id WHERE b.bond_type = '-';",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 72,
+            "db_id": "california_schools",
+            "question": "How many students from the ages of 5 to 17 are enrolled at the State Special School school in Fremont for the 2014-2015 academic year? Context: State Special School means EdOpsCode = 'SSS'",
+            "sql_score": 0,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX cs: <http://calischools.org/schema#>\nSELECT ?school ?frpm ?enrollment WHERE {\n  ?school a cs:School ; cs:schoolName ?sname ; cs:edOpsCode \"SSS\" .\n  ?frpm a cs:FRPMRecord ; cs:schoolName ?sname ; cs:academicYear \"2014-2015\" ; cs:enrollmentAges5_17 ?enrollment .\n}",
+            "generated_sql": "SELECT SUM(T1.`Enrollment (Ages 5-17)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.EdOpsCode = 'SSS' AND T2.City = 'Fremont' AND T1.`Academic Year` = '2014-2015' AND T1.`Enrollment (Ages 5-17)` IS NOT NULL",
+            "score_diff": 1.0
+        },
+        {
+            "question_id": 94,
+            "db_id": "financial",
+            "question": "List out the account numbers of female clients who are oldest and has lowest average salary, calculate the gap between this lowest average salary with the highest average salary? Context: Female means gender = 'F'; A11 refers to average salary; Gap = highest average salary - lowest average salary; If the person A's birthdate > B's birthdate, it means that person B is order than person A.",
+            "sql_score": 0.0,
+            "sparql_score": 0.6666666666666666,
+            "generated_sparql": "PREFIX fin: <http://financialdb.org/schema#>\nSELECT DISTINCT ?account ?accountId ?client ?clientBirthDate ?minAvg ?maxAvg ( ?maxAvg - ?minAvg AS ?gap ) WHERE {\n  BIND( 8110 AS ?minAvg ) BIND( 12541 AS ?maxAvg ) ?district fin:averageSalary ?districtAvg .\n  FILTER ( ?districtAvg = ?minAvg ) ?client fin:livesInDistrict ?district ; fin:gender ?gender ; fin:birthDate ?clientBirthDate .\n  FILTER ( ?gender = \"Female\" || ?gender = \"F\" ) {\n    SELECT ( MIN( ?bd ) AS ?minBD ) WHERE {\n      ?c fin:livesInDistrict ?d ; fin:gender ?g ; fin:birthDate ?bd .\n      ?d fin:averageSalary ?ad .\n      FILTER ( ?ad = 8110 ) FILTER ( ?g = \"Female\" || ?g = \"F\" )\n    }\n  }\n  FILTER ( ?clientBirthDate = ?minBD ) ?disp fin:forClient ?client ; fin:forAccount ?account .\n  ?account fin:accountId ?accountId .\n}\nORDER BY ?accountId",
+            "generated_sql": null,
+            "score_diff": 0.6667
+        },
+        {
+            "question_id": 128,
+            "db_id": "financial",
+            "question": "List the top nine districts, by descending order, from the highest to the lowest, the number of female account holders. Context: A2 refers to districts; Female refers to gender = 'F'",
+            "sql_score": 0.5,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX fin: <http://financialdb.org/schema#>\nSELECT ?district ( COUNT( DISTINCT ?client ) AS ?femaleCount ) ?districtLabel WHERE {\n  ?client a fin:Client ; fin:gender \"Female\" ; fin:livesInDistrict ?district .\n  ?disp a fin:Disposition ; fin:forClient ?client ; fin:forAccount ?account .\n  OPTIONAL {\n    ?district rdfs:label ?districtLabel\n  }\n}\nGROUP BY ?district ?districtLabel\nORDER BY DESC ( ?femaleCount )\nLIMIT 9",
+            "generated_sql": "SELECT T4.A2, COUNT(DISTINCT T3.client_id) FROM account AS T1 INNER JOIN disp AS T2 ON T1.account_id = T2.account_id INNER JOIN client AS T3 ON T2.client_id = T3.client_id INNER JOIN district AS T4 ON T1.district_id = T4.district_id WHERE T2.type = 'OWNER' AND T3.gender = 'F' GROUP BY T4.A2 ORDER BY COUNT(DISTINCT T3.client_id) DESC LIMIT 9;",
+            "score_diff": 0.5
+        },
+        {
+            "question_id": 1032,
+            "db_id": "european_football_2",
+            "question": "Give the name of the league with the highest matches of all time and how many matches were played in the said league. Context: league with highest matches of all time refers to MAX(COUNT(league_id));",
+            "sql_score": 0.6666666666666666,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX ef: <http://europeanfootball.org/schema#>\nSELECT ?league ( COUNT( ?match ) AS ?matches ) ?leagueLabel WHERE {\n  ?match ef:playedInLeague ?league .\n  OPTIONAL {\n    ?league rdfs:label ?leagueLabel\n  }\n}\nGROUP BY ?league ?leagueLabel\nORDER BY DESC ( ?matches )\nLIMIT 1",
+            "generated_sql": "SELECT L.name, COUNT(M.id) AS matches FROM Match AS M INNER JOIN League AS L ON M.league_id = L.id GROUP BY L.name ORDER BY matches DESC LIMIT 1;",
+            "score_diff": 0.3333
+        },
+        {
+            "question_id": 1124,
+            "db_id": "european_football_2",
+            "question": "Who are the players that tend to be attacking when their mates were doing attack moves? List down their name. Context: tend to be attacking when their mates were doing attack moves refers to attacking_work_rate = 'high';",
+            "sql_score": 1.0,
+            "sparql_score": 1.3333333333333333,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX ef: <http://europeanfootball.org/schema#>\nSELECT DISTINCT ?playerEntity ?playerName ?label WHERE {\n  ?attr ef:attackingWorkRate \"high\" .\n  ?attr ef:forPlayer ?playerEntity .\n  OPTIONAL {\n    ?playerEntity ef:playerName ?playerName\n  }\n  OPTIONAL {\n    ?playerEntity rdfs:label ?label\n  }\n}\nORDER BY ?playerName",
+            "generated_sql": "SELECT DISTINCT p.player_name FROM Player_Attributes AS pa INNER JOIN Player AS p ON pa.player_api_id = p.player_api_id WHERE pa.attacking_work_rate = 'high'",
+            "score_diff": 0.3333
+        },
+        {
+            "question_id": 739,
+            "db_id": "superhero",
+            "question": "What are the names of the superheroes with the power of death touch? Context: name of superheroes refers to refers to superhero_name; the power of death touch refers to power_name = 'Death Touch'",
+            "sql_score": 1.0,
+            "sparql_score": 1.3333333333333333,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX hero: <http://superhero.org/schema#>\nSELECT ?hero ?superhero_name ?rdfs_label WHERE {\n  ?hp hero:hasPower <http://superhero.org/superpower/37> .\n  ?hp hero:ofHero ?hero .\n  OPTIONAL {\n    ?hero hero:superheroName ?superhero_name .\n  }\n  OPTIONAL {\n    ?hero rdfs:label ?rdfs_label .\n  }\n}",
+            "generated_sql": "SELECT DISTINCT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Death Touch'",
+            "score_diff": 0.3333
+        },
+        {
+            "question_id": 764,
+            "db_id": "superhero",
+            "question": "What are the superpowers of heroes with ID 1? Context: superpowers refers to power_name; heroes with ID 1 refers to hero_id = 1;",
+            "sql_score": 1.0,
+            "sparql_score": 1.3333333333333333,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX hero: <http://superhero.org/schema#>\nSELECT DISTINCT ?power ?powerName ?label WHERE {\n  ?hp a hero:HeroPowerRelation ; hero:ofHero <http://superhero.org/superhero/1> ; hero:hasPower ?power .\n  OPTIONAL {\n    ?power hero:powerName ?powerName .\n  }\n  OPTIONAL {\n    ?power rdfs:label ?label .\n  }\n}\nORDER BY ?power",
+            "generated_sql": "SELECT DISTINCT T2.power_name FROM hero_power AS T1 INNER JOIN superpower AS T2 ON T1.power_id = T2.id WHERE T1.hero_id = 1",
+            "score_diff": 0.3333
+        },
+        {
+            "question_id": 1168,
+            "db_id": "thrombosis_prediction",
+            "question": "The oldest SJS patient's medical laboratory work was completed on what date, and what age was the patient when they initially arrived at the hospital? Context: The larger the birthday value, the younger the person is, and vice versa; 'SJS' refers to diagnosis; (SUBTRACT(year(`First Date`)), year(Birthday)); age of the patients when they initially arrived at the hospital refers to year(Birthday)",
+            "sql_score": 0.5,
+            "sparql_score": 0.8,
+            "generated_sparql": "PREFIX throm: <http://thrombosis.org/schema#>\nSELECT ?patient ?birthDate ?firstVisitDate ?labCompletionDate ( ( year( ?firstVisitDate ) - year( ?birthDate ) ) AS ?age ) WHERE {\n  ?patient throm:diagnosis ?diag .\n  FILTER ( CONTAINS( LCASE( STR( ?diag ) ) , \"sjs\" ) ) .\n  ?patient throm:birthDate ?birthDate .\n  ?patient throm:firstVisitDate ?firstVisitDate .\n  BIND( year( ?birthDate ) AS ?birthYear ) {\n    SELECT ( MIN( year( ?bd ) ) AS ?minBirthYear ) WHERE {\n      ?p throm:diagnosis ?d .\n      FILTER ( CONTAINS( LCASE( STR( ?d ) ) , \"sjs\" ) ) .\n      ?p throm:birthDate ?bd .\n    }\n  }\n  FILTER ( ?birthYear = ?minBirthYear ) {\n    SELECT ?patient ( MAX( ?ld ) AS ?labCompletionDate ) WHERE {\n      ?patient throm:diagnosis ?diag2 .\n      FILTER ( CONTAINS( LCASE( STR( ?diag2 ) ) , \"sjs\" ) ) .\n      ?patient throm:birthDate ?bd2 .\n      BIND( year( ?bd2 ) AS ?by2 ) {\n        SELECT ( MIN( year( ?bd3 ) ) AS ?minBirthYear2 ) WHERE {\n          ?pp throm:diagnosis ?dd .\n          FILTER ( CONTAINS( LCASE( STR( ?dd ) ) , \"sjs\" ) ) .\n          ?pp throm:birthDate ?bd3 .\n        }\n      }\n      FILTER ( ?by2 = ?minBirthYear2 ) ?lab a throm:LaboratoryTest ; throm:forPatient ?patient ; throm:testDate ?ld .\n    }\n    GROUP BY ?patient\n  }\n}",
+            "generated_sql": "WITH oldest AS (   SELECT ID, Birthday, \"First Date\"   FROM Patient   WHERE LOWER(COALESCE(Diagnosis, '')) LIKE '%sjs%'     AND Birthday IS NOT NULL     AND \"First Date\" IS NOT NULL   ORDER BY Birthday ASC   LIMIT 1 ) SELECT MAX(L.Date) AS Date,        CAST(STRFTIME('%Y', o.\"First Date\") AS INTEGER) - CAST(STRFTIME('%Y', o.Birthday) AS INTEGER) AS age FROM oldest o INNER JOIN Laboratory L ON o.ID = L.ID;",
+            "score_diff": 0.3
+        },
+        {
+            "question_id": 1239,
+            "db_id": "thrombosis_prediction",
+            "question": "Name the ID and age of patient with two or more laboratory examinations which show their hematoclit level exceeded the normal range. Context: age = SUBTRACT(year(current_timestamp), year(Birthday)); patient with two or more laboratory examinations refers to COUNT(ID) > 2; hematoclit level exceeded the normal range refers to HCT > = 52;",
+            "sql_score": 0.5,
+            "sparql_score": 0.6666666666666666,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX throm: <http://thrombosis.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?patient ( YEAR( NOW () ) - YEAR( ?birthDate ) AS ?age ) ( COUNT( ?labtest ) AS ?highHctCount ) ?label WHERE {\n  ?labtest a throm:LaboratoryTest ; throm:forPatient ?patient ; throm:HCT ?hct .\n  FILTER ( xsd:decimal ( ?hct ) >= 52 ) ?patient throm:birthDate ?birthDate .\n  OPTIONAL {\n    ?patient rdfs:label ?label\n  }\n}\nGROUP BY ?patient ?birthDate ?label\nHAVING ( COUNT( ?labtest ) >= 2 )\nORDER BY ?patient",
+            "generated_sql": "SELECT P.ID, CAST(STRFTIME('%Y','now') AS INTEGER) - CAST(STRFTIME('%Y', P.Birthday) AS INTEGER) AS age FROM Laboratory AS L INNER JOIN Patient AS P ON L.ID = P.ID WHERE L.HCT IS NOT NULL AND L.HCT >= 52 AND P.Birthday IS NOT NULL GROUP BY P.ID, P.Birthday HAVING COUNT(L.ID) > 2",
+            "score_diff": 0.1667
+        },
+        {
+            "question_id": 23,
+            "db_id": "california_schools",
+            "question": "List the names of schools with more than 30 difference in enrollements between K-12 and ages 5-17? Please also give the full street adress of the schools. Context: Diffrence in enrollement = `Enrollment (K-12)` - `Enrollment (Ages 5-17)`",
+            "sql_score": 0.8425969173283513,
+            "sparql_score": 0.9920683343502135,
+            "generated_sparql": "PREFIX cs: <http://calischools.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?frpm ?schoolEntity ?schoolName ?street ?city ?state ?zip ?enrollK12 ?enrollAges ?diff WHERE {\n  ?frpm cs:enrollmentK12 ?enrollK12 ; cs:enrollmentAges5_17 ?enrollAges ; cs:schoolName ?schoolName .\n  BIND( str( ?frpm ) AS ?frpmStr ) BIND( strafter( ?frpmStr , \"/frpm/\" ) AS ?after ) BIND( strbefore( ?after , \"/\" ) AS ?cds ) BIND( IRI( CONCAT ( \"http://calischools.org/school/\" , ?cds ) ) AS ?schoolEntity ) OPTIONAL {\n    ?schoolEntity cs:street ?street .\n  }\n  OPTIONAL {\n    ?schoolEntity cs:city ?city .\n  }\n  OPTIONAL {\n    ?schoolEntity cs:state ?state .\n  }\n  OPTIONAL {\n    ?schoolEntity cs:zip ?zip .\n  }\n  BIND( ( xsd:integer ( ?enrollK12 ) - xsd:integer ( ?enrollAges ) ) AS ?diff ) FILTER ( ?diff > 30 )\n}\nORDER BY DESC ( ?diff )",
+            "generated_sql": "SELECT T2.School, T2.MailStreet FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (Ages 5-17)` IS NOT NULL AND T2.MailStreet IS NOT NULL AND T2.School IS NOT NULL AND (T1.`Enrollment (K-12)` - T1.`Enrollment (Ages 5-17)`) > 30;",
+            "score_diff": 0.1495
+        },
+        {
+            "question_id": 894,
+            "db_id": "formula_1",
+            "question": "What is the best lap time recorded? List the driver and race with such recorded lap time. Context: the best lap time refers to min(milliseconds); List the driver refers to drivers.forename and drivers.surname; List the race refers to races.name",
+            "sql_score": 0.8571428571428571,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?lap ?driver ?driverLabel ?race ?raceName ?ms ?forename ?surname WHERE {\n  {\n    SELECT ( MIN( ?ms2 ) AS ?minMs ) WHERE {\n      ?l2 a <http://formula1.org/schema#LapTime> ; <http://formula1.org/schema#lapMilliseconds> ?ms2 .\n    }\n  }\n  ?lap a <http://formula1.org/schema#LapTime> ; <http://formula1.org/schema#lapMilliseconds> ?ms ; <http://formula1.org/schema#byDriver> ?driver ; <http://formula1.org/schema#forRace> ?race .\n  ?driver rdfs:label ?driverLabel .\n  OPTIONAL {\n    ?race <http://formula1.org/schema#raceName> ?raceName\n  }\n  FILTER ( ?ms = ?minMs ) BIND( REPLACE( STR( ?driverLabel ) , \" [^ ]+$\" , \"\" ) AS ?forename ) BIND( REPLACE( STR( ?driverLabel ) , \"^.* \" , \"\" ) AS ?surname )\n}\nORDER BY ?lap",
+            "generated_sql": "SELECT d.forename, d.surname, r.name FROM lapTimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE lt.milliseconds = (SELECT MIN(milliseconds) FROM lapTimes WHERE milliseconds IS NOT NULL)",
+            "score_diff": 0.1429
+        },
+        {
+            "question_id": 1040,
+            "db_id": "european_football_2",
+            "question": "List the top 10 players' names whose heights are above 180 in descending order of average heading accuracy. Context: heights are above 180 refers to Player.height > 180; average heading accuracy = DIVIDE(SUM(heading_accuracy), COUNT(player_fifa_api_id));",
+            "sql_score": 0.888888888888889,
+            "sparql_score": 1.0,
+            "generated_sparql": "PREFIX ef: <http://europeanfootball.org/schema#>\nSELECT ?player ?playerName ?height ( ( SUM( ?heading ) / COUNT( ?playerFifa ) ) AS ?avgHeadingAccuracy ) WHERE {\n  ?pa a ef:PlayerAttributes .\n  ?pa ef:forPlayer ?player .\n  ?pa ef:headingAccuracy ?heading .\n  ?player ef:playerFifaApiId ?playerFifa .\n  ?player ef:height ?height .\n  OPTIONAL {\n    ?player ef:playerName ?playerName .\n  }\n  FILTER ( ?height > 180 )\n}\nGROUP BY ?player ?playerName ?height\nORDER BY DESC ( ?avgHeadingAccuracy )\nLIMIT 10",
+            "generated_sql": "SELECT P.player_name FROM Player AS P INNER JOIN Player_Attributes AS PA ON P.player_fifa_api_id = PA.player_fifa_api_id WHERE P.height > 180 AND PA.heading_accuracy IS NOT NULL GROUP BY P.player_fifa_api_id, P.player_name ORDER BY AVG(PA.heading_accuracy) DESC LIMIT 10;",
+            "score_diff": 0.1111
+        },
+        {
+            "question_id": 1209,
+            "db_id": "thrombosis_prediction",
+            "question": "Please provide the diagnosis of patients with ALT glutamic pylvic transaminase beyond the normal range by ascending order of their date of birth. Context: ALT glutamic pylvic transaminase beyond the normal range refers to GPT > 60; The larger the birthday value, the younger the person is, and vice versa;",
+            "sql_score": 0,
+            "sparql_score": 0.05128205128205127,
+            "generated_sparql": "PREFIX throm: <http://thrombosis.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT DISTINCT ?patient ?birthDate ?diagnosis WHERE {\n  ?lab a throm:LaboratoryTest ; throm:GPT ?gpt ; throm:forPatient ?patient .\n  ?patient throm:birthDate ?birthDate .\n  OPTIONAL {\n    ?patient throm:diagnosis ?diagnosis .\n  }\n  FILTER ( xsd:decimal ( ?gpt ) > 60 )\n}\nORDER BY ?birthDate",
+            "generated_sql": "SELECT T1.Diagnosis FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.GPT IS NOT NULL AND T2.GPT > 60 AND T1.Birthday IS NOT NULL GROUP BY T1.ID, T1.Diagnosis, T1.Birthday ORDER BY T1.Birthday ASC;",
+            "score_diff": 0.0513
+        },
+        {
+            "question_id": 340,
+            "db_id": "card_games",
+            "question": "Which are the cards that have incredibly powerful foils. Context: incredibly poweful foils refers to cardKingdomFoilId is not null AND cardKingdomId is not null",
+            "sql_score": 0,
+            "sparql_score": 0.029640695023193647,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT DISTINCT ?card ?cardKingdomId ?cardKingdomFoilId ?cardLabel WHERE {\n  ?card <http://cardgames.org/schema#cardKingdomId> ?cardKingdomId .\n  ?card <http://cardgames.org/schema#cardKingdomFoilId> ?cardKingdomFoilId .\n  OPTIONAL {\n    ?card rdfs:label ?cardLabel\n  }\n}\nORDER BY ?card",
+            "generated_sql": "SELECT DISTINCT name FROM cards WHERE cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL;",
+            "score_diff": 0.0296
+        },
+        {
+            "question_id": 125,
+            "db_id": "financial",
+            "question": "For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996. Context: Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'",
+            "sql_score": 0.6818181818181819,
+            "sparql_score": 0.7111111111111111,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX fin: <http://financialdb.org/schema#>\nSELECT DISTINCT ?district ?districtLabel ?state ?u1995 ?u1996 ?pctIncrease WHERE {\n  ?loan a fin:Loan ; fin:status \"D\" ; fin:belongsToAccount ?acc .\n  ?disp fin:forAccount ?acc ; fin:forClient ?client .\n  ?client fin:livesInDistrict ?district .\n  ?district fin:unemploymentRate1995 ?u1995 ; fin:unemploymentRate1996 ?u1996 .\n  BIND( ( ( xsd:decimal ( ?u1996 ) - xsd:decimal ( ?u1995 ) ) / xsd:decimal ( ?u1995 ) ) * 100 AS ?pctIncrease ) .\n  OPTIONAL {\n    ?district rdfs:label ?districtLabel\n  }\n  .\n  OPTIONAL {\n    ?district fin:region ?state\n  }\n  .\n}\nORDER BY ?districtLabel",
+            "generated_sql": "SELECT DISTINCT d.A2, ((d.A13 - d.A12) / d.A12) * 100\n  FROM loan AS l\n  INNER JOIN account AS a ON l.account_id = a.account_id\n  INNER JOIN district AS d ON a.district_id = d.district_id\n  WHERE l.status = 'D' AND d.A12 IS NOT NULL AND d.A12 <> 0;",
+            "score_diff": 0.0293
+        },
+        {
+            "question_id": 27,
+            "db_id": "california_schools",
+            "question": "What is the average score in writing for the schools that were opened after 1991 or closed before 2000? List the school names along with the score. Also, list the communication number of the schools if there is any. Context: Communication number refers to phone number.",
+            "sql_score": 0.0022691357024190607,
+            "sparql_score": 0.0038867970363172595,
+            "generated_sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX cs: <http://calischools.org/schema#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT DISTINCT ?school ?schoolLabel ?writing ?phone WHERE {\n  ?sat cs:avgScoreWriting ?writing .\n  BIND( STRAFTER( STR( ?sat ) , \"http://calischools.org/sat/\" ) AS ?cds ) BIND( IRI( CONCAT ( \"http://calischools.org/school/\" , ?cds ) ) AS ?school ) OPTIONAL {\n    ?school rdfs:label ?schoolLabel\n  }\n  OPTIONAL {\n    ?school cs:phone ?phone\n  }\n  OPTIONAL {\n    ?school cs:openDate ?openDate\n  }\n  OPTIONAL {\n    ?school cs:closedDate ?closedDate\n  }\n  FILTER ( ( BOUND( ?openDate ) && ?openDate > \"1991-12-31\" ^^ xsd:date ) || ( BOUND( ?closedDate ) && ?closedDate < \"2000-01-01\" ^^ xsd:date ) )\n}\nORDER BY ?schoolLabel",
+            "generated_sql": "SELECT T1.School, T2.AvgScrWrite, T1.Phone FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite IS NOT NULL AND ((T1.OpenDate IS NOT NULL AND STRFTIME('%Y', T1.OpenDate) > '1991') OR (T1.ClosedDate IS NOT NULL AND STRFTIME('%Y', T1.ClosedDate) < '2000'));",
+            "score_diff": 0.0016
+        }
+    ]
+}

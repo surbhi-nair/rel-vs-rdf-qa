@@ -1,0 +1,11 @@
+{
+  "cc": "http://codecomt.org/schema#",
+  "ccu": "http://codecomt.org/user#",
+  "ccpo": "http://codecomt.org/post#",
+  "cccmt": "http://codecomt.org/comment#",
+  "cctag": "http://codecomt.org/tag#",
+  "ccbadge": "http://codecomt.org/badge#",
+  "ccv": "http://codecomt.org/vote#",
+  "ccph": "http://codecomt.org/postHistory#",
+  "ccpl": "http://codecomt.org/postLink#"
+}

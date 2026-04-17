@@ -1,0 +1,292 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix f1:   <http://formula1.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) Circuits
+######################################################################
+<#CircuitsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT circuitId, circuitRef, name, location, country, lat, lng, alt, url FROM circuits
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/circuit/{circuitId}" ; rr:class f1:Circuit ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name} ({country})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:circuitId ; rr:objectMap [ rml:reference "circuitId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:circuitName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:circuitRef ; rr:objectMap [ rml:reference "circuitRef" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:locatedIn ; rr:objectMap [ rr:template "http://formula1.org/location/{country}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:latitude ; rr:objectMap [ rml:reference "lat" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:longitude ; rr:objectMap [ rml:reference "lng" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:altitude ; rr:objectMap [ rml:reference "alt" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:circuitURL ; rr:objectMap [ rml:reference "url" ] ] .
+
+######################################################################
+# 2) Constructors
+######################################################################
+<#ConstructorsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT constructorId, constructorRef, name, nationality, url FROM constructors
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/constructor/{constructorId}" ; rr:class f1:Constructor ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name} ({nationality})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:constructorId ; rr:objectMap [ rml:reference "constructorId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:constructorName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:constructorRef ; rr:objectMap [ rml:reference "constructorRef" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:nationality ; rr:objectMap [ rml:reference "nationality" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:constructorURL ; rr:objectMap [ rml:reference "url" ] ] .
+
+######################################################################
+# 3) Drivers
+######################################################################
+<#DriversMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT driverId, driverRef, number, code, forename, surname, dob, nationality, url
+    FROM drivers
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/driver/{driverId}" ; rr:class f1:Driver ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{forename} {surname}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:driverId ; rr:objectMap [ rml:reference "driverId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:driverRef ; rr:objectMap [ rml:reference "driverRef" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:driverCode ; rr:objectMap [ rml:reference "code" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:driverNumber ; rr:objectMap [ rml:reference "number" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:dob ; rr:objectMap [ rml:reference "dob" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:nationality ; rr:objectMap [ rml:reference "nationality" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:driverURL ; rr:objectMap [ rml:reference "url" ] ] .
+
+######################################################################
+# 4) Races
+######################################################################
+<#RacesMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT raceId, year, round, circuitId, name, date, time, url FROM races
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:class f1:Race ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name} ({year})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceId ; rr:objectMap [ rml:reference "raceId" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceYear ; rr:objectMap [ rr:template "http://formula1.org/season/{year}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:round ; rr:objectMap [ rml:reference "round" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceDate ; rr:objectMap [ rml:reference "date" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceTime ; rr:objectMap [ rml:reference "time" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:heldAtCircuit ; rr:objectMap [ rr:template "http://formula1.org/circuit/{circuitId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceURL ; rr:objectMap [ rml:reference "url" ] ] .
+
+######################################################################
+# 5) Results (Race Outcomes)
+######################################################################
+<#ResultsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT resultId, raceId, driverId, constructorId, 
+    number, grid, position, positionText, positionOrder, points, laps, time, milliseconds, fastestLap, rank, fastestLapTime, fastestLapSpeed, statusId
+    FROM results
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/result/{resultId}" ; rr:class f1:RaceResult ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Result {resultId}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:byDriver ; rr:objectMap [ rr:template "http://formula1.org/driver/{driverId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:byConstructor ; rr:objectMap [ rr:template "http://formula1.org/constructor/{constructorId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:resultNumber ; rr:objectMap [ rml:reference "number" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:grid ; rr:objectMap [ rml:reference "grid" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:position ; rr:objectMap [ rml:reference "position" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:positionText ; rr:objectMap [ rml:reference "positionText" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:positionOrder ; rr:objectMap [ rml:reference "positionOrder" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:pointsEarned ; rr:objectMap [ rml:reference "points" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:laps ; rr:objectMap [ rml:reference "laps" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:finishTime ; rr:objectMap [ rml:reference "time" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:finishMilliseconds ; rr:objectMap [ rml:reference "milliseconds" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:fastestLapNumber ; rr:objectMap [ rml:reference "fastestLap" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:fastestLapSpeedRank ; rr:objectMap [ rml:reference "rank" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:fastestLapTime ; rr:objectMap [ rml:reference "fastestLapTime" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:fastestLapSpeed ; rr:objectMap [ rml:reference "fastestLapSpeed" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:raceStatus ; rr:objectMap [ rr:template "http://formula1.org/status/{statusId}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 6) Status
+######################################################################
+<#StatusMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT statusId, status FROM status
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/status/{statusId}" ; rr:class f1:Status ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Status {statusId}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "status" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:statusDescription ; rr:objectMap [ rml:reference "status" ] ] .
+
+######################################################################
+# 7) Qualifying
+######################################################################
+<#QualifyingMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT qualifyId, raceId, driverId, constructorId, number, position, q1, q2, q3
+    FROM qualifying
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/qualifying/{qualifyId}" ; rr:class f1:QualifyingSession ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Qualifying {qualifyId}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:byDriver ; rr:objectMap [ rr:template "http://formula1.org/driver/{driverId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:byConstructor ; rr:objectMap [ rr:template "http://formula1.org/constructor/{constructorId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:qualifyNumber ; rr:objectMap [ rml:reference "number" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:qualifyingPosition ; rr:objectMap [ rml:reference "position" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:q1 ; rr:objectMap [ rml:reference "q1" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:q2 ; rr:objectMap [ rml:reference "q2" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:q3 ; rr:objectMap [ rml:reference "q3" ] ] .
+
+######################################################################
+# 8) Lap Times
+######################################################################
+<#LapTimesMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT raceId, driverId, lap, position, time, milliseconds
+    FROM lapTimes
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/lap/{raceId}_{driverId}_{lap}" ; rr:class f1:LapTime ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Lap {lap} ({time})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:byDriver ; rr:objectMap [ rr:template "http://formula1.org/driver/{driverId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:lapNumber ; rr:objectMap [ rml:reference "lap" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:positionInLap ; rr:objectMap [ rml:reference "position" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:lapTime ; rr:objectMap [ rml:reference "time" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:lapMilliseconds ; rr:objectMap [ rml:reference "milliseconds" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 9) Pit Stops
+######################################################################
+<#PitStopsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT raceId, driverId, stop, lap, time, duration, milliseconds
+    FROM pitStops
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/pitstop/{raceId}_{driverId}_{stop}" ; rr:class f1:PitStop ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Pit Stop {stop} on Lap {lap}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:byDriver ; rr:objectMap [ rr:template "http://formula1.org/driver/{driverId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:stop ; rr:objectMap [ rml:reference "stop" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:lapNumber ; rr:objectMap [ rml:reference "lap" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:pitTime ; rr:objectMap [ rml:reference "time" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:duration ; rr:objectMap [ rml:reference "duration" ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:milliseconds ; rr:objectMap [ rml:reference "milliseconds" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 10) Seasons
+######################################################################
+<#SeasonsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT year, url FROM seasons"
+  ] ;
+  rr:subjectMap [ rr:template "http://formula1.org/season/{year}" ; rr:class f1:Season ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Season {year}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:seasonYear ; rr:objectMap [ rml:reference "year" ; rr:datatype xsd:gYear ] ] ;
+  rr:predicateObjectMap [ rr:predicate f1:seasonPage ; rr:objectMap [ rml:reference "url" ] ] .
+
+######################################################################
+# 11) Driver Standings
+######################################################################
+<#DriverStandingsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite";
+    rml:referenceFormulation ql:SQL;
+    rml:query """
+      SELECT driverStandingsId, raceId, driverId, points, position, positionText, wins
+      FROM driverStandings
+    """
+  ];
+  rr:subjectMap [ rr:template "http://formula1.org/driverStanding/{driverStandingsId}" ; rr:class f1:DriverStanding ];
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Driver Standing {driverStandingsId}" ; rr:termType rr:Literal ] ];
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ];
+  rr:predicateObjectMap [ rr:predicate f1:byDriver ; rr:objectMap [ rr:template "http://formula1.org/driver/{driverId}" ; rr:termType rr:IRI ] ];
+  rr:predicateObjectMap [ rr:predicate f1:points ; rr:objectMap [ rml:reference "points" ; rr:datatype xsd:decimal ] ];
+  rr:predicateObjectMap [ rr:predicate f1:standingPosition ; rr:objectMap [ rml:reference "position" ; rr:datatype xsd:integer ] ];
+  rr:predicateObjectMap [ rr:predicate f1:positionText ; rr:objectMap [ rml:reference "positionText" ] ];
+  rr:predicateObjectMap [ rr:predicate f1:wins ; rr:objectMap [ rml:reference "wins" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 12) Constructor Results
+######################################################################
+<#ConstructorResultsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite";
+    rml:referenceFormulation ql:SQL;
+    rml:query """
+      SELECT constructorResultsId, raceId, constructorId, points, status
+      FROM constructorResults
+    """
+  ];
+  rr:subjectMap [ rr:template "http://formula1.org/constructorResult/{constructorResultsId}" ; rr:class f1:ConstructorResult ];
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Constructor Result {constructorResultsId}" ; rr:termType rr:Literal ] ];
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ];
+  rr:predicateObjectMap [ rr:predicate f1:byConstructor ; rr:objectMap [ rr:template "http://formula1.org/constructor/{constructorId}" ; rr:termType rr:IRI ] ];
+  rr:predicateObjectMap [ rr:predicate f1:points ; rr:objectMap [ rml:reference "points" ; rr:datatype xsd:decimal ] ];
+  rr:predicateObjectMap [ rr:predicate f1:status ; rr:objectMap [ rml:reference "status" ] ] .
+
+######################################################################
+# 13) Constructor Standings
+######################################################################
+<#ConstructorStandingsMapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite";
+    rml:referenceFormulation ql:SQL;
+    rml:query """
+      SELECT constructorStandingsId, raceId, constructorId, points, position, positionText, wins
+      FROM constructorStandings
+    """
+  ];
+  rr:subjectMap [ rr:template "http://formula1.org/constructorStanding/{constructorStandingsId}" ; rr:class f1:ConstructorStanding ];
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Constructor Standing {constructorStandingsId}" ; rr:termType rr:Literal ] ];
+  rr:predicateObjectMap [ rr:predicate f1:forRace ; rr:objectMap [ rr:template "http://formula1.org/race/{raceId}" ; rr:termType rr:IRI ] ];
+  rr:predicateObjectMap [ rr:predicate f1:byConstructor ; rr:objectMap [ rr:template "http://formula1.org/constructor/{constructorId}" ; rr:termType rr:IRI ] ];
+  rr:predicateObjectMap [ rr:predicate f1:points ; rr:objectMap [ rml:reference "points" ; rr:datatype xsd:decimal ] ];
+  rr:predicateObjectMap [ rr:predicate f1:standingPosition ; rr:objectMap [ rml:reference "position" ; rr:datatype xsd:integer ] ];
+  rr:predicateObjectMap [ rr:predicate f1:positionText ; rr:objectMap [ rml:reference "positionText" ] ];
+  rr:predicateObjectMap [ rr:predicate f1:wins ; rr:objectMap [ rml:reference "wins" ; rr:datatype xsd:integer ] ] .
+
+
+# Property-level comments for adding commonsense evidence
+f1:finishTime rdfs:comment "if the value exists, it means the driver finished the race. Only the time of the champion shows in the format of 'minutes: seconds.millionsecond', the time of the other drivers shows as 'seconds.millionsecond' , which means their actual time is the time of the champion adding the value in this cell." .
+f1:grid rdfs:comment "grid is the number identifying the area where cars are set into a grid formation in order to start the race." .
+f1:qualifyId rdfs:comment "How does F1 Sprint qualifying work? Sprint qualifying is essentially a short-form Grand Prix – a race that is one-third the number of laps of the main event on Sunday. However, the drivers are battling for positions on the grid for the start of Sunday's race." .
+f1:q1 rdfs:comment "in minutes / seconds / ; Q1 lap times determine pole position and the order of the front 10 positions on the grid. The slowest driver in Q1 starts 10th, the next starts ninth and so on. All 20 F1 drivers participate in the first period, called Q1, with each trying to set the fastest time possible. Those in the top 15 move on to the next period of qualifying, called Q2. The five slowest drivers are eliminated and will start the race in the last five positions on the grid." .
+f1:q2 rdfs:comment "in minutes / seconds / ; only top 15 in the q1 has the record of q2; Q2 is slightly shorter but follows the same format. Drivers try to put down their best times to move on to Q1 as one of the 10 fastest cars. The five outside of the top 10 are eliminated and start the race from 11th to 15th based on their best lap time." .
+f1:q3 rdfs:comment "in minutes / seconds / ; only top 10 in the q2 has the record of q3" .
+
+

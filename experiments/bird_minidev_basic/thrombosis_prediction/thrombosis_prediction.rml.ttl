@@ -1,0 +1,345 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://thrombosis_prediction.org/> .
+
+######################################################################
+# Table: Examination
+######################################################################
+<#Examination_Mapping>
+  rml:logicalSource [
+    rml:source "thrombosis_prediction.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "ID", "Examination Date", "aCL IgG", "aCL IgM", "ANA", "ANA Pattern", "aCL IgA", "Diagnosis", "KCT", "RVVT", "LAC", "Symptoms", "Thrombosis" FROM "Examination"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://thrombosis_prediction.org/Examination/ID={ID}" ;
+    rr:class <http://thrombosis_prediction.org/Examination>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "Examination {ID}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#ID> ;
+    rr:objectMap [ rml:reference "ID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#ref-ID> ;
+    rr:objectMap [
+      rr:template "http://thrombosis_prediction.org/Patient/ID={ID}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#Examination Date> ;
+    rr:objectMap [ rml:reference "Examination Date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#aCL IgG> ;
+    rr:objectMap [ rml:reference "aCL IgG" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#aCL IgM> ;
+    rr:objectMap [ rml:reference "aCL IgM" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#ANA> ;
+    rr:objectMap [ rml:reference "ANA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#ANA Pattern> ;
+    rr:objectMap [ rml:reference "ANA Pattern" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#aCL IgA> ;
+    rr:objectMap [ rml:reference "aCL IgA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#Diagnosis> ;
+    rr:objectMap [ rml:reference "Diagnosis" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#KCT> ;
+    rr:objectMap [ rml:reference "KCT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#RVVT> ;
+    rr:objectMap [ rml:reference "RVVT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#LAC> ;
+    rr:objectMap [ rml:reference "LAC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#Symptoms> ;
+    rr:objectMap [ rml:reference "Symptoms" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Examination#Thrombosis> ;
+    rr:objectMap [ rml:reference "Thrombosis" ]
+  ]
+ .
+
+######################################################################
+# Table: Patient
+######################################################################
+<#Patient_Mapping>
+  rml:logicalSource [
+    rml:source "thrombosis_prediction.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "ID", "SEX", "Birthday", "Description", "First Date", "Admission", "Diagnosis" FROM "Patient"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://thrombosis_prediction.org/Patient/ID={ID}" ;
+    rr:class <http://thrombosis_prediction.org/Patient>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "Patient {ID}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#ID> ;
+    rr:objectMap [ rml:reference "ID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#SEX> ;
+    rr:objectMap [ rml:reference "SEX" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#Birthday> ;
+    rr:objectMap [ rml:reference "Birthday" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#Description> ;
+    rr:objectMap [ rml:reference "Description" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#First Date> ;
+    rr:objectMap [ rml:reference "First Date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#Admission> ;
+    rr:objectMap [ rml:reference "Admission" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Patient#Diagnosis> ;
+    rr:objectMap [ rml:reference "Diagnosis" ]
+  ]
+ .
+
+######################################################################
+# Table: Laboratory
+######################################################################
+<#Laboratory_Mapping>
+  rml:logicalSource [
+    rml:source "thrombosis_prediction.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "ID", "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://thrombosis_prediction.org/Laboratory/ID={ID};Date={Date}" ;
+    rr:class <http://thrombosis_prediction.org/Laboratory>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "Laboratory {ID}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#ID> ;
+    rr:objectMap [ rml:reference "ID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#ref-ID> ;
+    rr:objectMap [
+      rr:template "http://thrombosis_prediction.org/Patient/ID={ID}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#Date> ;
+    rr:objectMap [ rml:reference "Date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#GOT> ;
+    rr:objectMap [ rml:reference "GOT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#GPT> ;
+    rr:objectMap [ rml:reference "GPT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#LDH> ;
+    rr:objectMap [ rml:reference "LDH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#ALP> ;
+    rr:objectMap [ rml:reference "ALP" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#TP> ;
+    rr:objectMap [ rml:reference "TP" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#ALB> ;
+    rr:objectMap [ rml:reference "ALB" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#UA> ;
+    rr:objectMap [ rml:reference "UA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#UN> ;
+    rr:objectMap [ rml:reference "UN" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#CRE> ;
+    rr:objectMap [ rml:reference "CRE" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#T-BIL> ;
+    rr:objectMap [ rml:reference "T-BIL" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#T-CHO> ;
+    rr:objectMap [ rml:reference "T-CHO" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#TG> ;
+    rr:objectMap [ rml:reference "TG" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#CPK> ;
+    rr:objectMap [ rml:reference "CPK" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#GLU> ;
+    rr:objectMap [ rml:reference "GLU" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#WBC> ;
+    rr:objectMap [ rml:reference "WBC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#RBC> ;
+    rr:objectMap [ rml:reference "RBC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#HGB> ;
+    rr:objectMap [ rml:reference "HGB" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#HCT> ;
+    rr:objectMap [ rml:reference "HCT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#PLT> ;
+    rr:objectMap [ rml:reference "PLT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#PT> ;
+    rr:objectMap [ rml:reference "PT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#APTT> ;
+    rr:objectMap [ rml:reference "APTT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#FG> ;
+    rr:objectMap [ rml:reference "FG" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#PIC> ;
+    rr:objectMap [ rml:reference "PIC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#TAT> ;
+    rr:objectMap [ rml:reference "TAT" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#TAT2> ;
+    rr:objectMap [ rml:reference "TAT2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#U-PRO> ;
+    rr:objectMap [ rml:reference "U-PRO" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#IGG> ;
+    rr:objectMap [ rml:reference "IGG" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#IGA> ;
+    rr:objectMap [ rml:reference "IGA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#IGM> ;
+    rr:objectMap [ rml:reference "IGM" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#CRP> ;
+    rr:objectMap [ rml:reference "CRP" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#RA> ;
+    rr:objectMap [ rml:reference "RA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#RF> ;
+    rr:objectMap [ rml:reference "RF" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#C3> ;
+    rr:objectMap [ rml:reference "C3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#C4> ;
+    rr:objectMap [ rml:reference "C4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#RNP> ;
+    rr:objectMap [ rml:reference "RNP" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#SM> ;
+    rr:objectMap [ rml:reference "SM" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#SC170> ;
+    rr:objectMap [ rml:reference "SC170" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#SSA> ;
+    rr:objectMap [ rml:reference "SSA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#SSB> ;
+    rr:objectMap [ rml:reference "SSB" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#CENTROMEA> ;
+    rr:objectMap [ rml:reference "CENTROMEA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#DNA> ;
+    rr:objectMap [ rml:reference "DNA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://thrombosis_prediction.org/Laboratory#DNA-II> ;
+    rr:objectMap [ rml:reference "DNA-II" ]
+  ]
+ .

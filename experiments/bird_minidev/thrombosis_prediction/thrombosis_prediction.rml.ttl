@@ -1,0 +1,158 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix throm:  <http://thrombosis.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) Patient Mapping
+######################################################################
+<#PatientMapping>
+  rml:logicalSource [
+    rml:source "thrombosis_prediction.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+      SELECT ID
+      , CASE WHEN SEX = 'M' THEN 'Male' WHEN SEX = 'F' THEN 'Female' ELSE 'Unknown' END AS Gender
+      , Birthday, Description, "First Date" AS FirstDate
+      , Admission
+      , Diagnosis
+      FROM Patient
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://thrombosis.org/patient/{ID}" ; rr:class throm:Patient ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Patient {ID}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:hasSex ; rr:objectMap [ rml:reference "Gender" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:birthDate ; rr:objectMap [ rml:reference "Birthday" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:firstRecordDate ; rr:objectMap [ rml:reference "Description" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:firstVisitDate ; rr:objectMap [ rml:reference "FirstDate" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:admissionType ; rr:objectMap [ rml:reference "Admission" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:diagnosis ; rr:objectMap [ rml:reference "Diagnosis" ] ] .
+
+######################################################################
+# 2) Examination Mapping
+######################################################################
+<#ExaminationMapping>
+  rml:logicalSource [
+    rml:source "thrombosis_prediction.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+      SELECT ID, "Examination Date" AS ExaminationDate, "aCL IgG" AS aCL_IgG, "aCL IgM" AS aCL_IgM, ANA, "ANA Pattern" AS ANAPattern, "aCL IgA" AS aCL_IgA,
+             Diagnosis, KCT, RVVT, LAC, Symptoms, Thrombosis
+      FROM Examination
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://thrombosis.org/examination/{ID}_{ExaminationDate}" ; rr:class throm:Examination ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Examination {ID} on {ExaminationDate}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:examDate ; rr:objectMap [ rml:reference "ExaminationDate" ; rr:datatype xsd:date ] ] ;
+
+  # anti-Cardiolipin antibody (IgG)
+  rr:predicateObjectMap [ rr:predicate throm:aCL_IgG ; rr:objectMap [ rml:reference "aCL_IgG" ; rr:datatype xsd:decimal ] ] ;
+
+  # anti-Cardiolipin antibody (IgM)
+  rr:predicateObjectMap [ rr:predicate throm:aCL_IgM ; rr:objectMap [ rml:reference "aCL_IgM" ; rr:datatype xsd:decimal ] ] ;
+
+  # anti-nucleus antibody
+  rr:predicateObjectMap [ rr:predicate throm:anaConcentration ; rr:objectMap [ rml:reference "ANA" ; rr:datatype xsd:integer ] ] ;
+
+  # pattern observed in the sheet of ANA examination
+  rr:predicateObjectMap [ rr:predicate throm:anaPattern ; rr:objectMap [ rml:reference "ANAPattern" ] ] ;
+
+  # anti-Cardiolipin antibody (IgA) concentration
+  rr:predicateObjectMap [ rr:predicate throm:aCL_IgA ; rr:objectMap [ rml:reference "aCL_IgA" ; rr:datatype xsd:decimal ] ] ;
+
+  # Diagnosis
+  rr:predicateObjectMap [ rr:predicate throm:diagnosis ; rr:objectMap [ rml:reference "Diagnosis" ] ] ;
+
+  # measure of degree of coagulation
+  rr:predicateObjectMap [ rr:predicate throm:coagulationKCT ; rr:objectMap [ rml:reference "KCT" ] ] ;
+
+  # measure of degree of coagulation
+  rr:predicateObjectMap [ rr:predicate throm:coagulationRVVT ; rr:objectMap [ rml:reference "RVVT" ] ] ;
+
+  # measure of degree of coagulation
+  rr:predicateObjectMap [ rr:predicate throm:coagulationLAC ; rr:objectMap [ rml:reference "LAC" ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate throm:symptoms ; rr:objectMap [ rml:reference "Symptoms" ] ] ;
+
+  # Semantic interpretation for thrombosis degree
+  rr:predicateObjectMap [
+    rr:predicate throm:thrombosisSeverity ;
+    rr:objectMap [
+      rml:reference "Thrombosis" ;
+      rr:datatype xsd:integer
+    ]
+  ] ;
+  rr:predicateObjectMap [ rr:predicate throm:forPatient ; rr:objectMap [ rr:template "http://thrombosis.org/patient/{ID}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 3) Laboratory Mapping
+######################################################################
+<#LaboratoryMapping>
+  rml:logicalSource [
+    rml:source "thrombosis_prediction.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+      SELECT ID, Date, GOT, GPT, LDH, ALP, TP, ALB, UA, UN, CRE,
+            "T-BIL" AS T_BIL, "T-CHO" AS T_CHO, TG,
+            CPK, GLU, WBC, RBC, HGB, HCT, PLT, PT, APTT, FG,
+            PIC, TAT, TAT2, "U-PRO" AS U_PRO,
+            IGG, IGA, IGM, CRP, RA, RF, C3, C4, RNP, SM, SC170, SSA, SSB, CENTROMEA,
+            DNA, "DNA-II" AS DNA_II
+      FROM Laboratory
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://thrombosis.org/labtest/{ID}_{Date}" ; rr:class throm:LaboratoryTest ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Lab test {ID} on {Date}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:testDate ; rr:objectMap [ rml:reference "Date" ; rr:datatype xsd:date ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate throm:GOT ; rr:objectMap [ rml:reference "GOT" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:GPT ; rr:objectMap [ rml:reference "GPT" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:LDH ; rr:objectMap [ rml:reference "LDH" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:ALP ; rr:objectMap [ rml:reference "ALP" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:TP ; rr:objectMap [ rml:reference "TP" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:ALB ; rr:objectMap [ rml:reference "ALB" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:UA ; rr:objectMap [ rml:reference "UA" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:UN ; rr:objectMap [ rml:reference "UN" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:CRE ; rr:objectMap [ rml:reference "CRE" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:T_BIL ; rr:objectMap [ rml:reference "T_BIL" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:T_CHO ; rr:objectMap [ rml:reference "T_CHO" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:TG ; rr:objectMap [ rml:reference "TG" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:CPK ; rr:objectMap [ rml:reference "CPK" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:GLU ; rr:objectMap [ rml:reference "GLU" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:WBC ; rr:objectMap [ rml:reference "WBC" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:RBC ; rr:objectMap [ rml:reference "RBC" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:HGB ; rr:objectMap [ rml:reference "HGB" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:HCT ; rr:objectMap [ rml:reference "HCT" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:PLT ; rr:objectMap [ rml:reference "PLT" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:PT ; rr:objectMap [ rml:reference "PT" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:APTT ; rr:objectMap [ rml:reference "APTT" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:FG ; rr:objectMap [ rml:reference "FG" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:PIC ; rr:objectMap [ rml:reference "PIC" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:TAT ; rr:objectMap [ rml:reference "TAT" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:TAT2 ; rr:objectMap [ rml:reference "TAT2" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:U_PRO ; rr:objectMap [ rml:reference "U_PRO" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:IGG ; rr:objectMap [ rml:reference "IGG" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:IGA ; rr:objectMap [ rml:reference "IGA" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:IGM ; rr:objectMap [ rml:reference "IGM" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:CRP ; rr:objectMap [ rml:reference "CRP" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:RA ; rr:objectMap [ rml:reference "RA" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:RF ; rr:objectMap [ rml:reference "RF" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:C3 ; rr:objectMap [ rml:reference "C3" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:C4 ; rr:objectMap [ rml:reference "C4" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:RNP ; rr:objectMap [ rml:reference "RNP" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:SM ; rr:objectMap [ rml:reference "SM" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:SC170 ; rr:objectMap [ rml:reference "SC170" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:SSA ; rr:objectMap [ rml:reference "SSA" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:SSB ; rr:objectMap [ rml:reference "SSB" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:Centromere ; rr:objectMap [ rml:reference "CENTROMEA" ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:DNA ; rr:objectMap [ rml:reference "DNA" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate throm:DNA_II ; rr:objectMap [ rml:reference "DNA_II" ; rr:datatype xsd:integer ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate throm:forPatient ; rr:objectMap [ rr:template "http://thrombosis.org/patient/{ID}" ; rr:termType rr:IRI ] ] .

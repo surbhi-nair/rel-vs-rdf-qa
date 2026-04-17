@@ -1,0 +1,220 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix cc:   <http://codecomt.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) Users Mapping
+######################################################################
+<#UsersMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT 
+      Id, Reputation, CreationDate, REPLACE(DisplayName, '"', '''') AS DisplayName, LastAccessDate, REPLACE(WebsiteUrl, '"', '''') AS WebsiteUrl, REPLACE(Location, '"', '''') AS Location, 
+      REPLACE(AboutMe, '"', '''') AS AboutMe, Views, UpVotes, DownVotes, AccountId, Age, REPLACE(ProfileImageUrl, '"', '''') AS ProfileImageUrl,
+      CASE 
+        WHEN Age BETWEEN 13 AND 18 THEN 'Teenager'
+        WHEN Age BETWEEN 19 AND 65 THEN 'Adult'
+        WHEN Age > 65 THEN 'Elder'
+        ELSE 'Unknown'
+      END AS AgeGroup
+    FROM users
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/user/{Id}" ; rr:class cc:User ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{DisplayName}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:displayName ; rr:objectMap [ rml:reference "DisplayName" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:reputation ; rr:objectMap [ rml:reference "Reputation" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:location ; rr:objectMap [ rml:reference "Location" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:website ; rr:objectMap [ rml:reference "WebsiteUrl" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:about ; rr:objectMap [ rml:reference "AboutMe" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:profileImage ; rr:objectMap [ rml:reference "ProfileImageUrl" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:views ; rr:objectMap [ rml:reference "Views" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:upVotes ; rr:objectMap [ rml:reference "UpVotes" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:downVotes ; rr:objectMap [ rml:reference "DownVotes" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:ageGroup ; rr:objectMap [ rml:reference "AgeGroup" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:lastAccessDate ; rr:objectMap [ rml:reference "LastAccessDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:creationDate ; rr:objectMap [ rml:reference "CreationDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:accountId ; rr:objectMap [ rml:reference "AccountId" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:age ; rr:objectMap [ rml:reference "Age" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] .
+
+######################################################################
+# 2) Posts Mapping (fixed)
+######################################################################
+<#PostsMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      Id, PostTypeId, AcceptedAnswerId, CreaionDate, Score, ViewCount, REPLACE(Body, '"', '''') AS Body, OwnerUserId,
+      LasActivityDate, REPLACE(Title, '"', '''') AS Title, Tags, AnswerCount, CommentCount, FavoriteCount, LastEditorUserId,
+      LastEditDate, CommunityOwnedDate, ParentId, ClosedDate, REPLACE(OwnerDisplayName, '"', '''') AS OwnerDisplayName, REPLACE(LastEditorDisplayName, '"', '''') AS LastEditorDisplayName,
+      CASE WHEN ParentId IS NULL THEN 'Root Post' ELSE 'Child Post' END AS PostHierarchy,
+      CASE WHEN ClosedDate IS NULL OR ClosedDate = '' THEN 'Not well-finished' ELSE 'Well Finished' END AS CompletionStatus
+    FROM posts
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/post/{Id}" ; rr:class cc:Post ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{Title}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:title ; rr:objectMap [ rml:reference "Title" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:body ; rr:objectMap [ rml:reference "Body" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:score ; rr:objectMap [ rml:reference "Score" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:viewCount ; rr:objectMap [ rml:reference "ViewCount" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:favoriteCount ; rr:objectMap [ rml:reference "FavoriteCount" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:postHierarchy ; rr:objectMap [ rml:reference "PostHierarchy" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:completionStatus ; rr:objectMap [ rml:reference "CompletionStatus" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:owner ; rr:objectMap [ rr:template "http://codecomt.org/user/{OwnerUserId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:hasParentPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{ParentId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:creationDate ; rr:objectMap [ rml:reference "CreaionDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:postTypeId ; rr:objectMap [ rml:reference "PostTypeId" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:acceptedAnswerId ; rr:objectMap [ rml:reference "AcceptedAnswerId" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:lasActivityDate ; rr:objectMap [ rml:reference "LasActivityDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:tags ; rr:objectMap [ rml:reference "Tags" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:answerCount ; rr:objectMap [ rml:reference "AnswerCount" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:commentCount ; rr:objectMap [ rml:reference "CommentCount" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:lastEditorUserId ; rr:objectMap [ rml:reference "LastEditorUserId" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:lastEditDate ; rr:objectMap [ rml:reference "LastEditDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:communityOwnedDate ; rr:objectMap [ rml:reference "CommunityOwnedDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:closedDate ; rr:objectMap [ rml:reference "ClosedDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:ownerDisplayName ; rr:objectMap [ rml:reference "OwnerDisplayName" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:lastEditorDisplayName ; rr:objectMap [ rml:reference "LastEditorDisplayName" ; rr:termType rr:Literal ] ] .
+
+######################################################################
+# 3) Comments Mapping
+######################################################################
+<#CommentsMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT
+      Id, PostId, Score, REPLACE(Text, '"', '''') AS Text, CreationDate, UserId, REPLACE(UserDisplayName, '"', '''') AS UserDisplayName,
+      CASE WHEN Score >= 60 THEN 'Positive Comment' ELSE 'Negative Comment' END AS CommentSentiment
+    FROM comments
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/comment/{Id}" ; rr:class cc:Comment ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Comment {Id} ({CommentSentiment})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:commentText ; rr:objectMap [ rml:reference "Text" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:commentScore ; rr:objectMap [ rml:reference "Score" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:sentiment ; rr:objectMap [ rml:reference "CommentSentiment" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:creationDate ; rr:objectMap [ rml:reference "CreationDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:commentedBy ; rr:objectMap [ rr:template "http://codecomt.org/user/{UserId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:onPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{PostId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:userDisplayName ; rr:objectMap [ rml:reference "UserDisplayName" ; rr:termType rr:Literal ] ] .
+
+######################################################################
+# 4) Tags Mapping 
+######################################################################
+<#TagsMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT Id, REPLACE(TagName, '"', '''') AS TagName, Count, ExcerptPostId, WikiPostId
+    FROM tags
+    """
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/tag/{Id}" ; rr:class cc:Tag ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{TagName}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:tagName ; rr:objectMap [ rml:reference "TagName" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:count ; rr:objectMap [ rml:reference "Count" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:excerptPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{ExcerptPostId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:wikiPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{WikiPostId}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 5) Badges Mapping
+######################################################################
+<#BadgesMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT Id, UserId, REPLACE(Name, '"', '''') AS Name, Date FROM badges"""
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/badge/{Id}" ; rr:class cc:Badge ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{Name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:badgeName ; rr:objectMap [ rml:reference "Name" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:awardedTo ; rr:objectMap [ rr:template "http://codecomt.org/user/{UserId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:dateAwarded ; rr:objectMap [ rml:reference "Date"  ; rr:termType rr:Literal ] ] .
+
+######################################################################
+# 6) Votes Mapping
+######################################################################
+<#VotesMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT Id, PostId, VoteTypeId, CreationDate, UserId, BountyAmount FROM votes"""
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/vote/{Id}" ; rr:class cc:Vote ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Vote {Id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:onPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{PostId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:votedBy ; rr:objectMap [ rr:template "http://codecomt.org/user/{UserId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:bountyAmount ; rr:objectMap [ rml:reference "BountyAmount" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:creationDate ; rr:objectMap [ rml:reference "CreationDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:voteTypeId ; rr:objectMap [ rml:reference "VoteTypeId" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] .
+
+######################################################################
+# 7) Post History Mapping
+######################################################################
+<#PostHistoryMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """SELECT Id, PostHistoryTypeId, PostId, RevisionGUID, CreationDate, UserId, REPLACE(Text, '"', '''') AS Text, REPLACE(Comment, '"', '''') AS Comment, REPLACE(UserDisplayName, '"', '''') AS UserDisplayName FROM postHistory"""
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/postHistory/{Id}" ; rr:class cc:PostHistory ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Post History {Id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:revisionGUID ; rr:objectMap [ rml:reference "RevisionGUID" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:text ; rr:objectMap [ rml:reference "Text" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:comment ; rr:objectMap [ rml:reference "Comment" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:createdBy ; rr:objectMap [ rr:template "http://codecomt.org/user/{UserId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:forPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{PostId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:postHistoryTypeId ; rr:objectMap [ rml:reference "PostHistoryTypeId" ; rr:datatype xsd:integer ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:userDisplayName ; rr:objectMap [ rml:reference "UserDisplayName" ; rr:termType rr:Literal ] ] .
+
+######################################################################
+# 8) Post Links Mapping
+######################################################################
+<#PostLinksMapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT Id, CreationDate, PostId, RelatedPostId, LinkTypeId FROM postLinks"
+  ] ;
+
+  rr:subjectMap [ rr:template "http://codecomt.org/postLink/{Id}" ; rr:class cc:PostLink ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Post Link {Id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:creationDate ; rr:objectMap [ rml:reference "CreationDate"  ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:sourcePost ; rr:objectMap [ rr:template "http://codecomt.org/post/{PostId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:relatedPost ; rr:objectMap [ rr:template "http://codecomt.org/post/{RelatedPostId}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate cc:linkType ; rr:objectMap [ rml:reference "LinkTypeId" ; rr:termType rr:Literal ] ] .
+
+# Property-level comments for adding commonsense evidence
+cc:commentScore rdfs:comment "The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment." .
+cc:count rdfs:comment "more counts means this tag is more popular" .
+cc:reputation rdfs:comment "The user with higher reputation has more influence." .
+cc:viewCount rdfs:comment "Higher view count means the post has higher popularity" .
+cc:favoriteCount rdfs:comment "more favorite count refers to more valuable posts." .

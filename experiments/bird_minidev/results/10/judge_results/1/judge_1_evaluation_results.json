@@ -1,0 +1,548 @@
+[
+    {
+        "question_id": 1340,
+        "db_id": "student_club",
+        "question": "Calculate the difference of the total amount spent in all events by the Student_Club in year 2019 and 2020.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold: computes sum of spent for events in 2019 minus sum for 2020 by joining event and budget on event_id. Pred A: joins budget B to event E on the same key (B.link_to_event = E.event_id), uses STRFTIME('%Y', E.event_date) to extract year (equivalent to SUBSTR(...,1,4)), sums spent for year = '2019' and subtracts sum for year = '2020'. IFNULL wrappers ensure NULL-safe sums. The predicted SQL returns a single numeric result 2086.05, which matches the gold output and implements the same logic and grouping (no grouping, single scalar). Minor implementation differences (STRFTIME vs SUBSTR, IFNULL) do not change semantics. Therefore it is correct.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B computes two aggregated subqueries: total2019 and total2020 by summing the budget amount linked to events whose eventDate year (substring of the date string) is '2019' or '2020', then returns their difference. This mirrors the gold SQL's intent (sum spent in 2019 minus sum spent in 2020). The SPARQL uses explicit sum and cast to decimal and filters on the extracted year; it returns the same numeric result 2086.05. There is no evidence of schema mismatch in the provided result (the query produced the expected numeric value), and the logic corresponds to the gold query. Thus the SPARQL is semantically correct. Error category: NONE.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "Both predicted queries implement the same logic as the gold query and produce the same numeric difference (2019 total minus 2020 total).",
+                "winner": "TIE_BOTH_CORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 1457,
+        "db_id": "student_club",
+        "question": "Give the full name and contact number of members who had to spend more than average on each expense.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold returns distinct members (first_name, last_name, phone) whose individual expense cost is greater than the overall average cost across all expenses. Pred A computes average cost grouped by expense_description and compares each expense to the average for that description. Despite the different logic, the resulting output rows and counts match the gold output exactly (3 distinct members: Sacha Harrison, Phillip Cullen, Elijah Allen). Under the evaluation instructions (focus on semantic equivalence of values and row counts, ignore column names/formatting), Pred A's result is equivalent to the gold result.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B computes average cost grouped by expense description (same per-description grouping as Pred A) and then returns members whose expense cost exceeds the average for that description. However, Pred B returns multiple rows per member because it reports each (member, description) pair (6 total rows) rather than the distinct set of members required by the gold query. The gold expects distinct members who spent more than the overall average (single row per member); Pred B returns extra rows and different row counts. This is a logic mismatch rather than a pure schema issue.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction yields the same result set as the gold (so is correct by the evaluation rules), while the SPARQL returns extra per-description rows and is incorrect.",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 1152,
+        "db_id": "thrombosis_prediction",
+        "question": "What is the ratio of outpatient to inpatient followed up treatment among all the 'SLE' diagnosed patient?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold query computes (count of Admission = '+') / (count of Admission = '-'). Pred A computes SUM(Admission='-') / SUM(Admission='+') \u2014 i.e. the reciprocal of the intended ratio. The numeric output 0.763636... is the inverse of the gold result 1.3095238095, demonstrating the division order is reversed. This is a logic error producing the wrong numeric answer.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL returns outpatientCount=133 and inpatientCount=171 and computes outpatient/inpatient = 0.777778. The gold definition expects outpatient to correspond to Admission = '+' and inpatient to Admission = '-'. In the SPARQL the FILTERs use str(?adm) = '-' for the first (labeled outpatientCount) and str(?adm2) IN ('+','+(') for the second (labeled inpatientCount), which swaps the mapping of '+' and '-' relative to the gold query. The predicates used (diagnosis, admissionType) and the SLE regex appear plausible (no schema mismatch), so the error is logical (incorrect interpretation of admission codes), hence the result is incorrect.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions produce incorrect ratios: the SQL simply inverts the division, and the SPARQL swaps which admission code is outpatient vs inpatient; neither matches the gold result.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 1175,
+        "db_id": "thrombosis_prediction",
+        "question": "How old was the patient who had the highest hemoglobin count at the time of the examination, and what is the doctor's diagnosis?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold answer: age 28 and diagnosis 'SLE'. Pred A returns age = 11 and Diagnosis = 'SjS, BOOP'. The predicted SQL computes age with an exact date-adjusted formula (which is fine), but it joins Examination to Laboratory on both ID and matching Examination Date = Laboratory.Date. The gold joins Patient to Laboratory and orders by Laboratory.HGB; the predicted join to Examination (and the equality on Examination Date) likely selected a different lab record or mismatched row, producing a different patient and thus incorrect age and diagnosis. The returned values do not match the gold output, so the SQL is semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns patient URI, age 28, diagnosis 'SLE', HGB 18.9 and testDate 1981-07-31. These values match the gold-standard result (age 28 and diagnosis 'SLE'). The SPARQL includes extra columns (patient, h, testDate) which are allowed per instructions. There is no indication of schema mismatch: predicates used correspond to expected concepts and the computed age matches the gold. Therefore the SPARQL is semantically correct.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction matches the gold answer (age 28, diagnosis SLE); the SQL prediction returns a different patient (age 11, different diagnosis) and is incorrect.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 1205,
+        "db_id": "thrombosis_prediction",
+        "question": "Was the patient with the number 57266's uric acid within a normal range?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold: returns true when UA is above sex-specific upper limits (F > 6.5, M > 8.0). Pred A: computes within_normal_range = 'yes' when UA <= 6.5 for females or <= 8.0 for males (and returns the actual UA). These are logical opposites: Gold's TRUE corresponds to 'no' in Pred A. For patient 57266 Pred A returns UA = 6.2 and 'yes' (within normal). The gold logic would evaluate to false for that UA (6.2 is not >6.5 for F nor >8.0 for M). Therefore Pred A does not match the gold semantics.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B selects the most recent UA and sex and tests membership in fixed ranges (Male 3.4\u20137.0, Female 2.4\u20136.0). The gold uses only upper thresholds (Male > 8.0, Female > 6.5) to indicate abnormality. Pred B uses different numerical bounds and different sex literal values (\"Male\"/\"Female\" vs gold's 'M'/'F' convention), producing a boolean based on mismatched criteria. Although the ASK returned True, that truth value is relative to different ranges than the gold query, so the logic is incorrect relative to the gold standard.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predicted queries use criteria that do not match the gold standard's sex-specific thresholds, so both are incorrect; SQL is inverted (opposite), SPARQL uses different ranges.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 1239,
+        "db_id": "thrombosis_prediction",
+        "question": "Name the ID and age of patient with two or more laboratory examinations which show their hematoclit level exceeded the normal range.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Pred A returns exactly the three IDs that appear in the gold output (2307640, 3182521, 4007151) and the same row count (3). The ages differ by at most one year for two patients (predicted ages: 73, 73, 57 vs gold: 73, 74, 58). The gold uses a simple year-difference (STRFTIME('%Y') - STRFTIME('%Y', Birthday)); Pred A computes age with a month/day correction, producing off-by-one differences. The evaluation instructions allow small numeric rounding differences, so these one-year differences are acceptable. There are no extra or missing rows and the selection condition (HCT > 52, at least 2 tests) is implemented correctly. Therefore the SQL prediction is semantically correct.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns 10 patients (much more than the gold's 3) and includes many different patients not present in the gold result. Its logic differs: it applies sex-specific HCT thresholds (female > 48) instead of the gold's uniform HCT >= 52 threshold, computes age using firstVisitDate and birthDate year difference (not the current year minus birth year used by the gold), and therefore selects a different set of patients. The results are not a schema mismatch (predicates exist), but the query logic does not match the gold requirement. Hence the SPARQL is semantically incorrect.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction is semantically correct (row IDs match and numeric differences are minor), while the SPARQL prediction uses different thresholds and age logic and returns many incorrect rows.",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 1031,
+        "db_id": "european_football_2",
+        "question": "At present, calculate for the player's age who have a sprint speed of no less than 97 between 2013 to 2015.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Pred A applies the same filters as the gold: it joins Player and Player_Attributes, restricts Player_Attributes.date to years 2013\u20132015, and requires sprint_speed >= 97. The age expression computes current year minus birth year; although the gold computes DATETIME() - birthday, both produce the same single result value (36) for the dataset. The query returns exactly the expected single row with age 36, so semantically it matches the gold result.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B finds an attribute with sprint >= 97 in the 2013\u20132015 interval and binds the player's birth date, so it identifies the correct player. It returns one row (allowed extra columns are fine). However, the computed age is 35 whereas the gold answer's age is 36. The predicates and date filters appear to match the intended schema (not a pure schema mismatch), but the age computation/rounding logic differs from the gold result, producing the wrong numeric outcome.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction matches the gold result exactly; the SPARQL returns the correct player but computes a different age (35 vs 36), so the SQL wins.",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 1032,
+        "db_id": "european_football_2",
+        "question": "Give the name of the league with the highest matches of all time and how many matches were played in the said league.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The gold answer is the league name 'England Premier League' with max_count 3040. Pred A's SQL returns a single league with matches_played = 3040 but the league name is 'Spain LIGA BBVA', not 'England Premier League'. Although the COUNT value matches the gold numeric value, the query returns the wrong league identity. Therefore the SQL prediction is semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL returns the leagueLabel 'England Premier League' with matches = 3040, matching the gold standard league name and match count. The grouping and ordering logic finds the top league by match count, and the result aligns exactly with the gold. There is no schema mismatch or syntax error.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL query returns the correct league and match count (England Premier League, 3040); the SQL returns the correct count but the wrong league name.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 879,
+        "db_id": "formula_1",
+        "question": "For the driver who set the fastest lap speed, what is his nationality?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The gold query selects the nationality of the driver who has the single highest fastestLapSpeed. Pred A's SQL attempts the same: it finds the MAX fastestLapSpeed (casting to REAL) and returns the nationality of drivers whose fastestLapSpeed equals that max. However, the predicted SQL returns 'Brazilian' while the gold output is 'Italian'. Since the values differ, the SQL prediction does not produce the semantically correct result. Possible causes include data-type/casting issues or multiple rows with equal speeds and an unintended row being matched, but regardless the output nationality does not match the gold answer, so the prediction is incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL query computes the maximum fastestLapSpeed, finds the result(s) with that speed, retrieves the driver and optional nationality, and returns 'Italian' for nationality (driver Vitantonio Liuzzi) with speed 91.610. This matches the gold standard nationality ('Italian'). The query returns the correct driver nationality and uses appropriate predicates, so it is semantically correct. There is no evidence of schema mismatch or execution error.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction returns the correct nationality (Italian) matching the gold answer; the SQL prediction returns an incorrect nationality (Brazilian).",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 906,
+        "db_id": "formula_1",
+        "question": "Which was Lewis Hamilton first race? What was his points recorded for his first race event?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The gold query joins races -> driverStandings -> drivers and selects the earliest race (ORDER BY year ASC LIMIT 1) for Lewis Hamilton, returning name and the points from driverStandings (gold output: Malaysian Grand Prix, 14.0). Pred A instead joins drivers -> results -> races and picks the race with the MIN(r.date) for that driver's results. While both find the same first race event (Malaysian Grand Prix), Pred A returns points from the results table (8.0) rather than the driverStandings table used by the gold (14.0). Thus the row (race) matches but the numeric points value differs. This is a logic/data-source mismatch (different semantics for 'points' \u2014 per-race result points vs standings points), so the SQL answer is incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns a single result for a race result resource for driver/1 with raceLabel 'Malaysian Grand Prix (2007)' and points 8.0, ordered by raceDate and limited to the earliest. The gold expects Malaysian Grand Prix and points 14.0. Pred B therefore finds the same earliest race but reports 8.0 points (likely the per-result points) rather than the 14.0 value the gold obtains from driver standings. The SPARQL returns values (not empty) and uses predicates consistently, so this is not a schema mismatch or syntax error; it is a logic/data-source discrepancy (wrong choice of property or interpretation of 'points').",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions identify the same first race but report 8.0 points instead of the gold-standard 14.0 (both are therefore incorrect).",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 730,
+        "db_id": "superhero",
+        "question": "List the superheroes from Marvel Comics who have the super power of 'Super Strength'.",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The gold query returns 201 distinct superhero_name rows. Pred A returns 200 rows (distinct), so it is missing one hero compared to the gold result. The JOIN-based formulation is logically equivalent in intent to the EXISTS formulation, but the observed row count mismatch indicates it does not produce the full set from the gold standard (one row missing). Because the result counts differ, this is a semantic mismatch (wrong answer) even though most rows align.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL query selects heroes having the specific power URI and filters publisher by a publisher URI fragment, returning 201 distinct results. The output includes hero labels that match the superhero names from the gold result (and the total row count equals the gold's 201). Extra column hero (the URI) is allowed per the instructions. There is no evidence of schema mismatch: the query uses specific hasPower and publishedBy predicates and the provided results show matching labels. Therefore the SPARQL is semantically correct.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction exactly matches the gold answer (201 rows and corresponding names); the SQL prediction is missing one row and is therefore incorrect.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 738,
+        "db_id": "superhero",
+        "question": "Which superheroes have a durability attribute value of less than 50?",
+        "difficulty": "simple",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold returns 371 superhero_name rows. Pred A performs an INNER JOIN between hero_attribute, attribute, and superhero filtering attribute_name = 'Durability' and attribute_value < 50, selecting DISTINCT superhero_name. This logic matches the gold query conceptually, but the result count for Pred A is 368 (three fewer rows) indicating it missed some heroes that the gold query includes (possible data-related reason such as duplicate/NULL handling or join exclusion). Because the output row count and set do not match the gold, the SQL prediction is not semantically equivalent.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns 371 rows, matching the gold total. It selects heroes whose attribute value for a specific attribute URI (presumably Durability) is < 50, and returns the hero label and value; extra columns are allowed. The row count and the provided sample labels (e.g., '3-D Man', 'A-Bomb', ... 'Yoda') align with the gold output. There is no indication of schema mismatch (the query uses consistent predicates and the results are populated). Therefore the SPARQL is semantically correct.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction matches the gold answer (371 rows and correct heroes); the SQL prediction returns a different row set/count (368 rows) and is incorrect.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 750,
+        "db_id": "superhero",
+        "question": "What is the average weight of all female superheroes?",
+        "difficulty": "simple",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The predicted SQL is semantically equivalent to the gold query: both join superhero to gender on gender_id, filter for gender = 'Female', and compute AVG(weight_kg). The added predicate 'T1.weight_kg IS NOT NULL' does not change the numeric result because AVG by definition ignores NULLs; the returned value matches the gold (60.77956989247312). Therefore the SQL prediction is correct.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL query computes the average of ?weight for heroes that have a gender link to the resource <.../gender/2> and a weightInKg property. The numeric result (60.7796) matches the gold result up to acceptable rounding. The query allows two possible gender predicate properties via VALUES, which is acceptable (extra predicates permitted) and does not change the correct average here. There is no schema mismatch because the query produced the expected numeric result. Hence it is semantically correct.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "Both the SQL and SPARQL predictions compute the same average female superhero weight as the gold query (minor rounding differences allowed).",
+                "winner": "TIE_BOTH_CORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 791,
+        "db_id": "superhero",
+        "question": "Calculate the average height for all superhero.",
+        "difficulty": "simple",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold SQL computes SUM(height_cm) cast to REAL divided by COUNT(id) \u2014 that is, total height sum divided by total number of superhero rows (including those with NULL height, since COUNT(id) counts every row). Pred A uses AVG(height_cm) with WHERE height_cm IS NOT NULL, which computes the average only over rows with non-NULL height. These two semantics differ when some superheroes have NULL height values. Numerically, the predicted AVG (267.7514450867052) does not match the gold value (247.04533333333333), so the SQL prediction is not semantically equivalent to the gold query.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B attempts to compute the average using RDF predicates schema:Superhero and schema:heightInCm. The SPARQL result is 0, which indicates the query did not retrieve the expected height values from the data. Given the relational DB context and gold SQL, the RDF class/property names used are unlikely to match the dataset's schema, causing no matching triples (a schema mismatch). This is not a logical construction error of aggregation but a predicate/class mismatch with the data.",
+                "status": "SCHEMA_MISMATCH",
+                "error_category": "SCHEMA"
+            },
+            "comparison": {
+                "summary": "Both predictions fail: the SQL uses a different averaging denominator (non-NULL heights only) and so yields the wrong numeric result, while the SPARQL uses incorrect RDF predicates/classes and returns no valid data.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 797,
+        "db_id": "superhero",
+        "question": "Which superheroes have blue eyes with brown hair?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold returns 22 rows including two rows for 'Atlas' (duplicate). Pred A uses SELECT DISTINCT which collapses duplicate superhero_name values, producing 21 rows and thus omitting the duplicated 'Atlas' occurrence. The set of unique names in Pred A matches the unique names in the gold, but the row count and multiplicity do not match the gold answer. Therefore the SQL prediction is semantically incorrect with respect to the expected row multiplicity.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns 22 rows and includes two distinct resources for 'Atlas' (two different hero URIs with the same label), matching the gold's 22 rows including the duplicate 'Atlas' entry. The SPARQL result includes both the resource URI and the label; extra columns are allowed by the evaluation rules. The returned labels and row count align with the gold output, so the SPARQL prediction is semantically correct.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction matches the gold result (including duplicates) while the SQL prediction incorrectly collapsed duplicates via DISTINCT, so SPARQL wins.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 801,
+        "db_id": "superhero",
+        "question": "Find the ratio between male superheroes and female superheroes.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The predicted SQL computes SUM(CASE WHEN gender='Male' THEN 1 ELSE 0 END) / SUM(CASE WHEN gender='Female' THEN 1 ELSE 0 END) with a cast to floating and a NULLIF to avoid division by zero. It joins superhero to gender on gender_id and restricts to Male and Female, which is semantically equivalent to the gold query's COUNT(CASE WHEN ...) male / COUNT(CASE WHEN ...) female. The numeric result matches the gold output (2.5566502463054186). Handling of division-by-zero via NULLIF is acceptable. Therefore it returns the correct ratio.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL returns maleCount = 750, femaleCount = 750 and ratio = 1.0, which does not match the gold SQL result (~2.55665). The query binds specific gender URIs and counts Superhero instances for those URIs; labels indicate 'Male' and 'Female' were found, but the counts are incorrect relative to the gold. Results are non-empty, so this is not a pure schema mismatch (predicates and labels exist). The discrepancy indicates a logic/data-mapping error (incorrect gender mapping, incorrect selection of URIs, or mistaken counts) rather than a syntax error. Thus the SPARQL result is semantically incorrect.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction matches the gold ratio exactly and is correct; the SPARQL prediction yields an incorrect ratio (1.0) and is wrong.",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 340,
+        "db_id": "card_games",
+        "question": "Which are the cards that have incredibly powerful foils.",
+        "difficulty": "simple",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold query returns card ids for all cards where cardKingdomFoilId IS NOT NULL AND cardKingdomId IS NOT NULL (25061 rows). Pred A uses the same WHERE clause but selects DISTINCT name instead of id, which changes the output values and reduces the row count (17544). The result set contents and counts do not match the gold standard (ids vs distinct names, fewer rows), so it is semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL query filters cards by a hasFoil = \"yes\" predicate and additionally restricts to cards with numeric power >= 10, returning 109 rows with card URIs, labels and power. The gold SQL has no power requirement and simply checks two non-null kingdom-related id fields, producing 25061 ids. The SPARQL result set is a different logical condition (and much smaller), so it does not match the gold. This is a logic error rather than a schema or syntax mismatch.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions apply different semantics from the gold: the SQL returns distinct names instead of ids (and fewer rows), and the SPARQL applies additional power/foil logic, so both are incorrect.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 402,
+        "db_id": "card_games",
+        "question": "What is the percentage of Story Spotlight cards that do not have a text box? List them by their ID.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold computes a single percentage: SUM(CASE WHEN isTextless = 0 AND isStorySpotlight = 1 THEN 1 ELSE 0 END) * 100 / COUNT(id) \u2014 i.e., the percentage of cards that are story-spotlight AND have isTextless = 0 (based on gold). Pred A: (1) produces 104 rows instead of a single aggregated result (violates expected single-row output); (2) its aggregation calculates 100 * textless_spotlight / total_spotlight where textless_spotlight uses isTextless = 1, i.e. percentage of spotlight cards that ARE textless, which is the logical complement of the gold's predicate (gold uses isTextless = 0). Pred A therefore returns the wrong metric and wrong shape (multiple rows). Even if the intended interpretation were the opposite, returning one percentage per spotlight card is incorrect. For these reasons Pred A is semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B computes (COUNT textless AND spotlight) / (COUNT spotlight) \u2014 i.e. percentage of spotlight cards that are textless (isTextless = \"Yes\"). The Gold SQL uses isTextless = 0 in its CASE expression, so Pred B is computing the opposite predicate than the gold (textless vs non-textless). Additionally, Pred B returns percentage 0.0 and no ids (ids = None) despite an OPTIONAL attempt to list ids; this indicates either there are no textless spotlight cards in the RDF data or the OPTIONAL didn't bind \u2014 but in any case the returned percentage/value does not match the gold's single numeric result (gold ~0.183...). The query shape (single row with percentage and ids) matches the expected single-row form, but the computed metric is semantically different from the gold. This is a logic mismatch, not a schema/syntax error.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions compute the percentage of the opposite predicate (textless = 1) or otherwise differ from the gold's predicate and expected single-row metric; both are incorrect.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 424,
+        "db_id": "card_games",
+        "question": "What proportion of cards do not have a text box with a normal layout?",
+        "difficulty": "simple",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold query computes the percent of cards that are textless AND have layout = 'normal' by SUM(CASE WHEN isTextless = 1 AND layout = 'normal' THEN 1 ELSE 0 END) * 100 / COUNT(*). Pred A uses the same conditional count but does not multiply by 100 (it returns SUM(...) / COUNT(*)). That yields a value 100 times smaller than the gold percent. This is a numeric scaling error (not a small rounding difference), so the SQL result is not semantically equivalent to the gold.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL computes total cards and counts ?normal as cards with layout 'normal' AND having a cg:text triple (i.e. cards that have text and layout normal). It then sets notCount = total - normal and returns notCount/total. That yields the proportion of cards that are NOT (have text AND layout normal), which is not the same as the proportion of cards that are textless AND layout = 'normal'. Additionally, the gold uses an isTextless boolean flag; the SPARQL uses presence/absence of cg:text which is a different schema/logic assumption. This is a logical mismatch, not merely a syntax issue.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predicted queries are incorrect: the SQL has a scaling error (missing *100), and the SPARQL uses the wrong logic/assumptions about text presence versus the isTextless flag.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 486,
+        "db_id": "card_games",
+        "question": "What is the percentage of the cards with a converted mana cost of 7 in the set Coldsnap?",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The gold query computes (count of cards with convertedManaCost = 7) * 100 / total cards in set 'Coldsnap'. Pred A computes AVG(CASE WHEN convertedManaCost = 7 THEN 1.0 ELSE 0.0 END) * 100, which is mathematically equivalent to (count7/total)*100. The join and WHERE condition use the same set name 'Coldsnap'. The numeric result returned (7.741935483870968) exactly matches the gold output. Therefore Pred A is semantically correct.",
+                "status": "CORRECT"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns total = 166, count7 = 12, percentage = 7.22892. The gold percentage is 7.741935483870968 which corresponds to 12/155*100, so the expected total is 155 with count7 = 12. Pred B has the same count7 but a different total, producing an incorrect percentage. The SPARQL query filters by setCode = \"CSP\" rather than by set name 'Coldsnap' (the gold used the set name), which likely caused it to select a different set or include extra cards. The result is non-empty but numerically incorrect due to this logic/mapping choice, so this is a logic error rather than a pure schema/syntax issue.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "The SQL prediction is correct and matches the gold percentage; the SPARQL prediction yields the wrong percentage due to an incorrect total (logic/mapping error).",
+                "winner": "SQL"
+            }
+        }
+    },
+    {
+        "question_id": 518,
+        "db_id": "card_games",
+        "question": "Which of the play format has the highest number of banned status? Indicate the play format and the names of all the card meet the condition.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The predicted SQL computes banned_counts and finds the max, then selects cards where l.status = 'Banned' and the format's banned_count equals the max. However the query uses SELECT DISTINCT l.format, c.name which collapses duplicate (format,name) rows. The Gold output contains 546 rows while this prediction returns only 102 rows, so many expected rows are missing. The logic for identifying the top format is correct, but the DISTINCT (or some aggregation effect) causes undercount / missing rows compared to the gold result.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL first selects the format with the highest count of cg:status 'Banned' (LIMIT 1) then binds that as ?format and retrieves all legalities with status 'Banned' in that format, linking to card resources and optionally their names. The output shows 546 rows, the same total as the Gold output, the format matches ('legacy'), and cardName contains the card names; extra columns (URIs) are present but allowed. Therefore the SPARQL is semantically equivalent to the gold SQL. No schema mismatch or syntax error is evident.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction matches the gold result (correct format and 546 rows); the SQL prediction is missing many rows (returns 102) and is incorrect.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 212,
+        "db_id": "toxicology",
+        "question": "Which element is the least numerous in non-carcinogenic molecules?",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold counts DISTINCT molecule_id per element among molecules with label '-' and selects the element with the smallest such count. Pred A groups by element but uses COUNT(*) (counting atoms) rather than COUNT(DISTINCT molecule_id). The inner subquery that computes the MIN also uses COUNT(*) over atoms, so Pred A is comparing atom counts not distinct-molecule counts; this changes the metric and yields three elements (ca, k, pb) tied at the minimal atom count. That does not match the gold result (single element 'ca' by distinct-molecule count). Therefore the SQL prediction is semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns one row with element = 'Calcium' (and total = 1) for molecules labeled 'Non-Carcinogenic'. The gold answer is element 'ca' (calcium) as the single least numerous element in non-carcinogenic molecules. Although Pred B uses different property names/labels and reports the full element name and atom count, it produced the same single element as the gold result and the same row count (one row). The query execution produced results, so this is not a schema failure. Minor naming/format differences (e.g., 'Calcium' vs 'ca') are allowed by the evaluation rules. While Pred B counts atoms rather than DISTINCT molecules similar to Pred A, its result matches the gold element and row count in this dataset, so it should be judged correct.",
+                "status": "CORRECT",
+                "error_category": "NONE"
+            },
+            "comparison": {
+                "summary": "The SPARQL prediction returns the correct single element (Calcium) matching the gold answer; the SQL prediction is incorrect because it counts atoms instead of distinct molecules, yielding multiple elements.",
+                "winner": "SPARQL"
+            }
+        }
+    },
+    {
+        "question_id": 215,
+        "db_id": "toxicology",
+        "question": "How many atoms with iodine and with sulfur type elements are there in single bond molecules?",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold: counts distinct atom_ids that are connected (via connected->bond) to a bond whose bond_type = '-' and separates counts by element 'i' and 's' (iodine_nums = 3, sulfur_nums = 77). Pred A: joins atom to bond only by molecule_id and then filters bond.bond_type = '-' and atom.element IN ('i','s'); returns a single COUNT(DISTINCT atom.atom_id) = 97. Errors: (1) Pred A does not require the atom to be one end of a specific bond of type '-' (it only requires the atom to be in a molecule that has at least one single bond), so it overcounts atoms that are in molecules with single bonds but not themselves connected by a single bond. (2) Pred A collapses the two element-specific counts into one aggregated count rather than producing separate counts for iodine and sulfur. The numeric result (97) does not match the gold per-element counts (3 and 77) or their per-element separation. Therefore the SQL prediction is semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "Pred B returns counts grouped by element and reports Iodine = 3 and Sulfur = 5. It selects atoms that are partOfMolecule ?m where there exists a bond in the same molecule with bondType '-' and also applies a FILTER NOT EXISTS that excludes any molecule that has any bond with a bondType different from '-'. Thus Pred B effectively restricts to molecules whose all bonds are single ('-' only), rather than selecting atoms that are endpoints of individual bonds of type '-'. Consequences: iodine count matches the gold iodine count (3) by coincidence, but sulfur count (5) is far from the gold sulfur count (77). This is a logic error (wrong scoping/semantics about bonds vs molecules). The query is syntactically valid and uses correct predicates, so this is not a schema mismatch or syntax error. Therefore the SPARQL prediction is semantically incorrect.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions are semantically incorrect: the SQL mis-scopes the bond relationship and merges element counts; the SPARQL incorrectly restricts to molecules that have only single bonds, yielding the wrong sulfur count (iodine happens to match).",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 23,
+        "db_id": "california_schools",
+        "question": "List the names of schools with more than 30 difference in enrollements between K-12 and ages 5-17? Please also give the full street adress of the schools.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "The predicted SQL joins the same tables and returns school name and an address field, but it has two key errors vs the gold: (1) It uses ABS(f.\"Enrollment (K-12)\" - f.\"Enrollment (Ages 5-17)\") > 30 which allows rows where Enrollment (K-12) is much less than Enrollment (Ages 5-17). The gold requires Enrollment (K-12) - Enrollment (Ages 5-17) > 30 (i.e., K-12 greater by more than 30), not the absolute difference. (2) It selects s.MailStreet while the gold expects the schools.Street field (the full street address). Additionally there are NULL School values in the output sample, suggesting potential mismatches in selected columns versus expectations. The row count matches the gold (1239) but the logical condition and wrong address column make the results semantically incorrect.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL computes diff = enK12 - enA517 but then filters FILTER(ABS(?diff) > 30), which again accepts cases where enK12 - enA517 < -30 (i.e., Ages 5-17 greater by more than 30). The gold requires enK12 - enA517 > 30 (no absolute). Also the SPARQL returns mailing address components and a concatenated fullAddress (mailStreet, mailCity, mailState, mailZip) rather than the schools' Street used by the gold, though that is a lesser issue compared to the filter logic. The result count (1815) does not match the gold (1239), confirming the logic error. This is a logical mistake rather than a schema or syntax problem.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predictions are incorrect: both use absolute difference instead of requiring Enrollment (K-12) - Enrollment (Ages 5-17) > 30, and the SQL also returns the MailStreet column instead of Street.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 87,
+        "db_id": "california_schools",
+        "question": "What are the valid e-mail addresses of the administrator of the school located in the San Bernardino county, City of San Bernardino City Unified that opened between 1/1/2009 to 12/31/2010 whose school types are public Intermediate/Middle Schools and Unified Schools?",
+        "difficulty": "challenging",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold returns exactly two administrator emails (AdmEmail1 and AdmEmail2) for a single school that matches County='San Bernardino', City='San Bernardino', DOC=54, SOC=62, and OpenDate year between 2009 and 2010. Pred A selects admin emails from the schools table using District='San Bernardino City Unified' and a broad set of LIKE conditions on SOCType/EILName/EILCode/DOCType to capture 'intermediate/middle' or 'unified' types, and unions AdmEmail1/2/3. Pred A returns 7 email rows (including the two correct emails) rather than the single row with two specific columns expected by the gold. Pred A also uses different predicates/fields (District vs join to frpm and numeric DOC/SOC codes) and overgenerates results by matching many additional schools and emails. Therefore Pred A is not semantically equivalent to the gold and returns extra incorrect rows.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL returns six schools that roughly match county/city/district and the 2009\u20132010 open date window, but all returned email values are null/absent. The gold expects two valid administrator email addresses. The SPARQL query attempts to retrieve email via ?school cal:email ?email, but the result shows no email bindings. This suggests a schema mismatch between the gold/SQL data model and the RDF predicates used (cal:email may be the wrong property or emails are stored under a different predicate), rather than purely a logical filtering error\u2014the query finds candidate schools but fails to produce the expected email values. Hence this is a SCHEMA_MISMATCH.",
+                "status": "SCHEMA_MISMATCH",
+                "error_category": "SCHEMA"
+            },
+            "comparison": {
+                "summary": "Both predictions fail: the SQL returns extra unrelated emails (overgenerates) and the SPARQL returns matching schools but no email values (schema mismatch).",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    },
+    {
+        "question_id": 128,
+        "db_id": "financial",
+        "question": "List the top nine districts, by descending order, from the highest to the lowest, the number of female account holders.",
+        "difficulty": "moderate",
+        "judge_evaluation": {
+            "sql_eval": {
+                "reasoning": "Gold query counts all female clients per district (FROM client JOIN district WHERE gender='F' GROUP BY district). Pred A adds an extra join to disp and a filter T2.type = 'OWNER', and uses COUNT(DISTINCT client_id). That changes the semantics: it counts only female clients who are owners on some disposition rather than all female clients, resulting in lower counts (e.g. 324 vs 267 for Hl.m. Praha). Because the predicate in the question asks for number of female account holders by district with no restriction to 'OWNER' dispositions, Pred A does not match the gold logic.",
+                "status": "WRONG_ANSWER"
+            },
+            "sparql_eval": {
+                "reasoning": "The SPARQL query mirrors Pred A's logic: it selects clients with gender 'Female' and requires a Disposition of type 'OWNER' (and counts DISTINCT ?client). The gold SQL has no disposition/type restriction and counts all female clients by district. The SPARQL results match the SQL prediction (reduced counts like 267 for Hl.m. Praha), so this is a logical mismatch with the gold intent rather than a schema or syntax problem.",
+                "status": "WRONG_ANSWER",
+                "error_category": "LOGIC"
+            },
+            "comparison": {
+                "summary": "Both predicted queries restrict to clients with an 'OWNER' disposition and count distinct clients, whereas the gold query counts all female clients by district, so both are incorrect.",
+                "winner": "TIE_BOTH_INCORRECT"
+            }
+        }
+    }
+]

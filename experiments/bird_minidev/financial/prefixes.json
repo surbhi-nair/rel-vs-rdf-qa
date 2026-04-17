@@ -1,0 +1,11 @@
+{
+  "fin": "<http://financialdb.org/schema#",
+  "findist": "<http://financialdb.org/district#",
+  "fincl": "<http://financialdb.org/client#",
+  "finac": "<http://financialdb.org/account#",
+  "findisp": "<http://financialdb.org/disposition#",
+  "finca": "<http://financialdb.org/card#",
+  "finl": "<http://financialdb.org/loan#",
+  "fino": "<http://financialdb.org/order#",
+  "fintr": "<http://financialdb.org/transaction#"
+}

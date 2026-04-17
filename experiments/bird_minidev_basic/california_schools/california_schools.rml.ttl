@@ -1,0 +1,445 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://california_schools.org/> .
+
+######################################################################
+# Table: frpm
+######################################################################
+<#frpm_Mapping>
+  rml:logicalSource [
+    rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "CDSCode", "Academic Year", "County Code", "District Code", "School Code", "County Name", "District Name", "School Name", "District Type", "School Type", "Educational Option Type", "NSLP Provision Status", "Charter School (Y/N)", "Charter School Number", "Charter Funding Type", "IRC", "Low Grade", "High Grade", "Enrollment (K-12)", "Free Meal Count (K-12)", "Percent (%) Eligible Free (K-12)", "FRPM Count (K-12)", "Percent (%) Eligible FRPM (K-12)", "Enrollment (Ages 5-17)", "Free Meal Count (Ages 5-17)", "Percent (%) Eligible Free (Ages 5-17)", "FRPM Count (Ages 5-17)", "Percent (%) Eligible FRPM (Ages 5-17)", "2013-14 CALPADS Fall 1 Certification Status" FROM "frpm"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://california_schools.org/frpm/CDSCode={CDSCode}" ;
+    rr:class <http://california_schools.org/frpm>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "frpm {CDSCode}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#CDSCode> ;
+    rr:objectMap [ rml:reference "CDSCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#ref-CDSCode> ;
+    rr:objectMap [
+      rr:template "http://california_schools.org/schools/CDSCode={CDSCode}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Academic Year> ;
+    rr:objectMap [ rml:reference "Academic Year" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#County Code> ;
+    rr:objectMap [ rml:reference "County Code" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#District Code> ;
+    rr:objectMap [ rml:reference "District Code" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#School Code> ;
+    rr:objectMap [ rml:reference "School Code" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#County Name> ;
+    rr:objectMap [ rml:reference "County Name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#District Name> ;
+    rr:objectMap [ rml:reference "District Name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#School Name> ;
+    rr:objectMap [ rml:reference "School Name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#District Type> ;
+    rr:objectMap [ rml:reference "District Type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#School Type> ;
+    rr:objectMap [ rml:reference "School Type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Educational Option Type> ;
+    rr:objectMap [ rml:reference "Educational Option Type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#NSLP Provision Status> ;
+    rr:objectMap [ rml:reference "NSLP Provision Status" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Charter School (Y/N)> ;
+    rr:objectMap [ rml:reference "Charter School (Y/N)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Charter School Number> ;
+    rr:objectMap [ rml:reference "Charter School Number" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Charter Funding Type> ;
+    rr:objectMap [ rml:reference "Charter Funding Type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#IRC> ;
+    rr:objectMap [ rml:reference "IRC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Low Grade> ;
+    rr:objectMap [ rml:reference "Low Grade" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#High Grade> ;
+    rr:objectMap [ rml:reference "High Grade" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Enrollment (K-12)> ;
+    rr:objectMap [ rml:reference "Enrollment (K-12)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Free Meal Count (K-12)> ;
+    rr:objectMap [ rml:reference "Free Meal Count (K-12)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Percent (%) Eligible Free (K-12)> ;
+    rr:objectMap [ rml:reference "Percent (%) Eligible Free (K-12)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#FRPM Count (K-12)> ;
+    rr:objectMap [ rml:reference "FRPM Count (K-12)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Percent (%) Eligible FRPM (K-12)> ;
+    rr:objectMap [ rml:reference "Percent (%) Eligible FRPM (K-12)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Enrollment (Ages 5-17)> ;
+    rr:objectMap [ rml:reference "Enrollment (Ages 5-17)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Free Meal Count (Ages 5-17)> ;
+    rr:objectMap [ rml:reference "Free Meal Count (Ages 5-17)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Percent (%) Eligible Free (Ages 5-17)> ;
+    rr:objectMap [ rml:reference "Percent (%) Eligible Free (Ages 5-17)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#FRPM Count (Ages 5-17)> ;
+    rr:objectMap [ rml:reference "FRPM Count (Ages 5-17)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#Percent (%) Eligible FRPM (Ages 5-17)> ;
+    rr:objectMap [ rml:reference "Percent (%) Eligible FRPM (Ages 5-17)" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/frpm#2013-14 CALPADS Fall 1 Certification Status> ;
+    rr:objectMap [ rml:reference "2013-14 CALPADS Fall 1 Certification Status" ]
+  ]
+ .
+
+######################################################################
+# Table: satscores
+######################################################################
+<#satscores_Mapping>
+  rml:logicalSource [
+    rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "cds", "rtype", "sname", "dname", "cname", "enroll12", "NumTstTakr", "AvgScrRead", "AvgScrMath", "AvgScrWrite", "NumGE1500" FROM "satscores"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://california_schools.org/satscores/cds={cds}" ;
+    rr:class <http://california_schools.org/satscores>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "satscores {cds}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#cds> ;
+    rr:objectMap [ rml:reference "cds" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#ref-cds> ;
+    rr:objectMap [
+      rr:template "http://california_schools.org/schools/CDSCode={cds}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#rtype> ;
+    rr:objectMap [ rml:reference "rtype" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#sname> ;
+    rr:objectMap [ rml:reference "sname" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#dname> ;
+    rr:objectMap [ rml:reference "dname" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#cname> ;
+    rr:objectMap [ rml:reference "cname" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#enroll12> ;
+    rr:objectMap [ rml:reference "enroll12" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#NumTstTakr> ;
+    rr:objectMap [ rml:reference "NumTstTakr" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#AvgScrRead> ;
+    rr:objectMap [ rml:reference "AvgScrRead" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#AvgScrMath> ;
+    rr:objectMap [ rml:reference "AvgScrMath" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#AvgScrWrite> ;
+    rr:objectMap [ rml:reference "AvgScrWrite" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/satscores#NumGE1500> ;
+    rr:objectMap [ rml:reference "NumGE1500" ]
+  ]
+ .
+
+######################################################################
+# Table: schools
+######################################################################
+<#schools_Mapping>
+  rml:logicalSource [
+    rml:source "california_schools.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", "OpenDate", "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", "LastUpdate" FROM "schools"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://california_schools.org/schools/CDSCode={CDSCode}" ;
+    rr:class <http://california_schools.org/schools>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "schools {CDSCode}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#CDSCode> ;
+    rr:objectMap [ rml:reference "CDSCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#NCESDist> ;
+    rr:objectMap [ rml:reference "NCESDist" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#NCESSchool> ;
+    rr:objectMap [ rml:reference "NCESSchool" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#StatusType> ;
+    rr:objectMap [ rml:reference "StatusType" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#County> ;
+    rr:objectMap [ rml:reference "County" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#District> ;
+    rr:objectMap [ rml:reference "District" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#School> ;
+    rr:objectMap [ rml:reference "School" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Street> ;
+    rr:objectMap [ rml:reference "Street" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#StreetAbr> ;
+    rr:objectMap [ rml:reference "StreetAbr" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#City> ;
+    rr:objectMap [ rml:reference "City" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Zip> ;
+    rr:objectMap [ rml:reference "Zip" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#State> ;
+    rr:objectMap [ rml:reference "State" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#MailStreet> ;
+    rr:objectMap [ rml:reference "MailStreet" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#MailStrAbr> ;
+    rr:objectMap [ rml:reference "MailStrAbr" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#MailCity> ;
+    rr:objectMap [ rml:reference "MailCity" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#MailZip> ;
+    rr:objectMap [ rml:reference "MailZip" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#MailState> ;
+    rr:objectMap [ rml:reference "MailState" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Phone> ;
+    rr:objectMap [ rml:reference "Phone" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Ext> ;
+    rr:objectMap [ rml:reference "Ext" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Website> ;
+    rr:objectMap [ rml:reference "Website" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#OpenDate> ;
+    rr:objectMap [ rml:reference "OpenDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#ClosedDate> ;
+    rr:objectMap [ rml:reference "ClosedDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Charter> ;
+    rr:objectMap [ rml:reference "Charter" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#CharterNum> ;
+    rr:objectMap [ rml:reference "CharterNum" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#FundingType> ;
+    rr:objectMap [ rml:reference "FundingType" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#DOC> ;
+    rr:objectMap [ rml:reference "DOC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#DOCType> ;
+    rr:objectMap [ rml:reference "DOCType" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#SOC> ;
+    rr:objectMap [ rml:reference "SOC" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#SOCType> ;
+    rr:objectMap [ rml:reference "SOCType" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#EdOpsCode> ;
+    rr:objectMap [ rml:reference "EdOpsCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#EdOpsName> ;
+    rr:objectMap [ rml:reference "EdOpsName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#EILCode> ;
+    rr:objectMap [ rml:reference "EILCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#EILName> ;
+    rr:objectMap [ rml:reference "EILName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#GSoffered> ;
+    rr:objectMap [ rml:reference "GSoffered" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#GSserved> ;
+    rr:objectMap [ rml:reference "GSserved" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Virtual> ;
+    rr:objectMap [ rml:reference "Virtual" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Magnet> ;
+    rr:objectMap [ rml:reference "Magnet" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Latitude> ;
+    rr:objectMap [ rml:reference "Latitude" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#Longitude> ;
+    rr:objectMap [ rml:reference "Longitude" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmFName1> ;
+    rr:objectMap [ rml:reference "AdmFName1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmLName1> ;
+    rr:objectMap [ rml:reference "AdmLName1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmEmail1> ;
+    rr:objectMap [ rml:reference "AdmEmail1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmFName2> ;
+    rr:objectMap [ rml:reference "AdmFName2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmLName2> ;
+    rr:objectMap [ rml:reference "AdmLName2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmEmail2> ;
+    rr:objectMap [ rml:reference "AdmEmail2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmFName3> ;
+    rr:objectMap [ rml:reference "AdmFName3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmLName3> ;
+    rr:objectMap [ rml:reference "AdmLName3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#AdmEmail3> ;
+    rr:objectMap [ rml:reference "AdmEmail3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://california_schools.org/schools#LastUpdate> ;
+    rr:objectMap [ rml:reference "LastUpdate" ]
+  ]
+ .

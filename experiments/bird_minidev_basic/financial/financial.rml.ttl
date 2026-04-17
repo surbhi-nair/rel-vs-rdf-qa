@@ -1,0 +1,466 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://financial.org/> .
+
+######################################################################
+# Table: account
+######################################################################
+<#account_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "account_id", "district_id", "frequency", "date" FROM "account"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/account/account_id={account_id}" ;
+    rr:class <http://financial.org/account>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "account {account_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/account#account_id> ;
+    rr:objectMap [ rml:reference "account_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/account#district_id> ;
+    rr:objectMap [ rml:reference "district_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/account#ref-district_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/district/district_id={district_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/account#frequency> ;
+    rr:objectMap [ rml:reference "frequency" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/account#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ]
+ .
+
+######################################################################
+# Table: card
+######################################################################
+<#card_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "card_id", "disp_id", "type", "issued" FROM "card"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/card/card_id={card_id}" ;
+    rr:class <http://financial.org/card>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "card {card_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/card#card_id> ;
+    rr:objectMap [ rml:reference "card_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/card#disp_id> ;
+    rr:objectMap [ rml:reference "disp_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/card#ref-disp_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/disp/disp_id={disp_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/card#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/card#issued> ;
+    rr:objectMap [ rml:reference "issued" ]
+  ]
+ .
+
+######################################################################
+# Table: client
+######################################################################
+<#client_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "client_id", "gender", "birth_date", "district_id" FROM "client"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/client/client_id={client_id}" ;
+    rr:class <http://financial.org/client>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "client {client_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/client#client_id> ;
+    rr:objectMap [ rml:reference "client_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/client#gender> ;
+    rr:objectMap [ rml:reference "gender" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/client#birth_date> ;
+    rr:objectMap [ rml:reference "birth_date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/client#district_id> ;
+    rr:objectMap [ rml:reference "district_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/client#ref-district_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/district/district_id={district_id}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: disp
+######################################################################
+<#disp_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "disp_id", "client_id", "account_id", "type" FROM "disp"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/disp/disp_id={disp_id}" ;
+    rr:class <http://financial.org/disp>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "disp {disp_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/disp#disp_id> ;
+    rr:objectMap [ rml:reference "disp_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/disp#client_id> ;
+    rr:objectMap [ rml:reference "client_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/disp#ref-client_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/client/client_id={client_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/disp#account_id> ;
+    rr:objectMap [ rml:reference "account_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/disp#ref-account_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/account/account_id={account_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/disp#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ]
+ .
+
+######################################################################
+# Table: district
+######################################################################
+<#district_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/district/district_id={district_id}" ;
+    rr:class <http://financial.org/district>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "district {district_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#district_id> ;
+    rr:objectMap [ rml:reference "district_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A2> ;
+    rr:objectMap [ rml:reference "A2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A3> ;
+    rr:objectMap [ rml:reference "A3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A4> ;
+    rr:objectMap [ rml:reference "A4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A5> ;
+    rr:objectMap [ rml:reference "A5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A6> ;
+    rr:objectMap [ rml:reference "A6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A7> ;
+    rr:objectMap [ rml:reference "A7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A8> ;
+    rr:objectMap [ rml:reference "A8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A9> ;
+    rr:objectMap [ rml:reference "A9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A10> ;
+    rr:objectMap [ rml:reference "A10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A11> ;
+    rr:objectMap [ rml:reference "A11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A12> ;
+    rr:objectMap [ rml:reference "A12" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A13> ;
+    rr:objectMap [ rml:reference "A13" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A14> ;
+    rr:objectMap [ rml:reference "A14" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A15> ;
+    rr:objectMap [ rml:reference "A15" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/district#A16> ;
+    rr:objectMap [ rml:reference "A16" ]
+  ]
+ .
+
+######################################################################
+# Table: loan
+######################################################################
+<#loan_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "loan_id", "account_id", "date", "amount", "duration", "payments", "status" FROM "loan"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/loan/loan_id={loan_id}" ;
+    rr:class <http://financial.org/loan>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "loan {loan_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#loan_id> ;
+    rr:objectMap [ rml:reference "loan_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#account_id> ;
+    rr:objectMap [ rml:reference "account_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#ref-account_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/account/account_id={account_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#amount> ;
+    rr:objectMap [ rml:reference "amount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#duration> ;
+    rr:objectMap [ rml:reference "duration" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#payments> ;
+    rr:objectMap [ rml:reference "payments" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/loan#status> ;
+    rr:objectMap [ rml:reference "status" ]
+  ]
+ .
+
+######################################################################
+# Table: order
+######################################################################
+<#order_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "order_id", "account_id", "bank_to", "account_to", "amount", "k_symbol" FROM "order"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/order/order_id={order_id}" ;
+    rr:class <http://financial.org/order>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "order {order_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#order_id> ;
+    rr:objectMap [ rml:reference "order_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#account_id> ;
+    rr:objectMap [ rml:reference "account_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#ref-account_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/account/account_id={account_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#bank_to> ;
+    rr:objectMap [ rml:reference "bank_to" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#account_to> ;
+    rr:objectMap [ rml:reference "account_to" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#amount> ;
+    rr:objectMap [ rml:reference "amount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/order#k_symbol> ;
+    rr:objectMap [ rml:reference "k_symbol" ]
+  ]
+ .
+
+######################################################################
+# Table: trans
+######################################################################
+<#trans_Mapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "trans_id", "account_id", "date", "type", "operation", "amount", "balance", "k_symbol", "bank", "account" FROM "trans"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://financial.org/trans/trans_id={trans_id}" ;
+    rr:class <http://financial.org/trans>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "trans {trans_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#trans_id> ;
+    rr:objectMap [ rml:reference "trans_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#account_id> ;
+    rr:objectMap [ rml:reference "account_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#ref-account_id> ;
+    rr:objectMap [
+      rr:template "http://financial.org/account/account_id={account_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#operation> ;
+    rr:objectMap [ rml:reference "operation" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#amount> ;
+    rr:objectMap [ rml:reference "amount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#balance> ;
+    rr:objectMap [ rml:reference "balance" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#k_symbol> ;
+    rr:objectMap [ rml:reference "k_symbol" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#bank> ;
+    rr:objectMap [ rml:reference "bank" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://financial.org/trans#account> ;
+    rr:objectMap [ rml:reference "account" ]
+  ]
+ .

@@ -1,0 +1,212 @@
+[
+    {
+        "question_id": 1471,
+        "db_id": "debit_card_specializing",
+        "question": "What is the ratio of customers who pay in EUR against customers who pay in CZK? Context: ratio of customers who pay in EUR against customers who pay in CZK = count(Currency = 'EUR') / count(Currency = 'CZK').",
+        "sql": "SELECT CAST(SUM(IIF(Currency = 'EUR', 1, 0)) AS FLOAT) / SUM(IIF(Currency = 'CZK', 1, 0)) AS ratio FROM customers",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?eurCount ?czkCount ?ratio WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?custE ) AS ?eurCount ) WHERE {\n      ?custE <http://debit_card_specializing.org/customers#Currency> \"EUR\" .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?custC ) AS ?czkCount ) WHERE {\n      ?custC <http://debit_card_specializing.org/customers#Currency> \"CZK\" .\n    }\n  }\n  BIND( xsd:double ( ?eurCount ) / xsd:double ( ?czkCount ) AS ?ratio )\n}"
+    },
+    {
+        "question_id": 1472,
+        "db_id": "debit_card_specializing",
+        "question": "In 2012, who had the least consumption in LAM? Context: Year 2012 can be presented as Between 201201 And 201212; The first 4 strings of the Date values in the yearmonth table can represent year.",
+        "sql": "SELECT T1.CustomerID FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Segment = 'LAM' AND SUBSTR(T2.Date, 1, 4) = '2012' GROUP BY T1.CustomerID ORDER BY SUM(T2.Consumption) ASC LIMIT 1",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?customer ?customerLabel ( SUM( xsd:decimal ( ?cons ) ) AS ?total ) WHERE {\n  ?ym <http://debit_card_specializing.org/yearmonth#CustomerID> ?custID ; <http://debit_card_specializing.org/yearmonth#Date> ?date ; <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n  ?customer <http://debit_card_specializing.org/customers#CustomerID> ?custID ; <http://debit_card_specializing.org/customers#Segment> ?segment .\n  OPTIONAL {\n    ?customer rdfs:label ?customerLabel\n  }\n  FILTER ( STR( ?segment ) = \"LAM\" ) FILTER ( SUBSTR( STR( ?date ) , 1 , 4 ) = \"2012\" )\n}\nGROUP BY ?customer ?customerLabel\nORDER BY ?total\nLIMIT 1"
+    },
+    {
+        "question_id": 1473,
+        "db_id": "debit_card_specializing",
+        "question": "What was the average monthly consumption of customers in SME for the year 2013? Context: Average Monthly consumption = AVG(Consumption) / 12; Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year.",
+        "sql": "SELECT AVG(T2.Consumption) / 12 FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2013' AND T1.Segment = 'SME'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ( AVG( ?consNum ) / 12 AS ?avgMonthlyConsumption ) WHERE {\n  ?ym a <http://debit_card_specializing.org/yearmonth> .\n  ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n  BIND( xsd:double ( ?cons ) AS ?consNum ) .\n  ?ym <http://debit_card_specializing.org/yearmonth#ref-CustomerID> ?cust .\n  ?cust <http://debit_card_specializing.org/customers#Segment> \"SME\" .\n  ?ym <http://debit_card_specializing.org/yearmonth#Date> ?date .\n  FILTER ( SUBSTR( STR( ?date ) , 1 , 4 ) = \"2013\" )\n}"
+    },
+    {
+        "question_id": 1476,
+        "db_id": "debit_card_specializing",
+        "question": "What was the difference in gas consumption between CZK-paying customers and EUR-paying customers in 2012? Context: Year 2012 can be presented as Between 201201 And 201212; The first 4 strings of the Date values in the yearmonth table can represent year; Difference in Consumption = CZK customers consumption in 2012 - EUR customers consumption in 2012",
+        "sql": "SELECT SUM(IIF(T1.Currency = 'CZK', T2.Consumption, 0)) - SUM(IIF(T1.Currency = 'EUR', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2012'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?czkSum ?eurSum ?difference WHERE {\n  {\n    SELECT ( SUM( xsd:decimal ( ?cons ) ) AS ?czkSum ) WHERE {\n      ?ym <http://debit_card_specializing.org/yearmonth#Date> ?date ; <http://debit_card_specializing.org/yearmonth#Consumption> ?cons ; <http://debit_card_specializing.org/yearmonth#ref-CustomerID> ?cust .\n      ?cust <http://debit_card_specializing.org/customers#Currency> \"CZK\" .\n      FILTER ( SUBSTR( STR( ?date ) , 1 , 4 ) = \"2012\" )\n    }\n  }\n  {\n    SELECT ( SUM( xsd:decimal ( ?cons2 ) ) AS ?eurSum ) WHERE {\n      ?ym2 <http://debit_card_specializing.org/yearmonth#Date> ?date2 ; <http://debit_card_specializing.org/yearmonth#Consumption> ?cons2 ; <http://debit_card_specializing.org/yearmonth#ref-CustomerID> ?cust2 .\n      ?cust2 <http://debit_card_specializing.org/customers#Currency> \"EUR\" .\n      FILTER ( SUBSTR( STR( ?date2 ) , 1 , 4 ) = \"2012\" )\n    }\n  }\n  BIND( ( ?czkSum - ?eurSum ) AS ?difference )\n}"
+    },
+    {
+        "question_id": 1479,
+        "db_id": "debit_card_specializing",
+        "question": "Which year recorded the most consumption of gas paid in CZK? Context: The first 4 strings of the Date values in the yearmonth table can represent year.",
+        "sql": "SELECT SUBSTR(T2.Date, 1, 4) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Currency = 'CZK' GROUP BY SUBSTR(T2.Date, 1, 4) ORDER BY SUM(T2.Consumption) DESC LIMIT 1",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?year ( SUM( xsd:decimal ( ?price ) ) AS ?total ) WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#Price> ?price .\n  ?tx <http://debit_card_specializing.org/transactions_1k#Date> ?date .\n  ?tx <http://debit_card_specializing.org/transactions_1k#CustomerID> ?cid .\n  ?tx <http://debit_card_specializing.org/transactions_1k#GasStationID> ?gsid .\n  ?cust <http://debit_card_specializing.org/customers#CustomerID> ?cid .\n  ?cust <http://debit_card_specializing.org/customers#Currency> \"CZK\" .\n  BIND( SUBSTR( str( ?date ) , 1 , 4 ) AS ?year )\n}\nGROUP BY ?year\nORDER BY DESC ( ?total )\nLIMIT 1"
+    },
+    {
+        "question_id": 1480,
+        "db_id": "debit_card_specializing",
+        "question": "What was the gas consumption peak month for SME customers in 2013? Context: Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+        "sql": "SELECT SUBSTR(T2.Date, 5, 2) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.Date, 1, 4) = '2013' AND T1.Segment = 'SME' GROUP BY SUBSTR(T2.Date, 5, 2) ORDER BY SUM(T2.Consumption) DESC LIMIT 1",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX ym: <http://debit_card_specializing.org/yearmonth#>\nPREFIX cust: <http://debit_card_specializing.org/customers#>\nSELECT ?Date ( SUM( xsd:decimal ( ?cons ) ) AS ?totalConsumption ) WHERE {\n  ?ym a <http://debit_card_specializing.org/yearmonth> ; ym:Date ?Date ; ym:Consumption ?cons ; ym:ref-CustomerID ?custRef .\n  ?custRef cust:Segment ?segment .\n  FILTER ( ?segment = \"SME\" ) FILTER ( xsd:integer ( ?Date ) >= 201301 && xsd:integer ( ?Date ) <= 201312 )\n}\nGROUP BY ?Date\nORDER BY DESC ( ?totalConsumption )\nLIMIT 1"
+    },
+    {
+        "question_id": 1481,
+        "db_id": "debit_card_specializing",
+        "question": "What is the difference in the annual average consumption of the customers with the least amount of consumption paid in CZK for 2013 between SME and LAM, LAM and KAM, and KAM and SME? Context: annual average consumption of customer with the lowest consumption in each segment = total consumption per year / the number of customer with lowest consumption in each segment; Difference in annual average = SME's annual average - LAM's annual average; Difference in annual average = LAM's annual average - KAM's annual average; Year 2013 can be presented as Between 201301 And 201312; The first 4 strings of the Date values in the yearmonth table can represent year.",
+        "sql": "SELECT CAST(SUM(IIF(T1.Segment = 'SME', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'LAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) , CAST(SUM(IIF(T1.Segment = 'LAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'KAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) , CAST(SUM(IIF(T1.Segment = 'KAM', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) - CAST(SUM(IIF(T1.Segment = 'SME', T2.Consumption, 0)) AS REAL) / COUNT(T1.CustomerID) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Currency = 'CZK' AND T2.Consumption = ( SELECT MIN(Consumption) FROM yearmonth ) AND T2.Date BETWEEN 201301 AND 201312",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?SME_min ?LAM_min ?KAM_min ( ?SME_min - ?LAM_min AS ?SME_minus_LAM ) ( ?LAM_min - ?KAM_min AS ?LAM_minus_KAM ) ( ?KAM_min - ?SME_min AS ?KAM_minus_SME ) WHERE {\n  {\n    SELECT ( MIN( ?annualTotal ) AS ?SME_min ) WHERE {\n      {\n        SELECT ?cust ?segment ( SUM( xsd:decimal ( ?cons ) ) AS ?annualTotal ) WHERE {\n          ?ym a ?y .\n          FILTER ( CONTAINS( STR( ?ym ) , \"yearmonth\" ) ) ?ym <http://debit_card_specializing.org/yearmonth#Date> ?date .\n          FILTER ( STRSTARTS( STR( ?date ) , \"2013\" ) ) ?ym <http://debit_card_specializing.org/yearmonth#CustomerID> ?cid .\n          ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n          ?cust <http://debit_card_specializing.org/customers#CustomerID> ?cid .\n          ?cust <http://debit_card_specializing.org/customers#Segment> ?segment .\n        }\n        GROUP BY ?cust ?segment\n      }\n      FILTER ( ?segment = \"SME\" )\n    }\n  }\n  {\n    SELECT ( MIN( ?annualTotal ) AS ?LAM_min ) WHERE {\n      {\n        SELECT ?cust ?segment ( SUM( xsd:decimal ( ?cons ) ) AS ?annualTotal ) WHERE {\n          ?ym a ?y .\n          FILTER ( CONTAINS( STR( ?ym ) , \"yearmonth\" ) ) ?ym <http://debit_card_specializing.org/yearmonth#Date> ?date .\n          FILTER ( STRSTARTS( STR( ?date ) , \"2013\" ) ) ?ym <http://debit_card_specializing.org/yearmonth#CustomerID> ?cid .\n          ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n          ?cust <http://debit_card_specializing.org/customers#CustomerID> ?cid .\n          ?cust <http://debit_card_specializing.org/customers#Segment> ?segment .\n        }\n        GROUP BY ?cust ?segment\n      }\n      FILTER ( ?segment = \"LAM\" )\n    }\n  }\n  {\n    SELECT ( MIN( ?annualTotal ) AS ?KAM_min ) WHERE {\n      {\n        SELECT ?cust ?segment ( SUM( xsd:decimal ( ?cons ) ) AS ?annualTotal ) WHERE {\n          ?ym a ?y .\n          FILTER ( CONTAINS( STR( ?ym ) , \"yearmonth\" ) ) ?ym <http://debit_card_specializing.org/yearmonth#Date> ?date .\n          FILTER ( STRSTARTS( STR( ?date ) , \"2013\" ) ) ?ym <http://debit_card_specializing.org/yearmonth#CustomerID> ?cid .\n          ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n          ?cust <http://debit_card_specializing.org/customers#CustomerID> ?cid .\n          ?cust <http://debit_card_specializing.org/customers#Segment> ?segment .\n        }\n        GROUP BY ?cust ?segment\n      }\n      FILTER ( ?segment = \"KAM\" )\n    }\n  }\n}"
+    },
+    {
+        "question_id": 1482,
+        "db_id": "debit_card_specializing",
+        "question": "Which of the three segments\u2014SME, LAM and KAM\u2014has the biggest and lowest percentage increases in consumption paid in EUR between 2012 and 2013? Context: Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2013) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year",
+        "sql": "SELECT CAST((SUM(IIF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IIF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IIF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST(SUM(IIF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IIF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IIF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) , CAST(SUM(IIF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IIF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IIF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?segment ?sum2012 ?sum2013 ?increase ?pctIncrease WHERE {\n  {\n    SELECT ?segment ( SUM( IF( ?year = \"2012\" , xsd:decimal ( ?cons ) , 0 ) ) AS ?sum2012 ) ( SUM( IF( ?year = \"2013\" , xsd:decimal ( ?cons ) , 0 ) ) AS ?sum2013 ) WHERE {\n      ?ym <http://debit_card_specializing.org/yearmonth#CustomerID> ?cid ; <http://debit_card_specializing.org/yearmonth#Date> ?ymDate ; <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n      ?cust <http://debit_card_specializing.org/customers#CustomerID> ?cid ; <http://debit_card_specializing.org/customers#Segment> ?segment ; <http://debit_card_specializing.org/customers#Currency> ?currency .\n      BIND( STR( ?ymDate ) AS ?ymstr ) BIND( SUBSTR( ?ymstr , 1 , 4 ) AS ?year ) FILTER ( ?segment IN ( \"SME\" , \"LAM\" , \"KAM\" ) ) FILTER ( STR( ?currency ) = \"EUR\" )\n    }\n    GROUP BY ?segment\n  }\n  BIND( ( ?sum2013 - ?sum2012 ) AS ?increase ) BIND( ( ?increase / ?sum2013 ) * 100 AS ?pctIncrease )\n}\nORDER BY DESC ( ?pctIncrease )"
+    },
+    {
+        "question_id": 1483,
+        "db_id": "debit_card_specializing",
+        "question": "How much did customer 6 consume in total between August and November 2013? Context: Between August And November 2013 refers to Between 201308 And 201311; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+        "sql": "SELECT SUM(Consumption) FROM yearmonth WHERE CustomerID = 6 AND Date BETWEEN '201308' AND '201311'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX ymprop: <http://debit_card_specializing.org/yearmonth#>\nSELECT ?customer ( SUM( xsd:double ( ?consumption ) ) AS ?totalConsumption ) WHERE {\n  BIND( <http://debit_card_specializing.org/customers/CustomerID=6> AS ?customer ) ?ym ymprop:ref-CustomerID ?customer ; ymprop:Date ?date ; ymprop:Consumption ?consumption .\n  FILTER ( str( ?date ) >= \"201308\" && str( ?date ) <= \"201311\" )\n}\nGROUP BY ?customer"
+    },
+    {
+        "question_id": 1484,
+        "db_id": "debit_card_specializing",
+        "question": "How many more \"discount\" gas stations does the Czech Republic have compared to Slovakia? Context: Czech Republic can be represented as the Country value in gasstations table is 'CZE'; Slovakia can be represented as the Country value in the gasstations table is 'SVK';  Computation of more \"discount\" gas stations= Total no. of discount gas stations in Czech Republic - Total no. of discount gas stations in Slovakia",
+        "sql": "SELECT SUM(IIF(Country = 'CZE', 1, 0)) - SUM(IIF(Country = 'SVK', 1, 0)) FROM gasstations WHERE Segment = 'Discount'",
+        "sparql": "PREFIX gs: <http://debit_card_specializing.org/gasstations#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?cze_count ?svk_count ?difference WHERE {\n  {\n    SELECT ( COUNT( ?s1 ) AS ?cze_count ) WHERE {\n      ?s1 gs:Country \"CZE\" .\n      ?s1 gs:Segment \"Discount\" .\n    }\n  }\n  {\n    SELECT ( COUNT( ?s2 ) AS ?svk_count ) WHERE {\n      ?s2 gs:Country \"SVK\" .\n      ?s2 gs:Segment \"Discount\" .\n    }\n  }\n  BIND( xsd:integer ( ?cze_count ) - xsd:integer ( ?svk_count ) AS ?difference )\n}"
+    },
+    {
+        "question_id": 1486,
+        "db_id": "debit_card_specializing",
+        "question": "Is it true that more SMEs pay in Czech koruna than in euros? If so, how many more? Context: Amount of more SMEs = Total of SMEs pay using Currency CZK - Total of SMEs pay using Currency EUR",
+        "sql": "SELECT SUM(Currency = 'CZK') - SUM(Currency = 'EUR') FROM customers WHERE Segment = 'SME'",
+        "sparql": "SELECT ( SUM( IF( ?currency = \"CZK\" , 1 , 0 ) ) AS ?countCZK ) ( SUM( IF( ?currency = \"EUR\" , 1 , 0 ) ) AS ?countEUR ) ( ( SUM( IF( ?currency = \"CZK\" , 1 , 0 ) ) - SUM( IF( ?currency = \"EUR\" , 1 , 0 ) ) ) AS ?difference ) ( IF( SUM( IF( ?currency = \"CZK\" , 1 , 0 ) ) > SUM( IF( ?currency = \"EUR\" , 1 , 0 ) ) , true , false ) AS ?moreCZK ) WHERE {\n  ?cust a <http://debit_card_specializing.org/customers> .\n  ?cust <http://debit_card_specializing.org/customers#Segment> \"SME\" .\n  ?cust <http://debit_card_specializing.org/customers#Currency> ?currency .\n}"
+    },
+    {
+        "question_id": 1490,
+        "db_id": "debit_card_specializing",
+        "question": "How many percent of LAM customer consumed more than 46.73? Context: Percentage of LAM customer consumed more than 46.73 = (Total no. of LAM customers who consumed more than 46.73 / Total no. of LAM customers) * 100.",
+        "sql": "SELECT CAST(SUM(IIF(T2.Consumption > 46.73, 1, 0)) AS FLOAT) * 100 / COUNT(T1.CustomerID) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Segment = 'LAM'",
+        "sparql": "SELECT ?total ?num_above ( ( ?num_above * 100.0 ) / ?total AS ?percentage ) WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?c ) AS ?total ) WHERE {\n      ?c <http://debit_card_specializing.org/customers#Segment> ?seg .\n      FILTER ( str( ?seg ) = \"LAM\" )\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?c2 ) AS ?num_above ) WHERE {\n      ?c2 <http://debit_card_specializing.org/customers#Segment> ?seg2 .\n      FILTER ( str( ?seg2 ) = \"LAM\" ) {\n        SELECT ?c2 ( AVG( ?cons ) AS ?avgCons ) WHERE {\n          ?ym <http://debit_card_specializing.org/yearmonth#ref-CustomerID> ?c2 .\n          ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n        }\n        GROUP BY ?c2\n      }\n      FILTER ( ?avgCons > 46.73 )\n    }\n  }\n}"
+    },
+    {
+        "question_id": 1493,
+        "db_id": "debit_card_specializing",
+        "question": "In February 2012, what percentage of customers consumed more than 528.3? Context: February 2012 refers to '201202' in yearmonth.date; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+        "sql": "SELECT CAST(SUM(IIF(Consumption > 528.3, 1, 0)) AS FLOAT) * 100 / COUNT(CustomerID) FROM yearmonth WHERE Date = '201202'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ( ?over * 100.0 / ?total AS ?percentage ) WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?cust ) AS ?total ) WHERE {\n      ?ym <http://debit_card_specializing.org/yearmonth#Date> \"201202\" ; <http://debit_card_specializing.org/yearmonth#CustomerID> ?cust .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?cust2 ) AS ?over ) WHERE {\n      ?ym2 <http://debit_card_specializing.org/yearmonth#Date> \"201202\" ; <http://debit_card_specializing.org/yearmonth#CustomerID> ?cust2 ; <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n      FILTER ( xsd:decimal ( ?cons ) > 528.3 )\n    }\n  }\n}"
+    },
+    {
+        "question_id": 1498,
+        "db_id": "debit_card_specializing",
+        "question": "What is the highest monthly consumption in the year 2012? Context: The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+        "sql": "SELECT SUM(Consumption) FROM yearmonth WHERE SUBSTR(Date, 1, 4) = '2012' GROUP BY SUBSTR(Date, 5, 2) ORDER BY SUM(Consumption) DESC LIMIT 1",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?ym ?date ?cons WHERE {\n  ?ym <http://debit_card_specializing.org/yearmonth#Date> ?date .\n  ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?cons .\n  FILTER ( SUBSTR( STR( ?date ) , 1 , 4 ) = \"2012\" ) {\n    SELECT ( MAX( xsd:double ( ?c ) ) AS ?maxCons ) WHERE {\n      ?any <http://debit_card_specializing.org/yearmonth#Date> ?d .\n      ?any <http://debit_card_specializing.org/yearmonth#Consumption> ?c .\n      FILTER ( SUBSTR( STR( ?d ) , 1 , 4 ) = \"2012\" )\n    }\n  }\n  FILTER ( xsd:double ( ?cons ) = ?maxCons )\n}"
+    },
+    {
+        "question_id": 1500,
+        "db_id": "debit_card_specializing",
+        "question": "Please list the product description of the products consumed in September, 2013. Context: September 2013 refers to 201309; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month.",
+        "sql": "SELECT T3.Description FROM transactions_1k AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID INNER JOIN products AS T3 ON T1.ProductID = T3.ProductID WHERE T2.Date = '201309'",
+        "sparql": "SELECT DISTINCT ?prod ?description WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#Date> ?date .\n  FILTER ( SUBSTR( STR( ?date ) , 1 , 7 ) = \"2013-09\" ) .\n  ?tx <http://debit_card_specializing.org/transactions_1k#ProductID> ?prodID .\n  ?prod <http://debit_card_specializing.org/products#ProductID> ?prodID .\n  OPTIONAL {\n    ?prod <http://debit_card_specializing.org/products#Description> ?description\n  }\n}\nORDER BY ?prod"
+    },
+    {
+        "question_id": 1501,
+        "db_id": "debit_card_specializing",
+        "question": "Please list the countries of the gas stations with transactions taken place in June, 2013. Context: June 2013 refers to '201306'; The first 4 strings of the Date values in the yearmonth table can represent year; The 5th and 6th string of the date can refer to month;",
+        "sql": "SELECT DISTINCT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID INNER JOIN yearmonth AS T3 ON T1.CustomerID = T3.CustomerID WHERE T3.Date = '201306'",
+        "sparql": "SELECT DISTINCT ?gasStation ?country WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#Date> ?date ; <http://debit_card_specializing.org/transactions_1k#GasStationID> ?gasId .\n  ?gasStation <http://debit_card_specializing.org/gasstations#GasStationID> ?gasId ; <http://debit_card_specializing.org/gasstations#Country> ?country .\n  FILTER ( STRSTARTS( REPLACE( str( ?date ) , \"-\" , \"\" ) , \"201306\" ) )\n}"
+    },
+    {
+        "question_id": 1505,
+        "db_id": "debit_card_specializing",
+        "question": "Among the customers who paid in euro, how many of them have a monthly consumption of over 1000? Context: Pays in euro = Currency = 'EUR'.",
+        "sql": "SELECT COUNT(*) FROM yearmonth AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.Currency = 'EUR' AND T1.Consumption > 1000.00",
+        "sparql": "PREFIX yearmonth: <http://debit_card_specializing.org/yearmonth/>\nPREFIX customers: <http://debit_card_specializing.org/customers/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT (COUNT(DISTINCT ?customer) AS ?numCustomers) WHERE {\n  ?customer customers:Currency \"EUR\" .\n  ?ym yearmonth:ref-CustomerID ?customer ;\n      yearmonth:Consumption ?cons .\n  FILTER(xsd:double(?cons) > 1000)\n}"
+    },
+    {
+        "question_id": 1506,
+        "db_id": "debit_card_specializing",
+        "question": "Please list the product descriptions of the transactions taken place in the gas stations in the Czech Republic. Context: Czech Republic can be represented as the Country value in the gasstations table is 'CZE';",
+        "sql": "SELECT DISTINCT T3.Description FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID INNER JOIN products AS T3 ON T1.ProductID = T3.ProductID WHERE T2.Country = 'CZE'",
+        "sparql": "SELECT DISTINCT ?productIRI ?description WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#GasStationID> ?gid .\n  ?gs <http://debit_card_specializing.org/gasstations#GasStationID> ?gid .\n  ?gs <http://debit_card_specializing.org/gasstations#Country> \"CZE\" .\n  ?tx <http://debit_card_specializing.org/transactions_1k#ProductID> ?pid .\n  ?productIRI <http://debit_card_specializing.org/products#ProductID> ?pid .\n  OPTIONAL {\n    ?productIRI <http://debit_card_specializing.org/products#Description> ?description .\n  }\n}\nORDER BY ?productIRI"
+    },
+    {
+        "question_id": 1507,
+        "db_id": "debit_card_specializing",
+        "question": "Please list the disparate time of the transactions taken place in the gas stations from chain no. 11.",
+        "sql": "SELECT DISTINCT T1.Time FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T2.ChainID = 11",
+        "sparql": "SELECT DISTINCT ?time WHERE {\n  ?gs <http://debit_card_specializing.org/gasstations#GasStationID> ?gsid ; <http://debit_card_specializing.org/gasstations#ChainID> ?chainID .\n  ?trans <http://debit_card_specializing.org/transactions_1k#GasStationID> ?gsid ; <http://debit_card_specializing.org/transactions_1k#Time> ?time .\n  FILTER ( str( ?chainID ) = \"11\" )\n}\nORDER BY ?time"
+    },
+    {
+        "question_id": 1509,
+        "db_id": "debit_card_specializing",
+        "question": "Among the transactions made in the gas stations in the Czech Republic, how many of them are taken place after 2012/1/1? Context: Czech Republic can be represented as the Country value in the gasstations table is 'CZE'",
+        "sql": "SELECT COUNT(T1.TransactionID) FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T2.Country = 'CZE' AND STRFTIME('%Y', T1.Date) >= '2012'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ( COUNT( ?trans ) AS ?count ) WHERE {\n  ?trans <http://debit_card_specializing.org/transactions_1k#GasStationID> ?gsid ; <http://debit_card_specializing.org/transactions_1k#Date> ?date .\n  ?gas <http://debit_card_specializing.org/gasstations#GasStationID> ?gsid ; <http://debit_card_specializing.org/gasstations#Country> \"CZE\" .\n  FILTER ( xsd:date ( ?date ) > \"2012-01-01\" ^^ xsd:date )\n}"
+    },
+    {
+        "question_id": 1514,
+        "db_id": "debit_card_specializing",
+        "question": "What kind of currency did the customer paid at 16:25:00 in 2012/8/24? Context: '2012/8/24' can be represented by '2012-08-24';",
+        "sql": "SELECT DISTINCT T3.Currency FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID INNER JOIN customers AS T3 ON T1.CustomerID = T3.CustomerID WHERE T1.Date = '2012-08-24' AND T1.Time = '16:25:00'",
+        "sparql": "SELECT ?transaction ?customer ?currency WHERE {\n  ?transaction <http://debit_card_specializing.org/transactions_1k#Date> \"2012-08-24\" .\n  ?transaction <http://debit_card_specializing.org/transactions_1k#Time> \"16:25:00\" .\n  ?transaction <http://debit_card_specializing.org/transactions_1k#CustomerID> ?cid .\n  ?customer <http://debit_card_specializing.org/customers#CustomerID> ?cid .\n  ?customer <http://debit_card_specializing.org/customers#Currency> ?currency .\n}"
+    },
+    {
+        "question_id": 1515,
+        "db_id": "debit_card_specializing",
+        "question": "What segment did the customer have at 2012/8/23 21:20:00? Context: '2012/8/23' can be represented by '2012-08-23'",
+        "sql": "SELECT T2.Segment FROM transactions_1k AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.date = '2012-08-23' AND T1.time = '21:20:00'",
+        "sparql": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?customer ?customerLabel ?segment WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#Date> \"2012-08-23\" ; <http://debit_card_specializing.org/transactions_1k#Time> \"21:20:00\" ; <http://debit_card_specializing.org/transactions_1k#CustomerID> ?custId .\n  ?customer <http://debit_card_specializing.org/customers#CustomerID> ?custId .\n  OPTIONAL {\n    ?customer rdfs:label ?customerLabel .\n  }\n  OPTIONAL {\n    ?customer <http://debit_card_specializing.org/customers#Segment> ?segment .\n  }\n}"
+    },
+    {
+        "question_id": 1521,
+        "db_id": "debit_card_specializing",
+        "question": "For all the transactions happened during 8:00-9:00 in 2012/8/26, how many happened in CZE? Context: Czech Republic can be represented as the Country value in the gasstations table is 'CZE'; '2012/8/26' can be represented by '2012-08-26'; during 8:00-9:00 can be represented as Time BETWEEN '08:00:00' AND '09:00:00'",
+        "sql": "SELECT COUNT(T1.TransactionID) FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.Date = '2012-08-26' AND T1.Time BETWEEN '08:00:00' AND '09:00:00' AND T2.Country = 'CZE'",
+        "sparql": "PREFIX gs: <http://debit_card_specializing.org/gasstations#>\nPREFIX tr: <http://debit_card_specializing.org/transactions_1k#>\nSELECT ( COUNT( ?tx ) AS ?count ) WHERE {\n  ?tx tr:Date ?date ; tr:Time ?time ; tr:GasStationID ?gs .\n  ?gs gs:Country ?country .\n  FILTER ( str( ?date ) = \"2012-08-26\" && str( ?time ) >= \"08:00:00\" && str( ?time ) <= \"09:00:00\" && str( ?country ) = \"CZE\" )\n}"
+    },
+    {
+        "question_id": 1524,
+        "db_id": "debit_card_specializing",
+        "question": "What's the nationality of the customer who spent 548.4 in 2012/8/24? Context: '2012/8/24' can be represented by '2012-08-24'",
+        "sql": "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.Date = '2012-08-24' AND T1.Price  = 548.4",
+        "sparql": "SELECT ?customer ?currency WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#Date> \"2012-08-24\" .\n  ?tx <http://debit_card_specializing.org/transactions_1k#Price> ?price .\n  ?tx <http://debit_card_specializing.org/transactions_1k#CustomerID> ?custid .\n  FILTER ( str( ?price ) = \"548.4\" ) BIND( IRI( CONCAT ( \"http://debit_card_specializing.org/customers/CustomerID=\" , STR( ?custid ) ) ) AS ?customer ) OPTIONAL {\n    ?customer <http://debit_card_specializing.org/customers#Currency> ?currency\n  }\n}\nLIMIT 10"
+    },
+    {
+        "question_id": 1525,
+        "db_id": "debit_card_specializing",
+        "question": "What is the percentage of the customers who used EUR in 2012/8/25? Context: '2012/8/25' can be represented by '2012-08-25'",
+        "sql": "SELECT CAST(SUM(IIF(T2.Currency = 'EUR', 1, 0)) AS FLOAT) * 100 / COUNT(T1.CustomerID) FROM transactions_1k AS T1 INNER JOIN customers AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Date = '2012-08-25'",
+        "sparql": "SELECT ?total ?eur_on_date ?percentage WHERE {\n  {\n    SELECT ( COUNT( DISTINCT ?c ) AS ?total ) WHERE {\n      ?c <http://debit_card_specializing.org/customers#CustomerID> ?cid .\n    }\n  }\n  {\n    SELECT ( COUNT( DISTINCT ?c2 ) AS ?eur_on_date ) WHERE {\n      ?t <http://debit_card_specializing.org/transactions_1k#Date> \"2012-08-25\" .\n      ?t <http://debit_card_specializing.org/transactions_1k#CustomerID> ?cid2 .\n      ?c2 <http://debit_card_specializing.org/customers#CustomerID> ?cid2 .\n      ?c2 <http://debit_card_specializing.org/customers#Currency> \"EUR\" .\n    }\n  }\n  BIND( ( ?eur_on_date * 100.0 ) / ?total AS ?percentage )\n}"
+    },
+    {
+        "question_id": 1526,
+        "db_id": "debit_card_specializing",
+        "question": "For the customer who paid 634.8 in 2012/8/25, what was the consumption decrease rate from Year 2012 to 2013? Context: '2012/8/24' can be represented by '2012-08-24'; Consumption decrease rate = (consumption_2012 - consumption_2013) / consumption_2012",
+        "sql": "SELECT CAST(SUM(IIF(SUBSTRING(Date, 1, 4) = '2012', Consumption, 0)) - SUM(IIF(SUBSTRING(Date, 1, 4) = '2013', Consumption, 0)) AS FLOAT) / SUM(IIF(SUBSTRING(Date, 1, 4) = '2012', Consumption, 0)) FROM yearmonth WHERE CustomerID = ( SELECT T1.CustomerID FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.Date = '2012-08-25' AND T1.Price  = 1513.12 )",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?tx ?cust ?cons2012 ?cons2013 ?diff ?decreaseRate WHERE {\n  ?tx <http://debit_card_specializing.org/transactions_1k#Date> ?date ; <http://debit_card_specializing.org/transactions_1k#Price> ?price ; <http://debit_card_specializing.org/transactions_1k#CustomerID> ?cust .\n  FILTER ( contains( str( ?date ) , \"2012-08-25\" ) ) FILTER ( str( ?price ) = \"634.8\" || contains( str( ?price ) , \"634.8\" ) ) {\n    SELECT ?cust ( SUM( xsd:double ( ?price1 ) ) AS ?cons2012 ) WHERE {\n      ?t1 <http://debit_card_specializing.org/transactions_1k#CustomerID> ?cust ; <http://debit_card_specializing.org/transactions_1k#Date> ?date1 ; <http://debit_card_specializing.org/transactions_1k#Price> ?price1 .\n      FILTER ( STRSTARTS( STR( ?date1 ) , \"2012\" ) )\n    }\n    GROUP BY ?cust\n  }\n  OPTIONAL {\n    SELECT ?cust ( SUM( xsd:double ( ?price2 ) ) AS ?cons2013_raw ) WHERE {\n      ?t2 <http://debit_card_specializing.org/transactions_1k#CustomerID> ?cust ; <http://debit_card_specializing.org/transactions_1k#Date> ?date2 ; <http://debit_card_specializing.org/transactions_1k#Price> ?price2 .\n      FILTER ( STRSTARTS( STR( ?date2 ) , \"2013\" ) )\n    }\n    GROUP BY ?cust\n  }\n  BIND( COALESCE ( ?cons2013_raw , 0 ) AS ?cons2013 ) BIND( ( ?cons2012 - ?cons2013 ) AS ?diff ) BIND( IF( ?cons2012 = 0 , \"NaN\" , ( ?diff / ?cons2012 ) ) AS ?decreaseRate )\n}\nLIMIT 10"
+    },
+    {
+        "question_id": 1528,
+        "db_id": "debit_card_specializing",
+        "question": "What is the percentage of \"premium\" against the overall segment in Country = \"SVK\"?",
+        "sql": "SELECT CAST(SUM(IIF(Country = 'SVK' AND Segment = 'Premium', 1, 0)) AS FLOAT) * 100 / SUM(IIF(Country = 'SVK', 1, 0)) FROM gasstations",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?premiumCount ?totalCount ?percentage WHERE {\n  {\n    SELECT ( COUNT( ?gsPremium ) AS ?premiumCount ) WHERE {\n      ?gsPremium <http://debit_card_specializing.org/gasstations#Country> \"SVK\" .\n      ?gsPremium <http://debit_card_specializing.org/gasstations#Segment> \"Premium\" .\n    }\n  }\n  {\n    SELECT ( COUNT( ?gs ) AS ?totalCount ) WHERE {\n      ?gs <http://debit_card_specializing.org/gasstations#Country> \"SVK\" .\n    }\n  }\n  BIND( IF( ?totalCount > 0 , ( xsd:decimal ( ?premiumCount ) * \"100.0\" ^^ xsd:decimal ) / xsd:decimal ( ?totalCount ) , 0 ) AS ?percentage )\n}"
+    },
+    {
+        "question_id": 1529,
+        "db_id": "debit_card_specializing",
+        "question": "What is the amount spent by customer \"38508\" at the gas stations? How much had the customer spent in January 2012? Context: January 2012 refers to the Date value = '201201'",
+        "sql": "SELECT SUM(T1.Price ) , SUM(IIF(T3.Date = '201201', T1.Price, 0)) FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID INNER JOIN yearmonth AS T3 ON T1.CustomerID = T3.CustomerID WHERE T1.CustomerID = '38508'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?customerIRI ?totalAtGas ?ym ?janConsumption WHERE {\n  BIND( <http://debit_card_specializing.org/customers/CustomerID=38508> AS ?customerIRI ) OPTIONAL {\n    ?ym <http://debit_card_specializing.org/yearmonth#CustomerID> \"38508\" .\n    ?ym <http://debit_card_specializing.org/yearmonth#Date> \"201201\" .\n    ?ym <http://debit_card_specializing.org/yearmonth#Consumption> ?janConsumption .\n  }\n  {\n    SELECT ( SUM( xsd:decimal ( ?amt ) ) AS ?totalAtGas ) WHERE {\n      ?tx <http://debit_card_specializing.org/transactions_1k#CustomerID> ?custID .\n      FILTER ( str( ?custID ) = \"38508\" ) ?tx <http://debit_card_specializing.org/transactions_1k#GasStationID> ?gsid .\n      ?tx <http://debit_card_specializing.org/transactions_1k#Amount> ?amt .\n    }\n  }\n}"
+    },
+    {
+        "question_id": 1531,
+        "db_id": "debit_card_specializing",
+        "question": "Who is the top spending customer and how much is the average price per single item purchased by this customer? What currency was being used? Context: average price per single item = Total(price) / Total(amount)",
+        "sql": "SELECT T2.CustomerID, SUM(T2.Price / T2.Amount), T1.Currency FROM customers AS T1 INNER JOIN transactions_1k AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.CustomerID = ( SELECT CustomerID FROM yearmonth ORDER BY Consumption DESC LIMIT 1 ) GROUP BY T2.CustomerID, T1.Currency",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ?cust ?custid ( SUM( xsd:decimal ( ?price ) ) AS ?total_spent ) ( SUM( xsd:decimal ( ?amount ) ) AS ?total_amount ) ( ( SUM( xsd:decimal ( ?price ) ) / SUM( xsd:decimal ( ?amount ) ) ) AS ?avg_price_per_item ) ?currency WHERE {\n  ?cust a <http://debit_card_specializing.org/customers> .\n  ?cust <http://debit_card_specializing.org/customers#CustomerID> ?custid .\n  OPTIONAL {\n    ?cust <http://debit_card_specializing.org/customers#Currency> ?currency .\n  }\n  ?t <http://debit_card_specializing.org/transactions_1k#CustomerID> ?custid .\n  ?t <http://debit_card_specializing.org/transactions_1k#Price> ?price .\n  ?t <http://debit_card_specializing.org/transactions_1k#Amount> ?amount .\n}\nGROUP BY ?cust ?custid ?currency\nORDER BY DESC ( SUM( xsd:decimal ( ?price ) ) )\nLIMIT 1"
+    },
+    {
+        "question_id": 1533,
+        "db_id": "debit_card_specializing",
+        "question": "For all the people who paid more than 29.00 per unit of product id No.5. Give their consumption status in the August of 2012. Context: August of 2012 refers to the Date value = '201208' ; Price per unit of product = Price / Amount;",
+        "sql": "SELECT T2.Consumption FROM transactions_1k AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID WHERE T1.Price / T1.Amount > 29.00 AND T1.ProductID = 5 AND T2.Date = '201208'",
+        "sparql": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX transprop: <http://debit_card_specializing.org/transactions_1k#>\nPREFIX ymprop: <http://debit_card_specializing.org/yearmonth#>\nSELECT DISTINCT ?customerIRI ?custID ?consumption WHERE {\n  ?tx transprop:ProductID ?prodID .\n  FILTER ( STR( ?prodID ) = \"5\" ) ?tx transprop:Date ?date .\n  FILTER ( STRSTARTS( STR( ?date ) , \"2012-08\" ) ) ?tx transprop:Price ?price ; transprop:Amount ?amount ; transprop:CustomerID ?custID .\n  FILTER ( xsd:decimal ( ?amount ) > 0 && ( xsd:decimal ( ?price ) / xsd:decimal ( ?amount ) ) > 29 ) ?ym ymprop:CustomerID ?custID ; ymprop:Date \"201208\" ; ymprop:Consumption ?consumption .\n  BIND( IRI( CONCAT ( \"http://debit_card_specializing.org/customers/CustomerID=\" , STR( ?custID ) ) ) AS ?customerIRI )\n}\nORDER BY ?custID"
+    }
+]

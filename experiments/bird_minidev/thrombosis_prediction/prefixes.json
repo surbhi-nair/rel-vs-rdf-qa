@@ -1,0 +1,6 @@
+{
+  "throm": "<http://thrombosis.org/schema#",
+  "thpa": "<http://thrombosis.org/patient#",
+  "thex": "<http://thrombosis.org/examination#",
+  "thlab": "<http://thrombosis.org/labtest#"
+}

@@ -1,0 +1,18 @@
+{
+    "head": {
+        "vars": [
+            "avgMonthly"
+        ]
+    },
+    "results": {
+        "bindings": [
+            {
+                "avgMonthly": {
+                    "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+                    "type": "literal",
+                    "value": "3682.64"
+                }
+            }
+        ]
+    }
+}

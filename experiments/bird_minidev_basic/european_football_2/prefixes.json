@@ -1,0 +1,10 @@
+{
+  "european_football_2_vocab": "<http://european_football_2.org/vocab/>",
+  "Player_Attributes": "<http://european_football_2.org/data/Player_Attributes/>",
+  "Player": "<http://european_football_2.org/data/Player/>",
+  "League": "<http://european_football_2.org/data/League/>",
+  "Country": "<http://european_football_2.org/data/Country/>",
+  "Team": "<http://european_football_2.org/data/Team/>",
+  "Team_Attributes": "<http://european_football_2.org/data/Team_Attributes/>",
+  "Match": "<http://european_football_2.org/data/Match/>"
+}

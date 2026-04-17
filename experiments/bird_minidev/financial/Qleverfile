@@ -1,0 +1,22 @@
+# Qleverfile for BIRD financial db
+
+[data]
+NAME              = financial
+DESCRIPTION       = BIRD financial DB
+
+[index]
+INPUT_FILES     = ${data:NAME}_kg.nt
+CAT_INPUT_FILES = cat ${INPUT_FILES}
+SETTINGS_JSON   = { "ascii-prefixes-only": false, "num-triples-per-batch": 100000 }
+
+[server]
+PORT               = 9007
+ACCESS_TOKEN       = bird
+MEMORY_FOR_QUERIES = 5G
+CACHE_MAX_SIZE     = 5G
+TIMEOUT            = 30s
+
+[runtime]
+SYSTEM = native, if you cannot run Docker
+# SYSTEM = docker
+IMAGE  = docker.io/adfreiburg/qlever:latest

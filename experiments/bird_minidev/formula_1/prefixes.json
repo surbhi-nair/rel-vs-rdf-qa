@@ -1,0 +1,16 @@
+{
+    "f1": "http://formula1.org/schema#",
+    "f1c": "<http://formula1.org/circuit#",
+    "f1r": "<http://formula1.org/race#",
+    "f1d": "<http://formula1.org/driver#",
+    "f1drs": "<http://formula1.org/driverStanding#",
+    "f1cr": "<http://formula1.org/constructor#",
+    "f1crs": "<http://formula1.org/constructorStanding#",
+    "f1crr": "<http://formula1.org/constructorResult#",
+    "f1rs": "<http://formula1.org/results#",
+    "f1s": "<http://formula1.org/status#",
+    "f1q": "<http://formula1.org/qualifying#",
+    "f1l": "<http://formula1.org/lap#",
+    "f1p": "<http://formula1.org/pitstop#",
+    "f1se": "<http://formula1.org/season#"
+}

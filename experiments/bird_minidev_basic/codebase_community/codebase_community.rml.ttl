@@ -1,0 +1,565 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://codebase_community.org/> .
+
+######################################################################
+# Table: badges
+######################################################################
+<#badges_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "UserId", "Name", "Date" FROM "badges"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/badges/Id={Id}" ;
+    rr:class <http://codebase_community.org/badges>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "badges {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/badges#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/badges#UserId> ;
+    rr:objectMap [ rml:reference "UserId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/badges#ref-UserId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/users/Id={UserId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/badges#Name> ;
+    rr:objectMap [ rml:reference "Name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/badges#Date> ;
+    rr:objectMap [ rml:reference "Date" ]
+  ]
+ .
+
+######################################################################
+# Table: comments
+######################################################################
+<#comments_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "PostId", "Score", "Text", "CreationDate", "UserId", "UserDisplayName" FROM "comments"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/comments/Id={Id}" ;
+    rr:class <http://codebase_community.org/comments>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "comments {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#PostId> ;
+    rr:objectMap [ rml:reference "PostId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#ref-PostId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={PostId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#Score> ;
+    rr:objectMap [ rml:reference "Score" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#Text> ;
+    rr:objectMap [ rml:reference "Text" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#CreationDate> ;
+    rr:objectMap [ rml:reference "CreationDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#UserId> ;
+    rr:objectMap [ rml:reference "UserId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#ref-UserId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/users/Id={UserId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/comments#UserDisplayName> ;
+    rr:objectMap [ rml:reference "UserDisplayName" ]
+  ]
+ .
+
+######################################################################
+# Table: postHistory
+######################################################################
+<#postHistory_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "PostHistoryTypeId", "PostId", "RevisionGUID", "CreationDate", "UserId", "Text", "Comment", "UserDisplayName" FROM "postHistory"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/postHistory/Id={Id}" ;
+    rr:class <http://codebase_community.org/postHistory>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "postHistory {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#PostHistoryTypeId> ;
+    rr:objectMap [ rml:reference "PostHistoryTypeId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#PostId> ;
+    rr:objectMap [ rml:reference "PostId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#ref-PostId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={PostId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#RevisionGUID> ;
+    rr:objectMap [ rml:reference "RevisionGUID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#CreationDate> ;
+    rr:objectMap [ rml:reference "CreationDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#UserId> ;
+    rr:objectMap [ rml:reference "UserId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#ref-UserId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/users/Id={UserId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#Text> ;
+    rr:objectMap [ rml:reference "Text" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#Comment> ;
+    rr:objectMap [ rml:reference "Comment" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postHistory#UserDisplayName> ;
+    rr:objectMap [ rml:reference "UserDisplayName" ]
+  ]
+ .
+
+######################################################################
+# Table: postLinks
+######################################################################
+<#postLinks_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "CreationDate", "PostId", "RelatedPostId", "LinkTypeId" FROM "postLinks"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/postLinks/Id={Id}" ;
+    rr:class <http://codebase_community.org/postLinks>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "postLinks {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#CreationDate> ;
+    rr:objectMap [ rml:reference "CreationDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#PostId> ;
+    rr:objectMap [ rml:reference "PostId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#ref-PostId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={PostId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#RelatedPostId> ;
+    rr:objectMap [ rml:reference "RelatedPostId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#ref-RelatedPostId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={RelatedPostId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/postLinks#LinkTypeId> ;
+    rr:objectMap [ rml:reference "LinkTypeId" ]
+  ]
+ .
+
+######################################################################
+# Table: posts
+######################################################################
+<#posts_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "PostTypeId", "AcceptedAnswerId", "CreaionDate", "Score", "ViewCount", "Body", "OwnerUserId", "LasActivityDate", "Title", "Tags", "AnswerCount", "CommentCount", "FavoriteCount", "LastEditorUserId", "LastEditDate", "CommunityOwnedDate", "ParentId", "ClosedDate", "OwnerDisplayName", "LastEditorDisplayName" FROM "posts"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/posts/Id={Id}" ;
+    rr:class <http://codebase_community.org/posts>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "posts {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#PostTypeId> ;
+    rr:objectMap [ rml:reference "PostTypeId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#AcceptedAnswerId> ;
+    rr:objectMap [ rml:reference "AcceptedAnswerId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#CreaionDate> ;
+    rr:objectMap [ rml:reference "CreaionDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#Score> ;
+    rr:objectMap [ rml:reference "Score" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#ViewCount> ;
+    rr:objectMap [ rml:reference "ViewCount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#Body> ;
+    rr:objectMap [ rml:reference "Body" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#OwnerUserId> ;
+    rr:objectMap [ rml:reference "OwnerUserId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#ref-OwnerUserId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/users/Id={OwnerUserId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#LasActivityDate> ;
+    rr:objectMap [ rml:reference "LasActivityDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#Title> ;
+    rr:objectMap [ rml:reference "Title" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#Tags> ;
+    rr:objectMap [ rml:reference "Tags" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#AnswerCount> ;
+    rr:objectMap [ rml:reference "AnswerCount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#CommentCount> ;
+    rr:objectMap [ rml:reference "CommentCount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#FavoriteCount> ;
+    rr:objectMap [ rml:reference "FavoriteCount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#LastEditorUserId> ;
+    rr:objectMap [ rml:reference "LastEditorUserId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#ref-LastEditorUserId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/users/Id={LastEditorUserId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#LastEditDate> ;
+    rr:objectMap [ rml:reference "LastEditDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#CommunityOwnedDate> ;
+    rr:objectMap [ rml:reference "CommunityOwnedDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#ParentId> ;
+    rr:objectMap [ rml:reference "ParentId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#ref-ParentId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={ParentId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#ClosedDate> ;
+    rr:objectMap [ rml:reference "ClosedDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#OwnerDisplayName> ;
+    rr:objectMap [ rml:reference "OwnerDisplayName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/posts#LastEditorDisplayName> ;
+    rr:objectMap [ rml:reference "LastEditorDisplayName" ]
+  ]
+ .
+
+######################################################################
+# Table: tags
+######################################################################
+<#tags_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "TagName", "Count", "ExcerptPostId", "WikiPostId" FROM "tags"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/tags/Id={Id}" ;
+    rr:class <http://codebase_community.org/tags>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "tags {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/tags#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/tags#TagName> ;
+    rr:objectMap [ rml:reference "TagName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/tags#Count> ;
+    rr:objectMap [ rml:reference "Count" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/tags#ExcerptPostId> ;
+    rr:objectMap [ rml:reference "ExcerptPostId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/tags#ref-ExcerptPostId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={ExcerptPostId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/tags#WikiPostId> ;
+    rr:objectMap [ rml:reference "WikiPostId" ]
+  ]
+ .
+
+######################################################################
+# Table: users
+######################################################################
+<#users_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "Reputation", "CreationDate", "DisplayName", "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/users/Id={Id}" ;
+    rr:class <http://codebase_community.org/users>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "users {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#Reputation> ;
+    rr:objectMap [ rml:reference "Reputation" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#CreationDate> ;
+    rr:objectMap [ rml:reference "CreationDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#DisplayName> ;
+    rr:objectMap [ rml:reference "DisplayName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#LastAccessDate> ;
+    rr:objectMap [ rml:reference "LastAccessDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#WebsiteUrl> ;
+    rr:objectMap [ rml:reference "WebsiteUrl" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#Location> ;
+    rr:objectMap [ rml:reference "Location" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#AboutMe> ;
+    rr:objectMap [ rml:reference "AboutMe" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#Views> ;
+    rr:objectMap [ rml:reference "Views" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#UpVotes> ;
+    rr:objectMap [ rml:reference "UpVotes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#DownVotes> ;
+    rr:objectMap [ rml:reference "DownVotes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#AccountId> ;
+    rr:objectMap [ rml:reference "AccountId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#Age> ;
+    rr:objectMap [ rml:reference "Age" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/users#ProfileImageUrl> ;
+    rr:objectMap [ rml:reference "ProfileImageUrl" ]
+  ]
+ .
+
+######################################################################
+# Table: votes
+######################################################################
+<#votes_Mapping>
+  rml:logicalSource [
+    rml:source "codebase_community.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "Id", "PostId", "VoteTypeId", "CreationDate", "UserId", "BountyAmount" FROM "votes"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://codebase_community.org/votes/Id={Id}" ;
+    rr:class <http://codebase_community.org/votes>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "votes {Id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#Id> ;
+    rr:objectMap [ rml:reference "Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#PostId> ;
+    rr:objectMap [ rml:reference "PostId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#ref-PostId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/posts/Id={PostId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#VoteTypeId> ;
+    rr:objectMap [ rml:reference "VoteTypeId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#CreationDate> ;
+    rr:objectMap [ rml:reference "CreationDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#UserId> ;
+    rr:objectMap [ rml:reference "UserId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#ref-UserId> ;
+    rr:objectMap [
+      rr:template "http://codebase_community.org/users/Id={UserId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://codebase_community.org/votes#BountyAmount> ;
+    rr:objectMap [ rml:reference "BountyAmount" ]
+  ]
+ .

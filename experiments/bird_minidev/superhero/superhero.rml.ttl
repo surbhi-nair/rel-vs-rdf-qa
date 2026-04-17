@@ -1,0 +1,160 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix hero: <http://superhero.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) Alignment
+######################################################################
+<#AlignmentMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, alignment FROM alignment"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/alignment/{id}" ; rr:class hero:Alignment ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "alignment" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:alignmentType ; rr:objectMap [ rml:reference "alignment" ] ] .
+
+######################################################################
+# 2) Attribute
+######################################################################
+<#AttributeMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, attribute_name FROM attribute"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/attribute/{id}" ; rr:class hero:Attribute ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "attribute_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:attributeName ; rr:objectMap [ rml:reference "attribute_name" ] ] .
+
+######################################################################
+# 3) Colour
+######################################################################
+<#ColourMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, colour FROM colour"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/colour/{id}" ; rr:class hero:Colour ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "colour" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:colourName ; rr:objectMap [ rml:reference "colour" ] ] .
+
+######################################################################
+# 4) Gender
+######################################################################
+<#GenderMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, gender FROM gender"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/gender/{id}" ; rr:class hero:Gender ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "gender" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:genderType ; rr:objectMap [ rml:reference "gender" ] ] .
+
+######################################################################
+# 5) Publisher
+######################################################################
+<#PublisherMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, publisher_name FROM publisher"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/publisher/{id}" ; rr:class hero:Publisher ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "publisher_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:publisherName ; rr:objectMap [ rml:reference "publisher_name" ] ] .
+
+######################################################################
+# 6) Race
+######################################################################
+<#RaceMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, race FROM race"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/race/{id}" ; rr:class hero:Race ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "race" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:raceType ; rr:objectMap [ rml:reference "race" ] ] .
+
+######################################################################
+# 7) Superpower
+######################################################################
+<#PowerMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, power_name FROM superpower"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/superpower/{id}" ; rr:class hero:Superpower ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rml:reference "power_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:powerName ; rr:objectMap [ rml:reference "power_name" ] ] .
+
+######################################################################
+# 8) Superhero
+######################################################################
+<#SuperheroMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+      SELECT id, superhero_name, full_name, gender_id, eye_colour_id, hair_colour_id, skin_colour_id,
+             race_id, publisher_id, alignment_id, height_cm, weight_kg
+      FROM superhero
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/superhero/{id}" ; rr:class hero:Superhero ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{superhero_name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:superheroName ; rr:objectMap [ rml:reference "superhero_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:fullName ; rr:objectMap [ rml:reference "full_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasGender ; rr:objectMap [ rr:template "http://superhero.org/gender/{gender_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasEyeColour ; rr:objectMap [ rr:template "http://superhero.org/colour/{eye_colour_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasHairColour ; rr:objectMap [ rr:template "http://superhero.org/colour/{hair_colour_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasSkinColour ; rr:objectMap [ rr:template "http://superhero.org/colour/{skin_colour_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasRace ; rr:objectMap [ rr:template "http://superhero.org/race/{race_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:publishedBy ; rr:objectMap [ rr:template "http://superhero.org/publisher/{publisher_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasAlignment ; rr:objectMap [ rr:template "http://superhero.org/alignment/{alignment_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:heightInCm ; rr:objectMap [ rml:reference "height_cm" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:weightInKg ; rr:objectMap [ rml:reference "weight_kg" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 9) Hero-Attribute (Link Superhero to Attributes with Values)
+######################################################################
+<#HeroAttributeMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT hero_id, attribute_id, attribute_value FROM hero_attribute"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/heroAttribute/{hero_id}_{attribute_id}" ; rr:class hero:HeroAttributeScore ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Hero {hero_id} Attribute {attribute_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:ofHero ; rr:objectMap [ rr:template "http://superhero.org/superhero/{hero_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:forAttribute ; rr:objectMap [ rr:template "http://superhero.org/attribute/{attribute_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:attributeValue ; rr:objectMap [ rml:reference "attribute_value" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 10) Hero-Power (Link Superhero to Superpower)
+######################################################################
+<#HeroPowerMapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT hero_id, power_id FROM hero_power"
+  ] ;
+  rr:subjectMap [ rr:template "http://superhero.org/heroPower/{hero_id}_{power_id}" ; rr:class hero:HeroPowerRelation ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Hero {hero_id} Power {power_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:ofHero ; rr:objectMap [ rr:template "http://superhero.org/superhero/{hero_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate hero:hasPower ; rr:objectMap [ rr:template "http://superhero.org/superpower/{power_id}" ; rr:termType rr:IRI ] ] .
+
+# Property-level comments for adding commonsense evidence
+hero:alignment rdfs:comment "Alignment refers to a character's moral and ethical stance and can be used to describe the overall attitude or behavior of a superhero. Some common alignments for superheroes include: Good: These superheroes are typically kind, selfless, and dedicated to protecting others and upholding justice. Examples of good alignments include Superman, Wonder Woman, and Spider-Man. Neutral: These superheroes may not always prioritize the greater good, but they are not necessarily evil either. They may act in their own self-interest or make decisions based on their own moral code. Examples of neutral alignments include the Hulk and Deadpool. Bad: These superheroes are typically selfish, manipulative, and willing to harm others in pursuit of their own goals. Examples of evil alignments include Lex Luthor and the Joker." .
+hero:attribute_name rdfs:comment "A superhero's attribute is a characteristic or quality that defines who they are and what they are capable of. This could be a physical trait, such as superhuman strength or the ability to fly, or a personal trait, such as extraordinary intelligence or exceptional bravery." .
+hero:attribute_value rdfs:comment "If a superhero has a higher attribute value on a particular attribute, it means that they are more skilled or powerful in that area compared to other superheroes. For example, if a superhero has a higher attribute value for strength, they may be able to lift heavier objects or deliver more powerful punches than other superheroes." .
+hero:power_id rdfs:comment "In general, a superhero's attributes provide the foundation for their abilities and help to define who they are, while their powers are the specific abilities that they use to fight crime and protect others." .
+hero:race rdfs:comment "In the context of superheroes, a superhero's race would refer to the particular group of people that the superhero belongs to base on these physical characteristics" .

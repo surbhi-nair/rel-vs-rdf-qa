@@ -1,0 +1,7 @@
+{
+  "cs": "<http://calischools.org/schema#",
+  "school": "<http://calischools.org/school#",
+  "admin": "<http://calischools.org/admin#",
+  "sat": "<http://calischools.org/sat#",
+  "frpm": "<http://calischools.org/frpm#"
+}

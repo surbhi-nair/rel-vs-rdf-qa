@@ -1,0 +1,274 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix fin:  <http://financialdb.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) District Mapping (Updated to include all municipality columns)
+######################################################################
+<#DistrictMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT district_id
+    , A2 AS district_name
+    , A3 AS region
+    , A4 AS inhabitants
+    , A5 AS mun_lt_499
+    , A6 AS mun_500_1999
+    , A7 AS mun_2000_9999
+    , A8 AS mun_gt_10000
+    , A10 AS urban_ratio
+    , A11 AS avg_salary
+    , A12 AS unemployment_1995
+    , A13 AS unemployment_1996
+    , A14 AS entrepreneurs_per_1000
+    , A15 AS crimes_1995
+    , A16 AS crimes_1996
+    FROM district
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/district/{district_id}" ; rr:class fin:District ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{district_name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:district_id ; rr:objectMap [ rml:reference "district_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:districtName ; rr:objectMap [ rml:reference "district_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:region ; rr:objectMap [ rml:reference "region" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:inhabitants ; rr:objectMap [ rml:reference "inhabitants" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:municipalities_lt_499 ; rr:objectMap [ rml:reference "mun_lt_499" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:municipalities_500_1999 ; rr:objectMap [ rml:reference "mun_500_1999" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:municipalities_2000_9999 ; rr:objectMap [ rml:reference "mun_2000_9999" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:municipalities_gt_10000 ; rr:objectMap [ rml:reference "mun_gt_10000" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:urbanInhabitantsRatio ; rr:objectMap [ rml:reference "urban_ratio" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:averageSalary ; rr:objectMap [ rml:reference "avg_salary" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:unemploymentRate1995 ; rr:objectMap [ rml:reference "unemployment_1995" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:unemploymentRate1996 ; rr:objectMap [ rml:reference "unemployment_1996" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:entrepreneursPer1000Inhabitants ; rr:objectMap [ rml:reference "entrepreneurs_per_1000" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:crimeRate1995 ; rr:objectMap [ rml:reference "crimes_1995" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:crimeRate1996 ; rr:objectMap [ rml:reference "crimes_1996" ] ] .
+
+######################################################################
+# 2) Client Mapping
+######################################################################
+<#ClientMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT client_id
+    , CASE WHEN gender = 'M' THEN 'Male' WHEN gender = 'F' THEN 'Female' ELSE 'Other' END AS gender
+    , birth_date, district_id FROM client
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/client/{client_id}" ; rr:class fin:Client ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Client {client_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:gender ; rr:objectMap [ rml:reference "gender" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:birthDate ; rr:objectMap [ rml:reference "birth_date" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:livesInDistrict ; rr:objectMap [ rr:template "http://financialdb.org/district/{district_id}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 3) Account Mapping
+######################################################################
+<#AccountMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT account_id
+         , district_id
+         , frequency
+         , CASE 
+             WHEN frequency = 'POPLATEK MESICNE' THEN 'Monthly'
+             WHEN frequency = 'POPLATEK TYDNE' THEN 'Weekly'
+             WHEN frequency = 'POPLATEK PO OBRATU' THEN 'After Transaction'
+             ELSE 'Other'
+           END AS frequency_en
+         , date
+    FROM account
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/account/{account_id}" ; rr:class fin:Account ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Account {account_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:accountId ; rr:objectMap [ rml:reference "account_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:createdOn ; rr:objectMap [ rml:reference "date" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:belongsToDistrict ; rr:objectMap [ rr:template "http://financialdb.org/district/{district_id}" ; rr:termType rr:IRI ] ] ;
+  
+  # Original Czech value
+  rr:predicateObjectMap [ rr:predicate fin:frequencyRaw ; rr:objectMap [ rml:reference "frequency" ] ] ;
+  
+  # English mapping
+  rr:predicateObjectMap [ rr:predicate fin:frequencyLabel ; rr:objectMap [ rml:reference "frequency_en" ] ] .
+
+######################################################################
+# 4) Disposition Mapping
+######################################################################
+<#DispositionMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT disp_id, client_id, account_id, type FROM disp
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/disposition/{disp_id}" ; rr:class fin:Disposition ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Disposition {disp_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:dispositionId ; rr:objectMap [ rml:reference "disp_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:dispositionType ; rr:objectMap [ rml:reference "type" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:forAccount ; rr:objectMap [ rr:template "http://financialdb.org/account/{account_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:forClient ; rr:objectMap [ rr:template "http://financialdb.org/client/{client_id}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 5) Card Mapping
+######################################################################
+<#CardMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT card_id, disp_id, type, issued FROM card
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/card/{card_id}" ; rr:class fin:Card ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Card {card_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:cardId ; rr:objectMap [ rml:reference "card_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:cardType ; rr:objectMap [ rml:reference "type" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:issuedDate ; rr:objectMap [ rml:reference "issued" ; rr:datatype xsd:date ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:linkedToDisposition ; rr:objectMap [ rr:template "http://financialdb.org/disposition/{disp_id}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 6) Loan Mapping
+######################################################################
+<#LoanMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT loan_id, account_id, date, amount, duration, payments, status FROM loan
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/loan/{loan_id}" ; rr:class fin:Loan ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Loan {loan_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:loanAmount ; rr:objectMap [ rml:reference "amount" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:loanDuration ; rr:objectMap [ rml:reference "duration" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:monthlyPayment ; rr:objectMap [ rml:reference "payments" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:status ; rr:objectMap [ rml:reference "status" ]
+  ] ;
+  rr:predicateObjectMap [ rr:predicate fin:belongsToAccount ; rr:objectMap [ rr:template "http://financialdb.org/account/{account_id}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 7) Order Mapping
+######################################################################
+<#OrderMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT order_id
+         , account_id
+         , bank_to
+         , account_to
+         , amount
+         , k_symbol
+         , CASE
+             WHEN k_symbol = 'POJISTNE' THEN 'Insurance Payment'
+             WHEN k_symbol = 'SIPO' THEN 'Household Payment'
+             WHEN k_symbol = 'LEASING' THEN 'Leasing'
+             WHEN k_symbol = 'UVER' THEN 'Loan Payment'
+             ELSE 'Other'
+           END AS k_symbol_en
+    FROM 'order'
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/order/{order_id}" ; rr:class fin:Order ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Order {order_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:orderId ; rr:objectMap [ rml:reference "order_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:amount ; rr:objectMap [ rml:reference "amount" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:bankRecipient ; rr:objectMap [ rml:reference "bank_to" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:recipientAccount ; rr:objectMap [ rml:reference "account_to" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:initiatedFromAccount ; rr:objectMap [ rr:template "http://financialdb.org/account/{account_id}" ; rr:termType rr:IRI ] ] ;
+
+  # Original Czech purpose
+  rr:predicateObjectMap [ rr:predicate fin:purposeRaw ; rr:objectMap [ rml:reference "k_symbol" ] ] ;
+
+  # English mapping
+  rr:predicateObjectMap [ rr:predicate fin:purposeLabel ; rr:objectMap [ rml:reference "k_symbol_en" ] ] .
+
+######################################################################
+# 8) Transaction Mapping
+######################################################################
+<#TransactionMapping>
+  rml:logicalSource [
+    rml:source "financial.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT trans_id
+         , account_id
+         , date
+         , type
+         , operation
+         , amount
+         , balance
+         , k_symbol
+         , bank
+         , account
+         , CASE
+             WHEN type = 'PRIJEM' THEN 'Credit'
+             WHEN type = 'VYDAJ' THEN 'Withdrawal'
+             ELSE 'Other'
+           END AS type_en
+         , CASE
+             WHEN operation = 'VYBER KARTOU' THEN 'Credit Card Withdrawal'
+             WHEN operation = 'VKLAD' THEN 'Cash Deposit'
+             WHEN operation = 'PREVOD Z UCTU' THEN 'Collection from Another Bank'
+             WHEN operation = 'VYBER' THEN 'Cash Withdrawal'
+             WHEN operation = 'PREVOD NA UCET' THEN 'Remittance to Another Bank'
+             ELSE 'Other'
+           END AS operation_en
+         , CASE
+             WHEN k_symbol = 'POJISTNE' THEN 'Insurance Payment'
+             WHEN k_symbol = 'SLUZBY' THEN 'Payment for Statement'
+             WHEN k_symbol = 'UROK' THEN 'Interest Credited'
+             WHEN k_symbol = 'SANKC. UROK' THEN 'Sanction Interest'
+             WHEN k_symbol = 'SIPO' THEN 'Household Payment'
+             WHEN k_symbol = 'DUCHOD' THEN 'Old-age Pension'
+             WHEN k_symbol = 'UVER' THEN 'Loan Payment'
+             ELSE 'Other'
+           END AS k_symbol_en
+    FROM trans
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://financialdb.org/transaction/{trans_id}" ; rr:class fin:Transaction ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Transaction {trans_id}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:transactionId ; rr:objectMap [ rml:reference "trans_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:transactionDate ; rr:objectMap [ rml:reference "date" ; rr:datatype xsd:date ] ] ;
+  
+  # Original Czech values
+  rr:predicateObjectMap [ rr:predicate fin:transactionTypeRaw ; rr:objectMap [ rml:reference "type" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:operationModeRaw ; rr:objectMap [ rml:reference "operation" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:transactionPurposeRaw ; rr:objectMap [ rml:reference "k_symbol" ] ] ;
+  
+  # English semantic mappings
+  rr:predicateObjectMap [ rr:predicate fin:transactionTypeLabel ; rr:objectMap [ rml:reference "type_en" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:operationModeLabel ; rr:objectMap [ rml:reference "operation_en" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:transactionPurposeLabel ; rr:objectMap [ rml:reference "k_symbol_en" ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate fin:transactionAmount ; rr:objectMap [ rml:reference "amount" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:balanceAfter ; rr:objectMap [ rml:reference "balance" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:bankCode ; rr:objectMap [ rml:reference "bank" ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:toAccount ; rr:objectMap [ rml:reference "account" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate fin:forAccount ; rr:objectMap [ rr:template "http://financialdb.org/account/{account_id}" ; rr:termType rr:IRI ] ] .
+
+
+# Property-level comments for adding commonsense evidence
+fin:municipalities_lt_499 rdfs:comment "no. of municipalities with inhabitants less than 499" .
+fin:municipalities_500_1999 rdfs:comment "no. of municipalities with inhabitants between 500 and 1999" .
+fin:municipalities_2000_9999 rdfs:comment "no. of municipalities with inhabitants between 2000 and 9999" .
+fin:municipalities_gt_10000 rdfs:comment "no. of municipalities with inhabitants greater than 10000" .
+fin:dispositionType rdfs:comment "the account can only have the right to issue permanent orders or apply for loans" .
+fin:loanAmount rdfs:comment "approved amount in US dollars" .
+fin:duration rdfs:comment "duration of the loan in months" .
+fin:monthlyPayment rdfs:comment "monthly payment amount in US dollars" .
+fin:status rdfs:comment "'A' stands for contract finished, no problems;'B' stands for contract finished, loan not paid;'C' stands for running contract, OK so far;'D' stands for running contract, client in debt" .
+

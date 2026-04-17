@@ -1,0 +1,4002 @@
+[
+  {
+    "question_id": 1471,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts customers with Currency='EUR' and Currency='CZK' and divides them (yielding 2002/30459 = 0.0657277), which matches the gold ratio, so it is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 1472,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same customer (47273) filtered for LAM and year 2012 and orders by summed consumption, so it semantically matches the SQL gold result."
+    }
+  },
+  {
+    "question_id": 1473,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL first sums consumption per customer for the year and then averages those yearly totals (dividing by 12), whereas the gold SQL averages the monthly consumption values directly then divides by 12, so the aggregation/weighting is different and yields a non-equivalent result."
+    }
+  },
+  {
+    "question_id": 1476,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes CZK total minus EUR total for dates starting with '2012', matching the gold logic, and the reported difference (402,525,000.0) is within acceptable rounding tolerance of the gold value (402,524,570.17)."
+    }
+  },
+  {
+    "question_id": 1479,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it sums totalPrice (and limits to GasStation transactions) rather than summing the Consumption values per year for customers with Currency='CZK', so it computes the wrong metric and returns the wrong year."
+    }
+  },
+  {
+    "question_id": 1480,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes total consumption per month for SME customers in 2013, selects the month with the highest sum, and returns '04', matching the gold SQL's result and intent."
+    }
+  },
+  {
+    "question_id": 1481,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 1482,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns zero percentage increases (sum2013 is 0 and it uses a sum2013-based zero-check) and thus yields incorrect pct values, while the gold computes nonzero percentage increases by aggregating 2012 and 2013 consumption and dividing by the 2012 total \u2014 the SPARQL's aggregation/denominator logic is wrong."
+    }
+  },
+  {
+    "question_id": 1483,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes the sum of consumption values for customer 6 constrained by the date range 201308\u2013201311 and returns 1224.96, which semantically matches the SQL gold answer."
+    }
+  },
+  {
+    "question_id": 1484,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly counts Discount gas stations for CZE (235) and SVK (59) and computes their difference of 176, matching the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1486,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes SME counts by CZK and EUR and their difference, yielding 25134 - 1629 = 23505, which matches the gold result and implements the same filtering logic."
+    }
+  },
+  {
+    "question_id": 1490,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL percent (98.3871) matches the gold result (98.5268) within acceptable numeric rounding and the SPARQL query correctly computes (LAM customers with consumption > 46.73) / (total LAM customers) * 100."
+    }
+  },
+  {
+    "question_id": 1493,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the percentage of (distinct) customers in date '201202' with consumption > 528.3 and yields 66.623, which matches the gold result up to rounding."
+    }
+  },
+  {
+    "question_id": 1498,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns a single entry's consumption (445,280) filtered by year but does not GROUP BY month and SUM consumption per month, so it fails to compute the highest monthly total (expected ~51,787,161.74)."
+    }
+  },
+  {
+    "question_id": 1500,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect: the SPARQL returns no results because it filters dates with the hyphenated string \"2013-09\" on the transaction date and does not join the yearmonth table, while the gold SQL matches yearmonth.Date = '201309' (no hyphen) via a join, so the date format and join logic are wrong and no product descriptions are retrieved."
+    }
+  },
+  {
+    "question_id": 1501,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query filters the Transaction's own date using an ISO substring ('2013-06') and never joins the yearmonth table via CustomerID or checks yearmonth.Date = '201306', so it fails to implement the gold query's filtering logic."
+    }
+  },
+  {
+    "question_id": 1505,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns the number of distinct customers who ever have a consumption >1000, whereas the gold SQL counts yearmonth rows (monthly records) with Consumption>1000 for EUR customers (no DISTINCT), so the semantics and numeric result differ."
+    }
+  },
+  {
+    "question_id": 1506,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of product descriptions (ignoring duplicate row and extra product URIs) for transactions at gas stations with country 'CZE', matching the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 1507,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same distinct transaction times (11:55:00 and 14:29:00) for transactions at stations with chainID 11, matching the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1509,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same count (933) and correctly restricts transactions to stations with country 'CZE' and dates after 2012-01-01, matching the gold result."
+    }
+  },
+  {
+    "question_id": 1514,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query retrieves the customer currency for the transaction with the matching date and time, which semantically matches the SQL that selects the customer's Currency for that transaction (producing 'CZK')."
+    }
+  },
+  {
+    "question_id": 1515,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query retrieves the customer linked to the transaction at 2012-08-23 21:20:00 and returns the segment 'KAM', which matches the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1521,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (0) does not match the gold count (14); the query likely fails to match times because it compares untyped string literals (instead of xsd:time) or uses mismatched property/datatype, causing no transactions to satisfy the time filter."
+    }
+  },
+  {
+    "question_id": 1524,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 1525,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it divides the count of distinct customers who had EUR transactions on 2012-08-25 by the total number of customers in the database (and uses a brittle property join), whereas the SQL computes the percentage of transactions/customers for that specific date (numerator and denominator limited to that date), producing ~1.647% \u2014 the denominator and join logic are therefore wrong."
+    }
+  },
+  {
+    "question_id": 1526,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query filters the transaction by price 634.8 (and different property) on 2012-08-25, whereas the gold SQL identifies the customer by a transaction with price 1513.12, so the SPARQL selects a different customer and thus returns incorrect consumption sums and decrease rate."
+    }
+  },
+  {
+    "question_id": 1528,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same ratio (100 * count of Segment = 'Premium' within Country = 'SVK' divided by total gas stations in Country = 'SVK') and returns the same numeric result (\u224835.6818), so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1529,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL results differ from the gold totals (88612.4 vs 68740.2 and 0 vs 3437.01) because the query does not restrict transactions to gas stations (no join/type check) and incorrectly handles the date (no join to yearmonth and uses '2012-01' string check instead of the '201201' value), causing the January sum to be zero and the overall sum to be wrong."
+    }
+  },
+  {
+    "question_id": 1531,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect \u2014 the SPARQL picks the top customer by SUM(totalPrice) (returning customer 13665) whereas the gold SQL uses the customer from the yearmonth table ordered by Consumption (customer 12459), and the SPARQL computes average as SUM(price)/SUM(amount) while the gold sums per-transaction (SUM(price/amount)), so the selected customer and average value do not match the gold standard."
+    }
+  },
+  {
+    "question_id": 1533,
+    "db_id": "debit_card_specializing",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1312,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query finds the member with firstName 'Angela' and lastName 'Sanders' and returns the major_name 'Business', which matches the SQL gold standard result."
+    }
+  },
+  {
+    "question_id": 1317,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct members with tShirtSize \"Medium\" who attended the specific event URI (representing 'Women's Soccer'), yielding 7, which semantically matches the SQL's intended count of attendees with Medium T-shirts."
+    }
+  },
+  {
+    "question_id": 1322,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns a count of 4 meetings with >10 attendees, which semantically matches the gold result indicating four such meeting events."
+    }
+  },
+  {
+    "question_id": 1323,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of eight event names with count >20 and excludes fundraisers, matching the gold standard results."
+    }
+  },
+  {
+    "question_id": 1331,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns totalAmount 100.0 for the Vice President (it aggregates with SUM per member), but the gold SQL result is amount 50, so the numeric value/aggregation does not match the gold result."
+    }
+  },
+  {
+    "question_id": 1334,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the same full names (Tyler Hewitt, Trent Smith, Annabella Warren) as the SQL ground truth and the extra member URI column is allowed."
+    }
+  },
+  {
+    "question_id": 1338,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect because the SPARQL ASK returns false (claiming not all expenses are approved) while the gold result shows every expense for that event has approved = true, so the query's boolean conclusion contradicts the ground truth."
+    }
+  },
+  {
+    "question_id": 1339,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the same average value (74.0775) for Elijah Allen over September and October (extra columns/explicit member binding are allowed), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1340,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly sums amounts for 2019 and 2020 and returns their difference (2086.05), matching the gold SQL result and equivalent join-and-filter logic."
+    }
+  },
+  {
+    "question_id": 1344,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the expected note 'Secured donations to help pay for speaker gifts.' (in incomeNotes), which matches the gold standard."
+    }
+  },
+  {
+    "question_id": 1346,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the correct phone number '928-555-2577' for the member with firstName 'Carlo' and lastName 'Jacobs', matching the gold output (extra columns/duplicate rows are allowed)."
+    }
+  },
+  {
+    "question_id": 1350,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL results include the event_status value 'Closed' for the expense with description 'Post Cards, Posters' on 2019-08-20, which matches the SQL ground truth."
+    }
+  },
+  {
+    "question_id": 1351,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes majorLabel 'Business Education' for the member labeled 'Brent Thomason', which semantically matches the gold standard major_name."
+    }
+  },
+  {
+    "question_id": 1352,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns a count of 1 for members with t_shirt_size 'Medium' restricted to the Business major IRI, matching the gold SQL result of 1."
+    }
+  },
+  {
+    "question_id": 1356,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output includes the correct department value 'Liberal Arts Program' for the member with position President, which matches the gold result (extra columns/rows are allowed)."
+    }
+  },
+  {
+    "question_id": 1357,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same two date_received values (2019-10-02 and 2019-09-12) for dues as the SQL ground truth, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1359,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it uses hard-coded event URIs and sums budgets directly without joining/filtering events by type='Meeting' (and yields ratio 1.0 vs the gold 2.727), so it does not implement the same event-type filter or equivalent join logic as the SQL."
+    }
+  },
+  {
+    "question_id": 1361,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query sums the cost for triples with expenseDescription \"Pizza\" and returns 600.11, matching the SQL ground truth SUM(cost) for expense_description = 'Pizza'."
+    }
+  },
+  {
+    "question_id": 1362,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same filters (county = 'Orange County' and state = 'Virginia') and counts distinct city names, yielding the same numeric result as the SQL (7)."
+    }
+  },
+  {
+    "question_id": 1368,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the majorName 'Agricultural Education' for the member with phone '809-555-3360', which matches the gold standard major_name result."
+    }
+  },
+  {
+    "question_id": 1371,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the same attendee count (17) for the 'Women's Soccer' event, matching the gold standard result."
+    }
+  },
+  {
+    "question_id": 1375,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the exact same five full names (first_name, last_name) as the gold standard, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1376,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns 'Officers meeting - October' (ratio 1.01) rather than the gold-standard 'September Speaker', so it does not identify the same event as having the highest spend-to-budget ratio."
+    }
+  },
+  {
+    "question_id": 1378,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes SUM(amountSpent) per event and returns the event with the largest total (449.13) instead of the maximum single spent value (MAX(spent) = 327.07), so it yields the wrong aggregation. "
+    }
+  },
+  {
+    "question_id": 1380,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL sums the amountSpent for entries with budgetCategory \"Food\", which semantically matches SUM(spent) WHERE category='Food' and yields the same numeric result."
+    }
+  },
+  {
+    "question_id": 1381,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the same set of student full names meeting COUNT(events) > 7 (all 29 gold rows are present), and it correctly groups by member and filters by COUNT(?event) > 7, so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1387,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only one member (Elijah Allen) and infers budget responsibility from attendance and a 'Treasurer' position rather than following the budget->expense->member linkage in the gold query, so it misses Sacha Harrison and uses the wrong relationship to determine who manages the budget."
+    }
+  },
+  {
+    "question_id": 1389,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL finds events with the smallest total/summed budgetAmount per event (and uses budgetAmount) instead of selecting the event with the single minimum expense.cost, so it returns multiple wrong events rather than the gold answer 'November Speaker'."
+    }
+  },
+  {
+    "question_id": 1390,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL sums sclub:cost directly on Event instead of joining Event -> Budget -> Expense to sum expense.cost as in the SQL, so it does not replicate the same data path and may produce incorrect totals/percentage."
+    }
+  },
+  {
+    "question_id": 1392,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns 'School Appropration' for the specified September 2019 date range (aggregating amounts and selecting the top source), matching the gold standard result."
+    }
+  },
+  {
+    "question_id": 1394,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct members whose major has majorName 'Physics Teaching' and returns 1, which semantically matches the SQL result (extra major column is allowed)."
+    }
+  },
+  {
+    "question_id": 1398,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the event name 'Yearly Kickoff' for the budget entry with category 'Advertisement' ordered by highest spent, matching the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1399,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL ASK returns True (attendance relation exists between the member and the event), which semantically matches the SQL result 'YES' indicating Maya Mclean attended the 'Women's Soccer' event."
+    }
+  },
+  {
+    "question_id": 1401,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the cost 67.81 for the 'Posters' expense linked to the 'September Speaker' event, which matches the gold SQL output."
+    }
+  },
+  {
+    "question_id": 1403,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the per-event minimum remaining, filters for remaining < 0 and closed events, and returns the event (with name) having the smallest remaining value, which matches the SQL's intent and result."
+    }
+  },
+  {
+    "question_id": 1404,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns per-budget/expense-category approved totals (Food 121.14, Advertisement 54.25) instead of the event's type ('Meeting') and the single overall SUM(cost)=175.39\u2014it groups by budget/category rather than selecting the event.type and aggregating all expenses for 'October Meeting'."
+    }
+  },
+  {
+    "question_id": 1405,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same categories with matching summed amounts ordered ascending (10, 25, 75, 150) for the event, and the extra columns (event, total, categoryLabel) are allowed."
+    }
+  },
+  {
+    "question_id": 1409,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query filters expenses by expenseDate = '2019-08-20' and returns the SUM(cost) (122.06), which semantically matches the SQL result."
+    }
+  },
+  {
+    "question_id": 1410,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same member (rec4BLdZHS2Blfp4v) with first name Sacha, last name Harrison, and the summed cost 866.25, matching the gold standard."
+    }
+  },
+  {
+    "question_id": 1411,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of expense descriptions as the gold SQL results (duplicates collapsed via DISTINCT), so the predicted query returns the correct semantic values."
+    }
+  },
+  {
+    "question_id": 1422,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query returns event types (e.g., 'Meeting', 'Guest Speaker') for events at MU 215 instead of the budget categories (Advertisement, Food, Speaker Gifts, Parking) because it never accesses/joined the budget/category information required by the gold SQL."
+    }
+  },
+  {
+    "question_id": 1426,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query does not enforce the condition that the person\u2019s position = 'Member' (the SQL filters T2.position = 'Member'), so its logic is not equivalent and may return non-members even though the current results match."
+    }
+  },
+  {
+    "question_id": 1427,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query filters ?spent on the event itself and never joins to a budget entity (where spent is checked in the SQL), so it fails to enforce budget.spent = 0 and returns no matching categories (and also omits selecting the event type as in the gold query)."
+    }
+  },
+  {
+    "question_id": 1432,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes percentage of members (distinct members with amount=50 divided by total members), whereas the gold SQL computes percentage of income records with amount=50 out of all income records for those members (counts of income rows), so it counts members instead of income entries and thus is semantically incorrect."
+    }
+  },
+  {
+    "question_id": 1435,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same event names required by the SQL gold (\"Women's Soccer\" and \"Football game\"); extra duplicate row does not change the semantic answer."
+    }
+  },
+  {
+    "question_id": 1457,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same three members with matching first/last names and phone numbers as the gold SQL output, so the returned values are semantically equivalent."
+    }
+  },
+  {
+    "question_id": 1460,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 1464,
+    "db_id": "student_club",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same two students (Sacha Harrison and Carlo Jacobs) with the correct amounts for 2019-09-09 (extra member URI column is irrelevant), so it is semantically equivalent to the SQL result."
+    }
+  },
+  {
+    "question_id": 1149,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1150,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly computes the count of female patients and the count born after 1930 and returns the same percentage (~94.0371) as the gold SQL, so it is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 1152,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the count of SLE patients with Admission='+' and with Admission='-' and divides them, yielding the same ratio (110/84 \u2248 1.3095238) as the SQL ground truth."
+    }
+  },
+  {
+    "question_id": 1153,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query returns only the laboratory test dates for patient 30609 and omits the patient's Diagnosis, whereas the gold SQL selects both Diagnosis and Date, so the SPARQL result is incomplete."
+    }
+  },
+  {
+    "question_id": 1155,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the same set of patients meeting LDH > 500 with their sex and birthDate (values semantically matching the SQL output despite different labels/URIs), so it is equivalent to the gold SQL."
+    }
+  },
+  {
+    "question_id": 1156,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same patient identifiers (as IRIs) and the same computed ages for examinations with RVVT='+'; extra label column and ordering/format differences are allowed, so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1157,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL results are not semantically equivalent: it fails to return sex for any patient and yields missing/incorrect diagnoses (first patient has no diagnosis, second shows 'SLE+Psy' instead of 'SLE'), so it does not match the gold SQL output."
+    }
+  },
+  {
+    "question_id": 1162,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (61) does not match the gold count (161); the query likely misfilters the intended set by using sex = \"Female\" instead of 'F' and a different date/property (firstVisitDate with SUBSTR) than STRFTIME on Description, causing an undercount."
+    }
+  },
+  {
+    "question_id": 1164,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL filters sex as the string \"Female\" (and counts DISTINCT patients) while the gold SQL expects sex = 'F' (and counts joined rows), so the sex value mismatch (and different counting semantics) makes the result incorrect."
+    }
+  },
+  {
+    "question_id": 1166,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns the correct symptoms but the diagnosis value ('SLE+Psy') does not match the gold standard diagnosis ('SLE'), so the returned diagnosis is incorrect."
+    }
+  },
+  {
+    "question_id": 1168,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output has the correct birthday and computed age (1917-04-18, 69) but returns labCompletionDate 1986-01-07 instead of the gold-standard laboratory Date 1981-07-31 (it appears to aggregate/select the wrong lab date)."
+    }
+  },
+  {
+    "question_id": 1169,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query semantically differs from the SQL: it uses \"Male\"/\"Female\" literals instead of SEX='M'/'F' and counts DISTINCT patients (patient-level counts) rather than summing laboratory rows as in the SQL, yielding a different ratio (0.184 vs 0.2057)."
+    }
+  },
+  {
+    "question_id": 1171,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (0) does not match the gold SQL result (1); the SPARQL uses COUNT(DISTINCT ?patient) (and relies on YEAR() extraction) instead of counting patient\u2013examination rows as the SQL does, so its aggregation/selection semantics differ and produce an incorrect numeric outcome."
+    }
+  },
+  {
+    "question_id": 1175,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the patient age = 28 and diagnosis = 'SLE' for the highest HGB (ORDER BY HGB DESC LIMIT 1), matching the gold result semantically."
+    }
+  },
+  {
+    "question_id": 1179,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the correct patient/exam and the aCL IgM value 4.1 (anti-Cardiolipin), matching the gold standard for the specified patient and date."
+    }
+  },
+  {
+    "question_id": 1185,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same decrease rate (\u22480.0603015) as the gold SQL result for the targeted patient (values match within rounding), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1187,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the exact same set of patient IDs satisfying Date BETWEEN '1987-07-06' AND '1996-01-31' with GPT>30 and ALB<4 (63 distinct IDs); extra columns (patient URI and total) are permitted."
+    }
+  },
+  {
+    "question_id": 1189,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes the AVG(aCL IgM) over all patients instead of restricting the average to those with Thrombosis = 2 and ANA = 'S' (and additionally uses >= rather than the SQL's >), so the threshold and resulting count are incorrect."
+    }
+  },
+  {
+    "question_id": 1192,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies equivalent filters for Admission='-', Date starting with '1991-10', and T-BIL < 2.0 and returns the same set of patient IDs (extra label/URI columns are allowed), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1195,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 0 instead of the expected average (~3.912); it fails to correctly aggregate ALB for female SLE patients with PLT>400 because the PLT triple/filters are malformed/poorly placed so the PLT and diagnosis constraints are not reliably applied to the same patient/lab records."
+    }
+  },
+  {
+    "question_id": 1198,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query uses a case-insensitive CONTAINS(..., 'aps') substring match for diagnosis rather than requiring Diagnosis = 'APS' (exact match), which can overcount patients and explains the discrepancy (51 vs 16)."
+    }
+  },
+  {
+    "question_id": 1201,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result yields 100.0% female (3/3) for patients with Diagnosis='RA' and birth year 1980, matching the gold SQL percentage output."
+    }
+  },
+  {
+    "question_id": 1205,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1208,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result set contains exactly the same patient IDs as the gold SQL output (order/label differences are irrelevant), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1209,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns one row per patient (patient, birthDate, diagnosis) and thus contains duplicate diagnoses and patient URIs instead of the DISTINCT list of diagnoses ordered by patient birthday required by the SQL; it fails to select distinct diagnosis values (and order those distinct diagnoses by the associated birthday)."
+    }
+  },
+  {
+    "question_id": 1220,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the exact same set of patients with matching birthdays and equivalent sex values (Male/Female vs M/F) for UN = 29, so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1225,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL results contain the same set of patient IDs correctly filtered by T-BIL >= 2.0 and grouped by sex (Female/Male), matching the gold SQL output (extra concatenated columns are allowed)."
+    }
+  },
+  {
+    "question_id": 1227,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL selects distinct male patients with T-CHO >= 250, computes YEAR(NOW())-YEAR(birthDate) per patient and averages those ages, which matches the SQL semantics."
+    }
+  },
+  {
+    "question_id": 1229,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query applies TG >= 200, computes age as year(now()) - year(birthDate) > 50, and counts DISTINCT patients, which semantically matches the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 1231,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL filter allows both 'male' and 'M' (lcase(str(?sex)) = 'male' || str(?sex) = 'M'), but the gold SQL requires sex = 'M' only, making the SPARQL potentially overinclusive and not strictly equivalent."
+    }
+  },
+  {
+    "question_id": 1232,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of patient IDs with matching sex and age values (semantically equivalent representations like 'Male'/'M') as the SQL ground truth, satisfying the GLU >= 180 and T-CHO < 250 conditions."
+    }
+  },
+  {
+    "question_id": 1235,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1238,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same patient ID (4792723) and equivalent sex (Female) and the query correctly applies the SLE diagnosis, HGB 10< HGB <17 filter and selects the oldest patient via MIN(birthDate), matching the SQL semantics."
+    }
+  },
+  {
+    "question_id": 1239,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL results return the same three patients with matching ages and satisfy HCT >= 52 and count >= 2 (extra count column is allowed), so it is semantically equivalent to the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 1241,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is semantically incorrect: it counts DISTINCT patients (and further restricts to patients satisfying an EXISTS condition) and uses different threshold tests (<100 and >400) instead of summing all laboratory rows with PLT <=100 and PLT >=400 as in the gold SQL, producing wrong totals."
+    }
+  },
+  {
+    "question_id": 1242,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns only 5 of the many expected patient IDs and its age filter uses YEAR(NOW()) - YEAR(birthDate) (age at present) instead of computing age at the exam date (YEAR(testDate) - YEAR(birthDate)), so it omits correct rows and applies the wrong age logic."
+    }
+  },
+  {
+    "question_id": 1243,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts distinct patients (COUNT DISTINCT ?p) whereas the gold SQL counts Laboratory rows (joined lab records) so the SPARQL computes the fraction of patients with an abnormal PT who are female instead of the fraction of abnormal PT measurements/rows that are female, causing a semantic mismatch."
+    }
+  },
+  {
+    "question_id": 1247,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (0) does not match the gold count (75); the query appears to treat FG/WBC as direct patient properties and thus misses the INNER JOIN to Laboratory (or the lab-record structure), so it fails to retrieve the same matching records."
+    }
+  },
+  {
+    "question_id": 1251,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query omits the required join/condition ensuring the patient has an Examination record (it only counts patients with a Laboratory IGG>=2000), which leads to a much larger result than the gold-standard query that requires an associated Examination."
+    }
+  },
+  {
+    "question_id": 1252,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect: it applies exclusive IGG bounds (?igg > 900 && ?igg < 2000) rather than the SQL's BETWEEN 900 AND 2000 semantics and checks symptoms on the patient node instead of requiring the Examination join (Symptoms IS NOT NULL), so it does not reproduce the SQL's logic and yields a different count."
+    }
+  },
+  {
+    "question_id": 1254,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (147) is not equivalent to the SQL ground truth (1590) because the SPARQL counts DISTINCT patients (removing duplicates from multiple lab rows), uses a date>=1990-01-01 filter (including 1990) while the SQL uses YEAR(...) > '1990' (excluding 1990), and applies strict >80 and <500 rather than the SQL's BETWEEN 80 AND 500 (inclusive), so it selects a different population and produces a different count."
+    }
+  },
+  {
+    "question_id": 1255,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result ('SLE') does not match the gold answer ('RA'); additionally the SPARQL uses COUNT(DISTINCT ?patient) (and returns a sample patient) which changes aggregation semantics compared to the SQL's COUNT(T1.Diagnosis), causing a different top diagnosis."
+    }
+  },
+  {
+    "question_id": 1256,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL filters for missing description properties on the Laboratory (?lab) rather than checking that the Patient's Description is NULL, so it counts a different subset of patients (and yields 90 instead of 208)."
+    }
+  },
+  {
+    "question_id": 1257,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same CRE >= 1.5 filter, computes age as current year minus birth year (< 70), and counts distinct patients, yielding the same result as the gold SQL."
+    }
+  },
+  {
+    "question_id": 1265,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1267,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (count 0) does not match the gold count (7); although it attempts the same filters, it fails to select the same patients\u2014its thrombosis filter (?th = 0) or the SM matching does not correctly correspond to the SQL's Thrombosis = 0 and SM IN ('negative','0'), so the query is semantically incorrect."
+    }
+  },
+  {
+    "question_id": 1270,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect (returns 0 vs expected 2) because it treats SC170 and symptoms as direct properties of the patient (?patient throm:SC170, ?patient throm:symptoms) instead of joining through Laboratory and Examination resources as in the SQL, so it fails to match the intended lab/exam records."
+    }
+  },
+  {
+    "question_id": 1275,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 1281,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query filters GOT >= 60, orders by birthDate descending and LIMIT 1, returning the same birth date (1987-12-05); the extra patient column is permissible."
+    }
+  },
+  {
+    "question_id": 1302,
+    "db_id": "thrombosis_prediction",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 0 while the gold SQL result is 7, so it fails to capture the patients with CPK < 250 and a positive coagulation measure (i.e., the query's joins/property usage or the FILTER casting prevents matching the same patients that the SQL joins do)."
+    }
+  },
+  {
+    "question_id": 1025,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL filters season '2015/2016', sums home+away goals grouped by league, orders and limits to the top league, and returns the same league (as a URI) with the matching total goals, which is semantically equivalent to the SQL result."
+    }
+  },
+  {
+    "question_id": 1028,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 'Rangers' (team 8548) with 11 away wins while the gold SQL returns 'Celtic', so the predicted query yields the wrong team (likely due to an incorrect league URI or data mapping) and is not semantically equivalent."
+    }
+  },
+  {
+    "question_id": 1029,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns each team's MAX(buildUpPlaySpeed) and the top 4 highest values (80,78,78,77), which do not match the gold SQL's expected buildUpPlaySpeed values (20,20,20,23); the aggregation/selected values and result set are therefore incorrect."
+    }
+  },
+  {
+    "question_id": 1030,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes per-league draw counts for season '2015/2016' (using SUM(IF(homeGoals=awayGoals,1,0))) and returns 'France Ligue 1' as the top result, matching the gold SQL semantics and output."
+    }
+  },
+  {
+    "question_id": 1031,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same age value (36) for a player meeting sprint_speed >= 97 and date years 2013\u20132015 and uses the current date minus birth year (allowed small rounding), so it is semantically equivalent to the SQL result."
+    }
+  },
+  {
+    "question_id": 1032,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the England Premier League with 3040 matches, which matches the gold standard league name and match count."
+    }
+  },
+  {
+    "question_id": 1035,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1036,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1037,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL percentage (28.8681%) does not match the gold SQL result (24.5669%); the query's counts (1237/4285) differ, so it selects or counts left-footed players in the 1987\u20131992 cohort incorrectly compared to the gold query."
+    }
+  },
+  {
+    "question_id": 1039,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL aggregates SUM(longShots) and COUNT(rows) for Ahmed Samir Farag producing 431/7 = 61.5714, which matches the gold result 61.5714286 within acceptable rounding tolerances."
+    }
+  },
+  {
+    "question_id": 1040,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query applies the same height filter, computes the same average heading accuracy (SUM/COUNT), orders DESC, and returns the same top 10 player names (with allowable extra columns and minor rounding), so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1042,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes per-league AVG as SUM/COUNT(DISTINCT matchId) for matches in season '2009/2010' and applies the same HAVING condition (home avg > away avg), returning the same league names as the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 1044,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same four players (Chris Swailes, Dean Kiely, Edwin van der Sar, Sander Boschker) with birthdates in October 1970, matching the gold SQL results."
+    }
+  },
+  {
+    "question_id": 1048,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the overall rating 75 for Gabriel Tamas in 2011, which matches the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1057,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result yields the same numeric value (361/240 = 1.5041667, shown as 1.50417) for average home goals in Poland 2010/2011, matching the SQL ground truth (allowing rounding)."
+    }
+  },
+  {
+    "question_id": 1058,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes average finishing per individual player and returns the top player among tallest/shortest, whereas the gold SQL aggregates finishing across all players at MAX(height) and across all players at MIN(height) and compares those two group averages, so the aggregation level and result semantics are incorrect."
+    }
+  },
+  {
+    "question_id": 1068,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query applies the same join and filters (player height > 170 and attribute date between 2010\u20132015) and returns an average (68.9014) that is within an acceptable small numeric rounding difference of the gold value (68.8540)."
+    }
+  },
+  {
+    "question_id": 1076,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same per-player averages and their difference (0.8) as the SQL result, with only acceptable numeric rounding."
+    }
+  },
+  {
+    "question_id": 1078,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns Aaron Lennon (dob 1987-04-16) as the earliest birthday among the two players, which matches the gold answer."
+    }
+  },
+  {
+    "question_id": 1079,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the tallest player (label 'Kristof van Hout'), which matches the SQL ground truth."
+    }
+  },
+  {
+    "question_id": 1080,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL incorrectly restricts to each player's most recent attributes and counts distinct players, whereas the SQL counts all Player_Attributes rows with preferred_foot='left' and attacking_work_rate='low', producing a much larger total."
+    }
+  },
+  {
+    "question_id": 1084,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same filters (defensive work rate = 'high' and birth year < 1986), counts distinct players (analogous to DISTINCT player_name) and produces the same numeric result, so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1088,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same attribute-level filter (dribbling > 70 AND volleys > 70) and returns the distinct players (with labels), semantically matching the SQL result."
+    }
+  },
+  {
+    "question_id": 1091,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query applies the same league filter and SUBSTR(date,1,7) = '2009-04' and returns the same count (36), so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 1092,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query returns only a single league (ORDER BY ... LIMIT 1) instead of all leagues tied for the maximum match count in the 2008/2009 season, so it misses the other leagues that share the top count."
+    }
+  },
+  {
+    "question_id": 1094,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes the percentage using each player's most recent overall_rating (68 vs 59 \u2192 ~15.25%), but the gold SQL uses the SUM of overall_rating across all attribute rows per player (yielding ~133.73%), so the SPARQL's aggregation logic is incorrect."
+    }
+  },
+  {
+    "question_id": 1096,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the same average overall rating for Pietro Marino (61.6667, matching 61.6666667 within rounding), so it is semantically equivalent to the gold SQL."
+    }
+  },
+  {
+    "question_id": 1098,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the maximum chanceCreationPassing value 67 and its class 'Risky' (the extra teamAttr column is irrelevant), which matches the gold standard results."
+    }
+  },
+  {
+    "question_id": 1102,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same filters (overallRating=77 and date starting '2016-06-23'), orders by birth ascending to pick the oldest, and returns 'Laurent Ciman', matching the SQL result."
+    }
+  },
+  {
+    "question_id": 1103,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns overall = 75 for the same player and date (date starts with '2016-02-04'), matching the gold SQL result; the extra pa column is permissible."
+    }
+  },
+  {
+    "question_id": 1105,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the attacking work rate value 'medium', which matches the gold standard answer; the extra playerAttribute column is allowed and does not affect semantic equivalence."
+    }
+  },
+  {
+    "question_id": 1107,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns 2013-02-15 (the earliest occurrence of the max crossing value) while the gold answer is 2016-04-21, so the query returns the wrong date and does not match the gold-standard result."
+    }
+  },
+  {
+    "question_id": 1110,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 1113,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns defenceAggressionClass 'Press' for Hannover 96 on 2015-09-10, which semantically matches the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1114,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same average overall rating (~75.3939) for the Marko Arnautovic player within the specified date range, matching the SQL result."
+    }
+  },
+  {
+    "question_id": 1115,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes ((79-59)/79)*100 = 25.3165 for the two players on 2013-07-12, matching the gold SQL result (\u224825.3164557), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 1116,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL finds players with height equal to the maximum height and returns Kristof van Hout, which semantically matches the SQL result for rank = 1 (the tallest player)."
+    }
+  },
+  {
+    "question_id": 1122,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the player label 'Lionel Messi' whose overallRating equals the global MAX, which semantically matches the gold SQL result."
+    }
+  },
+  {
+    "question_id": 1124,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=3339, SPARQL row_count=3360."
+    }
+  },
+  {
+    "question_id": 1130,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 1133,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 6 while the gold SQL result is 9, so it is semantically incorrect \u2014 it omits players (likely due to the datetime filter or name-matching differences) resulting in fewer matches."
+    }
+  },
+  {
+    "question_id": 1134,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL pulls only the latest jumping value for each player (ORDER BY ... LIMIT 1) instead of computing the SUM of jumping values for id=6 and id=23 as required by the SQL, so it does not match the intended aggregation."
+    }
+  },
+  {
+    "question_id": 1135,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only players whose potential equals the global MIN(potential) (absolute minimum) rather than the four players with the lowest potentials ordered ascending and limited to 4, so it will miss the other lowest-ranked players required by the SQL."
+    }
+  },
+  {
+    "question_id": 1136,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output lists individual players (with duplicates) and reports total=2 instead of the single aggregated count 3 required by the SQL; its aggregation/filtering incorrectly computes the number of left-footed players with MAX(crossing)."
+    }
+  },
+  {
+    "question_id": 1139,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same home and away goals (1 and 1) for the match on 2008-09-24 with an equivalent league and date filter, matching the gold answer."
+    }
+  },
+  {
+    "question_id": 1141,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns only 'Balanced' (it orders by date and uses LIMIT 1), but the gold standard includes both 'Balanced' and 'Fast', so the predicted query misses the 'Fast' value."
+    }
+  },
+  {
+    "question_id": 1144,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns two players tied for max weight with NULL finishing and curve values, whereas the gold SQL returns a specific player with finishing=13 and curve=13, so the predicted query fails to produce the expected finishing and curve scores."
+    }
+  },
+  {
+    "question_id": 1145,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same four league names as the gold standard and correctly counts matches for season '2015/2016' (row order is irrelevant)."
+    }
+  },
+  {
+    "question_id": 1146,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the maximum away goals and returns the corresponding team's long name ('Paris Saint-Germain'), which matches the gold result."
+    }
+  },
+  {
+    "question_id": 1147,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns a player (Lionel Messi) whose overallRating equals the computed MAX(overallRating) (rating 94), matching the gold answer; extra columns and LIMIT 1 are acceptable for \u2018name one player\u2019."
+    }
+  },
+  {
+    "question_id": 1148,
+    "db_id": "european_football_2",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 846,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the same five driverRef values (sato, davidson, vettel, sutil, fisichella) for raceId 20 ordered by q1 DESC with LIMIT 5, matching the gold SQL result (extra columns are allowed)."
+    }
+  },
+  {
+    "question_id": 847,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 'raikkonen' rather than the expected 'Fisichella', so it does not select the driver with the minimal q2 time for race 19 (likely due to computing MIN over q2 as strings or otherwise misidentifying the correct qualifying session)."
+    }
+  },
+  {
+    "question_id": 850,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the same set of race names (German Grand Prix, European Grand Prix, Luxembourg Grand Prix) as the SQL ground truth, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 854,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the same latitude (-34.9272) and longitude (138.617) for the circuit(s) of 'Australian Grand Prix', matching the gold standard (extra columns are allowed)."
+    }
+  },
+  {
+    "question_id": 857,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the correct latitude and longitude (24.4672, 54.6031) for races named 'Abu Dhabi Grand Prix'; extra rows for multiple race instances and extra columns are permitted by the evaluation rules."
+    }
+  },
+  {
+    "question_id": 859,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the q1 value '1:23.796' for the qualifying in race 354 by the specified driver, which matches the gold standard answer."
+    }
+  },
+  {
+    "question_id": 861,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns driverNumber values 5 and 3, which match the gold standard numbers 3 and 5 for raceId 903 with q3 LIKE '1:54%', so the result is semantically correct."
+    }
+  },
+  {
+    "question_id": 862,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query counts RaceResult entries for the Bahrain GP race URI and uses NOT EXISTS on finishTime (equivalent to time IS NULL) which yields the same count (12), matching the SQL semantics."
+    }
+  },
+  {
+    "question_id": 865,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result identifies the driver with dob 1937-04-26 (Jean-Pierre Beltoise), matching the gold answer for the oldest driver who finished race 592 while properly requiring non-null finish time and dob."
+    }
+  },
+  {
+    "question_id": 866,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same nine drivers with matching names and introduction URLs as the SQL gold result, so it is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 868,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL retrieves the circuit latitude and longitude (2.76083, 101.738) for races named 'Malaysian Grand Prix', which matches the SQL's distinct circuit coordinates (extra rows/columns are allowed)."
+    }
+  },
+  {
+    "question_id": 869,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns the constructor URL 'http://en.wikipedia.org/wiki/Brawn_GP' (Brawn) rather than the expected 'http://en.wikipedia.org/wiki/Red_Bull_Racing', so it identifies the wrong constructor as having the max points for raceId 9."
+    }
+  },
+  {
+    "question_id": 872,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1, SPARQL row_count=83."
+    }
+  },
+  {
+    "question_id": 875,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the season page URL 'http://en.wikipedia.org/wiki/2014_Formula_One_season' for raceId 901, which matches the gold standard output (extra columns are allowed)."
+    }
+  },
+  {
+    "question_id": 877,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL restricts to results for race 872 with a bound time field (finished), orders by dob DESC and LIMIT 1, which returns the same youngest driver as the SQL."
+    }
+  },
+  {
+    "question_id": 879,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly computes the maximum fastestLapSpeed, selects the result/driver with that speed and returns the driver's nationality (Italian), which matches the gold query's intent and answer."
+    }
+  },
+  {
+    "question_id": 880,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same fastest-lap speeds for races 853 and 854 and computes the percentage difference (32.5016 \u2248 32.5015517), so it is semantically equivalent to the gold SQL result."
+    }
+  },
+  {
+    "question_id": 881,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect: it yields 5/34 = 0.14706 (a fraction) instead of the gold 17.241% because it uses DISTINCT driver counts (denominator 34) and does not multiply by 100, whereas the SQL uses COUNT over results (denominator 29) and scales to a percentage."
+    }
+  },
+  {
+    "question_id": 884,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same three races that occurred in the earliest year and month (British Grand Prix, Monaco Grand Prix, Indianapolis 500); the labels include the year in parentheses but semantically match the gold answer."
+    }
+  },
+  {
+    "question_id": 892,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns forename 'Sebastian', surname 'Vettel' and points 397.0 (the same values as the gold result) and uses ordering+LIMIT to pick the max points, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 894,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the same minimal milliseconds (67411) with forename 'Lewis', surname 'Hamilton', and race name 'Austrian Grand Prix', matching the gold-standard values."
+    }
+  },
+  {
+    "question_id": 895,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same average lap time (109399.0) as the gold result (109398.55) within allowable rounding and is scoped to the specific driver and race, so it is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 896,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL percentage (66.1972 from 94/142) does not match the gold 73.2394%; the SPARQL query is counting RaceResult records (and uses BOUND(?pos)) rather than the driverStandings join used in the SQL, producing a different numerator/denominator and thus an incorrect percentage."
+    }
+  },
+  {
+    "question_id": 897,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns Michael Schumacher, nationality German, and max points 148.0, which matches the gold output (even though it uses SUM(wins) rather than COUNT(wins), the selected values are the same)."
+    }
+  },
+  {
+    "question_id": 898,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the youngest Japanese driver with dob, computed age 40 and label 'Kamui Kobayashi', which semantically matches the gold SQL result (Kamui Kobayashi, age 40)."
+    }
+  },
+  {
+    "question_id": 901,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The query returns the correct races and circuits but extracts the circuit's country via locatedIn (Italy/Belgium/Brazil) instead of the circuit's city/track location (Monza, Spa, S\u00e3o Paulo) required by the gold SQL."
+    }
+  },
+  {
+    "question_id": 902,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL results do not match the gold set: it omits many races present in the SQL output (e.g., San Marino, Spanish, Monaco, British, German, Hungarian, Belgian) and includes different/extra races (Japanese races and year-specific entries), so the returned race set is not semantically equivalent to the gold query."
+    }
+  },
+  {
+    "question_id": 904,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the Austrian Grand Prix with year 2003 (matching the gold SQL output), so the predicted answer is semantically correct."
+    }
+  },
+  {
+    "question_id": 906,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 909,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same percentage (12/23 \u2248 52.1739) by counting European Grand Prix races and those held in Germany, matching the SQL logic and result (minor rounding allowed)."
+    }
+  },
+  {
+    "question_id": 910,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the same latitude and longitude values (52.0786, -1.01694) for Silverstone Circuit, matching the gold output; the extra circuit column is allowed."
+    }
+  },
+  {
+    "question_id": 912,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the correct circuitRef value 'marina_bay' for Marina Bay Street Circuit, matching the gold standard answer."
+    }
+  },
+  {
+    "question_id": 915,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL orders by dob ASC and returns the driver's nationality 'French' (extra columns allowed), which matches the SQL ground truth."
+    }
+  },
+  {
+    "question_id": 928,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns driverRef 'hamilton' rather than the expected 'alonso' \u2014 the query uses a hardcoded race URI instead of filtering by race name='Canadian Grand Prix' and year=2007, so it retrieves the wrong driver."
+    }
+  },
+  {
+    "question_id": 930,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=37, SPARQL row_count=58."
+    }
+  },
+  {
+    "question_id": 931,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same maximum fastestLapSpeed value (202.484) for the race entity (race/5), which matches the gold SQL result."
+    }
+  },
+  {
+    "question_id": 933,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the correct positionOrder value (1) for Lewis Hamilton in the Chinese Grand Prix, which matches the gold standard answer (extra columns are permitted)."
+    }
+  },
+  {
+    "question_id": 937,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output returns finishTime '+14.925' for the 2nd-place driver while the gold standard is '+16.445', so the returned value is incorrect (not a minor rounding difference)."
+    }
+  },
+  {
+    "question_id": 940,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct drivers who have a non-null finishTime for the specified Chinese GP and requires at least one result for the driver (which can be the same result), matching the SQL logic and yielding the same count (14)."
+    }
+  },
+  {
+    "question_id": 944,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 945,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL uses f1:locatedIn = Australia and filters f1:circuitRef = 'adelaide' instead of checking the circuit's location = 'Adelaide' and country = 'Australia' (and it returns entities rather than the required count), so it does not semantically match the SQL."
+    }
+  },
+  {
+    "question_id": 948,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1, SPARQL row_count=79."
+    }
+  },
+  {
+    "question_id": 950,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL includes the six correct constructors but also returns additional constructors (Fondmetal, March, McLaren, Team Lotus, Tyrrell) that are not in the gold-standard result for race 291, so its result set is incorrect."
+    }
+  },
+  {
+    "question_id": 951,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query checks SUM(?points)=0 across the two races rather than requiring each constructor result to have ?points = 0 (as the SQL WHERE T1.points = 0 does), so it can miscount constructors and returns 1 instead of the correct 2."
+    }
+  },
+  {
+    "question_id": 954,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes 18 completed out of 62 Japanese driver results (18/62*100 \u2248 29.0323), matching the SQL's percentage, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 955,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 959,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL wrongly restricts to a single driver (byDriver <driver/18>) and LIMIT 1 (returning fastestLap 46) instead of returning all fastestLap values for winners in 2009 filtered by the champion time format as in the SQL, and the returned value (46) is not in the SQL result set."
+    }
+  },
+  {
+    "question_id": 960,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result 199.642 matches the gold average 199.6415625 within rounding; although the query binds a specific race URI rather than filtering by year and name, it computes the same average value."
+    }
+  },
+  {
+    "question_id": 962,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts distinct drivers for numerator and denominator (percentage of drivers), whereas the gold SQL counts result rows (instances) in 2000\u20132005 and the rows matching dob<1985 and laps>50, so it computes a different ratio."
+    }
+  },
+  {
+    "question_id": 963,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query counts DISTINCT drivers (9) while the gold SQL counts all joined lapTime rows for French drivers with time < 120s (23295), so the aggregation semantics differ and the SPARQL undercounts compared to the SQL."
+    }
+  },
+  {
+    "question_id": 964,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=157, SPARQL row_count=2."
+    }
+  },
+  {
+    "question_id": 967,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the top-3 youngest drivers with their driver numbers/codes and computes the count of Dutch (Netherlandic) drivers among them as 1, matching the gold query's result."
+    }
+  },
+  {
+    "question_id": 971,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns driverRef 'brudes', matching the gold standard, and the query correctly selects the German driver with the minimum year of birth."
+    }
+  },
+  {
+    "question_id": 972,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=150, SPARQL row_count=4."
+    }
+  },
+  {
+    "question_id": 977,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query counts RaceResult entries with status 2, a non-null finishTime, and raceId > 50 and < 100, which matches the SQL semantics and result."
+    }
+  },
+  {
+    "question_id": 978,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns per-circuit rows (including counts) and binds the location to the Austria IRI rather than the actual distinct location names, producing three circuit rows (two with the same coordinates) instead of the DISTINCT locations/coordinates (Spielburg and Styria) required by the gold SQL."
+    }
+  },
+  {
+    "question_id": 981,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly selects the driver with the maximum dob (youngest), finds that driver's earliest qualifying race date and returns the race name, date, time and year which match the gold-standard results (Chinese Grand Prix, 2017-04-09, 06:00:00, year 2017)."
+    }
+  },
+  {
+    "question_id": 988,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same three German drivers born 1980\u20131985 (Nico Rosberg, Timo Glock, Adrian Sutil) with the shortest average pit stop durations; extra columns, minor numeric differences, and ordering variations are allowed."
+    }
+  },
+  {
+    "question_id": 989,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the champion's finish time '1:36:24.227', which matches the gold standard result for the 2008 Canadian Grand Prix."
+    }
+  },
+  {
+    "question_id": 990,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same constructorRef ('mclaren') and URL as the gold result; extra columns and using the race URI instead of name/year/time filters do not change the semantic answer."
+    }
+  },
+  {
+    "question_id": 717,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the same set of superpower labels (Agility, Super Strength, Stamina, Super Speed) for 3-D Man as the gold SQL output."
+    }
+  },
+  {
+    "question_id": 994,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns McLaren with totalPoints 218.5 and nationality British, matching the gold SQL semantics and answer."
+    }
+  },
+  {
+    "question_id": 1001,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the same driver (Felipe Massa) as the gold SQL result, so the predicted output is semantically correct despite a different query structure."
+    }
+  },
+  {
+    "question_id": 1002,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns Lance Stroll (full name), nationality Canadian, and firstRaceName 'Chinese Grand Prix', which semantically matches the gold SQL output."
+    }
+  },
+  {
+    "question_id": 1003,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly counts results with status=3 for the race named 'Canadian Grand Prix', groups by driver and returns the highest count (2), matching the SQL semantics."
+    }
+  },
+  {
+    "question_id": 1011,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only the single global minimum lap/time and its driver, but the gold requires computing each driver\u2019s minimum lap time, ordering drivers by those per-driver minima and returning the top 20 drivers (grouping, ordering and LIMIT 20 are missing)."
+    }
+  },
+  {
+    "question_id": 1014,
+    "db_id": "formula_1",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns the fastest lap per circuit in Italy (two rows) while the gold SQL returns the single overall fastest lap across all Italian circuits; the query therefore computes per-circuit minima instead of the global minimum required by the gold standard."
+    }
+  },
+  {
+    "question_id": 719,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query filters by a specific power URI (<http://superhero.org/superpower/18>) rather than matching superpower by power_name = 'Super Strength', so it does not select the same heroes (yielding 0 instead of the expected 56)."
+    }
+  },
+  {
+    "question_id": 723,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect \u2014 the SPARQL returns 0 instead of the expected 83; it appears to use specific resource IRIs (<.../7>, <.../1>) rather than matching colour='Blue' and power_name='Agility' (or otherwise fails to join the hero to the correct superpower/colour entities), so it does not count the same set of heroes as the SQL."
+    }
+  },
+  {
+    "question_id": 724,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=90, SPARQL row_count=90."
+    }
+  },
+  {
+    "question_id": 726,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=387, SPARQL row_count=366."
+    }
+  },
+  {
+    "question_id": 728,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same eye-color labels and counts for Marvel Comics ordered by descending count matching the SQL output (the explicit rank column is omitted but the popularity ordering and counts are semantically equivalent)."
+    }
+  },
+  {
+    "question_id": 730,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=201, SPARQL row_count=201."
+    }
+  },
+  {
+    "question_id": 732,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the correct publisher name 'Marvel Comics' (the same value as the gold answer), so it is semantically correct despite extra columns/URI formatting."
+    }
+  },
+  {
+    "question_id": 733,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query uses a hard-coded colour URI instead of joining to the colour entity and matching colour = 'Gold', so it does not correctly implement the eye_colour filter required (hence returns 0 instead of the expected 2)."
+    }
+  },
+  {
+    "question_id": 736,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns all heroes tied for the minimum Intelligence (three rows) whereas the SQL returns only a single hero ('Ammo'); the SPARQL logic selects every min-valued hero instead of returning the single row expected by the SQL."
+    }
+  },
+  {
+    "question_id": 737,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect \u2014 the SPARQL returns only a race URI (http://superhero.org/race/42.0) with no label and does not produce the literal 'Mutant' required by the gold standard (and it uses a hardcoded superhero URI rather than matching by superhero_name)."
+    }
+  },
+  {
+    "question_id": 738,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=371, SPARQL row_count=371."
+    }
+  },
+  {
+    "question_id": 739,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of superhero names (Black Flash, Blackwulf, Hela, Living Tribunal, One-Above-All, Poison Ivy, Spectre) associated with the Death Touch power, so it is semantically equivalent to the SQL result."
+    }
+  },
+  {
+    "question_id": 740,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query restricts to superheroes with the female gender URI and the Strength attribute equal to 100 and counts distinct heroes, producing the same result (12) as the gold SQL."
+    }
+  },
+  {
+    "question_id": 743,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result gives the same percentage (~28.2667) and the same Marvel count (118) as the gold SQL output, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 744,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "True \u2014 the SPARQL query computes Marvel (387) minus DC (224) yielding difference 163, which matches the gold SQL result and logic."
+    }
+  },
+  {
+    "question_id": 745,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the publisher resource URI 'http://superhero.org/publisher/20', which corresponds to the requested publisher id 20."
+    }
+  },
+  {
+    "question_id": 747,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly counts Superhero resources for which the fullName property does not exist (FILTER NOT EXISTS), which semantically matches counting rows with full_name IS NULL and yields the same result (122)."
+    }
+  },
+  {
+    "question_id": 750,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes AVG(weight) for Superhero entities with the Female gender URI and returns the same numeric average (within rounding) as the SQL result."
+    }
+  },
+  {
+    "question_id": 751,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output only contains 'Agility' of the five expected values and is missing 'Super Strength', 'Stamina', 'Super Speed', and 'Accelerated Healing', so it does not return the required five male superpowers from the gold SQL."
+    }
+  },
+  {
+    "question_id": 753,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains exactly the same set of 15 superhero names (all within 170\u2013190 cm) matching the gold SQL result for eye colour 'No Colour', so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 758,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same distinct hair colour values (Blond, Brown, Black, Brown/White, No Colour) for human heroes with height 185 cm as the gold SQL."
+    }
+  },
+  {
+    "question_id": 760,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is semantically incorrect: it uses OPTIONAL (so the denominator counts heroes without a publisher) and tests a specific publisher IRI instead of enforcing publisher_name='Marvel Comics' via a required join, causing num=0 and yielding 0% instead of the ~60.87% from the gold SQL."
+    }
+  },
+  {
+    "question_id": 761,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same male-gender and weight > 0.79*avg(weight) filter and returns 'King Kong' (the gold result); extra columns/URI are allowed by the rules."
+    }
+  },
+  {
+    "question_id": 764,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the same distinct power names (Agility, Super Strength, Stamina, Super Speed) for hero id 1 as the gold query, and extra columns are permitted."
+    }
+  },
+  {
+    "question_id": 765,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query counts the (distinct) heroes linked to the Stealth power URI and returns 127, matching the gold SQL result for heroes with power_name='Stealth'."
+    }
+  },
+  {
+    "question_id": 766,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1, SPARQL row_count=63."
+    }
+  },
+  {
+    "question_id": 769,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns the same superhero (Dash) with the maximum Durability value among heroes published by Dark Horse Comics, matching the gold SQL result."
+    }
+  },
+  {
+    "question_id": 772,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same five sets of eye/hair/skin colour values as the gold SQL result (represented as colour URIs) and the extra hero column is permitted."
+    }
+  },
+  {
+    "question_id": 773,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=157, SPARQL row_count=157."
+    }
+  },
+  {
+    "question_id": 775,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes (blueCount / femaleCount) * 100 and returns 2.46305, which matches the gold SQL percentage (\u22482.463054187) within rounding, so the logic and result are semantically correct."
+    }
+  },
+  {
+    "question_id": 779,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query yields a powerCount of 50 for the Amazo hero while the gold standard count is 44, so the numeric result does not match (the query is counting a different/more set of powers)."
+    }
+  },
+  {
+    "question_id": 781,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of heights (178, 198, 175) as the gold standard, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 782,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set of superhero names (the gold-standard results) for heroes with both eye and hair colour Black, so it is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 785,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the exact same set of superhero_name values (all 28 neutral-alignment heroes) as the gold SQL result, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 786,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct heroes whose Strength attribute value equals the computed max and returns 63, which matches the gold SQL result numerically, so the predicted query is semantically correct."
+    }
+  },
+  {
+    "question_id": 788,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (27.0415 = 202/747) does not match the gold percentage (~28.682%), so the query's filters produce an incorrect numerator/denominator (wrong gender or publisher URI mapping or missing join), yielding a mismatched percentage."
+    }
+  },
+  {
+    "question_id": 790,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes Emil Blonsky's weight minus Charles Chandler's weight and returns the difference 351, which matches the gold SQL result."
+    }
+  },
+  {
+    "question_id": 791,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes SUM(height_cm) and COUNT(superheroes) and yields 247.045 (matches the gold 247.045333... within rounding), so the semantic result is correct."
+    }
+  },
+  {
+    "question_id": 792,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the exact same set of power names (Accelerated Healing, Intelligence, Super Strength, Stamina, Super Speed, Invulnerability, Animation, Super Breath) as the gold standard."
+    }
+  },
+  {
+    "question_id": 794,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns many heroes tied at the maximum Speed (including Air-Walker) while the gold SQL returns only a single hero (Air-Walker); the SPARQL selects all maxima instead of replicating the SQL's single top-row (ORDER BY ... LIMIT 1) result."
+    }
+  },
+  {
+    "question_id": 796,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns general biographical properties (name, height, eye colour, etc.) for the hero resource instead of the hero's attribute_name/attribute_value pairs (Intelligence, Strength, Speed, Durability, Power, Combat with their numeric values) required by the SQL, so the needed attribute stats are missing."
+    }
+  },
+  {
+    "question_id": 797,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same set (including duplicate 'Atlas') of superhero names that satisfy eye colour = Blue and hair colour = Brown as the gold SQL result, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 798,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns publisher URIs (and empty publisherName/publisherLabel) rather than the publisher_name literal 'DC Comics' for the three heroes, so it does not provide the required publisher_name values."
+    }
+  },
+  {
+    "question_id": 800,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same percentage (234/750 = 31.2) by counting superheroes with eye colour id 7 and total superheroes, matching the gold SQL result."
+    }
+  },
+  {
+    "question_id": 801,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes the same counts (519 and 203) and their quotient (\u22482.55665), matching the SQL ground-truth ratio (allowing minor rounding), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 806,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output provides the eye colour label 'Brown' for Karen Beecher-Duncan, which semantically matches the gold standard answer."
+    }
+  },
+  {
+    "question_id": 819,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query semantically counts superheroes with missing weight grouped by eye colour (blue id=7 and none id=1) and subtracts them, producing the same numeric result (-122) as the gold SQL."
+    }
+  },
+  {
+    "question_id": 822,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query correctly counts distinct heroes filtered by the alignment and colour URIs corresponding to 'Bad' and 'Green' (yielding 6), matching the SQL semantics and result."
+    }
+  },
+  {
+    "question_id": 824,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same three superhero names (Crystal, Red Tornado, Tempest) as the gold result in alphabetical order; the extra hero URI column is permitted."
+    }
+  },
+  {
+    "question_id": 825,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the hero's genderLabel 'Female', which matches the gold standard gender value, so the semantics are correct."
+    }
+  },
+  {
+    "question_id": 829,
+    "db_id": "superhero",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query returns DC = 224 and Marvel = 387 with difference -163, which matches the gold SQL result (-163)."
+    }
+  },
+  {
+    "question_id": 531,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result identifies Harlan (http://codecomt.org/user/6) as the winner with higher reputation (457 vs 101), which semantically matches the gold answer that Harlan has the highest reputation."
+    }
+  },
+  {
+    "question_id": 532,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=4430, SPARQL row_count=4429."
+    }
+  },
+  {
+    "question_id": 533,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (5146) does not match the expected count (4941); the query compares lastAccessDate as strings (and uses DISTINCT) instead of casting/truncating to dates like date(LastAccessDate) > '2014-09-01', causing incorrect filtering and an incorrect count."
+    }
+  },
+  {
+    "question_id": 539,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns the owner's URI-derived numeric id ('8 0') instead of the user's DisplayName ('csgillespie')\u2014it extracts the numeric part from the URI rather than retrieving the user's DisplayName property."
+    }
+  },
+  {
+    "question_id": 537,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query hard-codes a specific user URI (<http://codecomt.org/user/8>) instead of finding the user with DisplayName 'csgillespie', so it returns the wrong count (0) rather than the expected 121."
+    }
+  },
+  {
+    "question_id": 544,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the display name 'Abhilash' for the user who last edited the specified post, which matches the gold standard output."
+    }
+  },
+  {
+    "question_id": 547,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query implements the same logic as the SQL\u2014counting posts with score >= 20 whose owners have age > 65\u2014so it is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 549,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the exact body text of the post referenced by the 'bayesian' tag's ExcerptPostId, matching the gold standard output."
+    }
+  },
+  {
+    "question_id": 555,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the average score 9.0 for posts owned by the user URI corresponding to 'csgillespie', which semantically matches the SQL AVG(Score) for that DisplayName."
+    }
+  },
+  {
+    "question_id": 557,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result (percentage 0.165722) matches the gold percentage (0.168994...) within acceptable numeric rounding tolerance and correctly computes elder posts/total posts for Score>5."
+    }
+  },
+  {
+    "question_id": 563,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query finds the post linked to the comment by user 3025 at the given creation date and returns its FavoriteCount (3), which matches the gold result."
+    }
+  },
+  {
+    "question_id": 565,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The ASK query returns True because it verifies the post has a closedDate (i.e. not NULL), which semantically corresponds to the SQL result 'well-finished' for the same comment and timestamp."
+    }
+  },
+  {
+    "question_id": 567,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result reports 2 posts for the user 'Tiago Pasqualini', which matches the gold standard count of 2."
+    }
+  },
+  {
+    "question_id": 568,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result contains the user URI but has displayName = None, so it fails to return the required DisplayName ('George Dontas')\u2014the query does not successfully retrieve the user's display name value."
+    }
+  },
+  {
+    "question_id": 571,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query counts votes on the user's posts (votes received) rather than votes made by the user (votes with UserId=24), so the denominator is incorrect and the computed ratio does not match the SQL's intent."
+    }
+  },
+  {
+    "question_id": 572,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result includes the post with the given title and returns viewCount 60, which matches the gold standard ViewCount."
+    }
+  },
+  {
+    "question_id": 573,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains all five comment texts from the gold result (the extra comment URI column is allowed), so it is semantically equivalent to the SQL output."
+    }
+  },
+  {
+    "question_id": 576,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query locates the comment and user but does not return the user's DisplayName (displayName and label are null), so the required DisplayName value 'Preets' is missing."
+    }
+  },
+  {
+    "question_id": 578,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns only the post and owner IRI while ownerLabel and reputation are null, so it fails to provide the required DisplayName ('Hendy') and Reputation (146)."
+    }
+  },
+  {
+    "question_id": 581,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returned no results: it uses rdfs:label for the post title and owner name (and/or wrong predicates), so it fails to retrieve the owner's DisplayName ('Paul') as the SQL JOIN between posts.Title and users.DisplayName does."
+    }
+  },
+  {
+    "question_id": 584,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query returns actual comment posts (three full commentText values and commenter info) rather than the postHistory 'Comment' fields (eight edit-history comments including empty strings and edits like 'edited title', 'TeXified the formulas.', 'deleted 5 characters in body; edited title'), so it retrieves the wrong data and misses the required edit comments."
+    }
+  },
+  {
+    "question_id": 586,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=2, SPARQL row_count=200."
+    }
+  },
+  {
+    "question_id": 587,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns one row per post using the post body and viewCount, but the gold requires one row per comment (including each comment's Text) for posts tagged '<humor>' \u2014 the query fails to join/include comments and group by comment text."
+    }
+  },
+  {
+    "question_id": 592,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL groups badges by user, applies HAVING ?badgeCount > 5, and then counts those users, which matches the SQL's logic and result (2875)."
+    }
+  },
+  {
+    "question_id": 595,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=94, SPARQL row_count=46."
+    }
+  },
+  {
+    "question_id": 598,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same quantities (counts for Student badges in 2010 and 2011, divided by total Student badges, multiplied by 100 and subtracted) and yields the same numeric result (within rounding) as the gold SQL."
+    }
+  },
+  {
+    "question_id": 604,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "While the average up votes matches, the average age is incorrect because the SPARQL query coerces missing/null ages to 0 and divides by COUNT(?user) (including users with no age), whereas the SQL AVG ignores NULLs\u2014resulting in a much lower average age."
+    }
+  },
+  {
+    "question_id": 629,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query counts votes in 2010 and 2011 and computes their ratio (1.3071), which matches the gold standard result (1.307099679981036) within rounding, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 633,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it filters by a specific owner URI ('http://.../user/16') rather than selecting the user with DisplayName = 'slashnick' (so it does not retrieve the post with the MAX(AnswerCount) and returns no result)."
+    }
+  },
+  {
+    "question_id": 634,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL correctly sums viewCount for the two specified users, orders by the total descending and returns the top owner (user/25.0), which corresponds to Harvey Motulsky in the gold result."
+    }
+  },
+  {
+    "question_id": 637,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only the 'books' tag but omits the NULL (untagged) post value present in the SQL result, because it only matches explicit Tag entities and ignores posts with no tags."
+    }
+  },
+  {
+    "question_id": 639,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query hardcodes owner <http://codecomt.org/user/-1> and returns total=0/rCount=0 (0%) instead of selecting the user with DisplayName='Community' and correctly joining post history and tags, so it computes the wrong percentage compared to the gold result (~0.1957)."
+    }
+  },
+  {
+    "question_id": 640,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 665,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts posts (using post creationDate and answerCount) rather than counting postLinks and using the link creationDate (missing the join to postLinks), so the numerator is incorrect and the result does not match the SQL."
+    }
+  },
+  {
+    "question_id": 669,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the earliest vote creationDate (2010-08-13) for the corresponding user (user/930), which matches the SQL's MIN(CreationDate) result."
+    }
+  },
+  {
+    "question_id": 671,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns userLabel 'Jin' (user http://codecomt.org/user/12) as the earliest Autobiographer, whereas the gold answer expects 'Geoff Dalgas', so the returned user is incorrect and not semantically equivalent to the SQL result."
+    }
+  },
+  {
+    "question_id": 672,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect: the SPARQL aggregates (SUM) favorites per user and counts users whose totalFav >= 4, but the SQL counts join rows/posts where each post's FavoriteCount >= 4 for users with Location = 'United Kingdom' (the SPARQL therefore misapplies aggregation and counts users instead of qualifying individual posts)."
+    }
+  },
+  {
+    "question_id": 678,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the same post (Id 109) and title as the gold standard; the additional viewCount column is allowed."
+    }
+  },
+  {
+    "question_id": 682,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result finds the post and favorite count but fails to return the owner's display name (ownerName is empty) and does not provide the owner's id, so it does not match the required owner information (Fabian Fagerholm / OwnerUserId 890)."
+    }
+  },
+  {
+    "question_id": 683,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL divides high-reputation posts in 2011 by the total number of 2011 posts, but the gold SQL divides by COUNT(T1.Id) over the joined table (i.e. not restricted to 2011); the SPARQL uses the wrong denominator, producing an incorrect percentage."
+    }
+  },
+  {
+    "question_id": 685,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result includes the correct ViewCount (1708) but fails to provide the required DisplayName of the last editor ('mbq')\u2014lastEditorDisplayName is null (only lastEditorUserId is present), so the query does not return the expected user name."
+    }
+  },
+  {
+    "question_id": 687,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 34 comments for the highest-score post while the gold SQL result is 3, so the numeric answer is incorrect (does not match the expected count)."
+    }
+  },
+  {
+    "question_id": 694,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 701,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output percentage (0.664452) matches the SQL ground-truth value (0.664451827...) within rounding tolerance, and the counts used to compute it are present, so the result is semantically equivalent."
+    }
+  },
+  {
+    "question_id": 704,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the correct excerpt and wiki post values (28276.0 and 28275.0 correspond to 28276 and 28275); the extra tag column is allowed."
+    }
+  },
+  {
+    "question_id": 705,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns only the user URI while reputation and upVotes are null, so it fails to retrieve the required numeric Reputation (2316) and UpVotes (74) values (missing/wrong property retrieval)."
+    }
+  },
+  {
+    "question_id": 707,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same comment text as the gold output and correctly selects the comment with the maximum score among posts whose ViewCount is between 100 and 150."
+    }
+  },
+  {
+    "question_id": 710,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts comments with commentScore = 0 on posts with commentCount = 1, whereas the gold SQL filters posts with T2.Score = 0 (post score), so the filter targets a different property and yields a different count (10997 vs 2888)."
+    }
+  },
+  {
+    "question_id": 716,
+    "db_id": "codebase_community",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts DISTINCT users (unique users) with/without zero upvotes, whereas the gold SQL computes the ratio over comment rows (each comment by a user); thus the SPARQL's denominator/numerator semantics are incorrect."
+    }
+  },
+  {
+    "question_id": 340,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=25061, SPARQL row_count=25061."
+    }
+  },
+  {
+    "question_id": 341,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=67, SPARQL row_count=72."
+    }
+  },
+  {
+    "question_id": 344,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect \u2014 the SPARQL returns no rows because it mis-specifies the join between cards and legalities (it matches both to a ?legalityUUID property instead of linking the card's uuid to the legality node), so it fails to retrieve the five mythic cards banned in gladiator."
+    }
+  },
+  {
+    "question_id": 345,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=3, SPARQL row_count=500."
+    }
+  },
+  {
+    "question_id": 346,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "SPARQL output is missing or None."
+    }
+  },
+  {
+    "question_id": 347,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only an aggregate count of cards grouped by hasContentWarning instead of returning each card's id and the associated ruling text (and hasContentWarning) as required by the SQL, and it does not perform the equivalent join to rulings to retrieve ruling texts."
+    }
+  },
+  {
+    "question_id": 349,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query does not restrict to promotional cards (isPromo = 1) and therefore does not implement the gold query's requirement to return the promotional card with the maximum rulings, so its result is not semantically equivalent."
+    }
+  },
+  {
+    "question_id": 352,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (35.38%) does not match the gold (8.77%) because the query divides by the total number of cards and uses DISTINCT counts; the gold SQL computes the percentage over the INNER JOIN of cards with foreign_data (i.e., only joined foreign_data rows), so the denominator and counting method are incorrect."
+    }
+  },
+  {
+    "question_id": 356,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result is 0 whereas the gold SQL count is 429, so the SPARQL query fails to match and count the cards with power='*' (literal matching mismatch), and thus is incorrect."
+    }
+  },
+  {
+    "question_id": 358,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output includes the border color 'black' (matching the gold result), so the correct value is present despite extra rows/columns."
+    }
+  },
+  {
+    "question_id": 366,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect \u2014 the SPARQL query returns card labels and rules text for Benalish Knight, but it does not retrieve the card legalities/formats (e.g., commander, duel, legacy, modern, etc.) as required by the gold SQL."
+    }
+  },
+  {
+    "question_id": 368,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query computes (241/56822)*100 = 0.424131, matching the SQL's percentage (0.424131498...), so it is semantically equivalent (allowing rounding)."
+    }
+  },
+  {
+    "question_id": 371,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (12.5%) does not match the gold 10.0% \u2014 the query uses isStorySpotlight=\"Yes\" and COUNT DISTINCT with a different join pattern, producing different numerator/denominator counts than the SQL which uses isStorySpotlight = 1 and a standard join."
+    }
+  },
+  {
+    "question_id": 377,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct cards with originalType \"Summon - Angel\" that have a subtype literal not equal to \"Angel\", which semantically matches the SQL WHERE originalType = 'Summon - Angel' AND subtypes != 'Angel' and returns the same count."
+    }
+  },
+  {
+    "question_id": 379,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=804, SPARQL row_count=804."
+    }
+  },
+  {
+    "question_id": 383,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query requires both status='Banned' and borderColor='white' on the same ?card node, but the gold SQL joins cards with legalities (status is on the legalities record), so the SPARQL misses that join and returns 0 instead of 258."
+    }
+  },
+  {
+    "question_id": 391,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output includes an incorrect extra card ('Serpent's Soul-Jar') that is not in the gold result and returns print-specific labels instead of the distinct base card names expected by the SQL query."
+    }
+  },
+  {
+    "question_id": 397,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=11446, SPARQL row_count=547."
+    }
+  },
+  {
+    "question_id": 402,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts cards with isStorySpotlight=Yes and isTextless=No, divides by total Card count to produce the same percentage (matching the SQL result within rounding) and additionally returns the matching IDs, which is allowed."
+    }
+  },
+  {
+    "question_id": 405,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it yields 0 instead of the expected 7 \u2014 it fails to correctly join translations to sets (it uses a ?st <...#forSet> ?set pattern rather than matching the setCode join used in the SQL), so it does not find the Portuguese (Brazil) translations for Commander sets."
+    }
+  },
+  {
+    "question_id": 407,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1693, SPARQL row_count=283."
+    }
+  },
+  {
+    "question_id": 408,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL checks the card's text for 'triggered ability' instead of joining to rulings and checking rulings.text as in the SQL, so it misses matches that appear in rulings and therefore does not implement the same logic."
+    }
+  },
+  {
+    "question_id": 409,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it treats format and rulingText as direct properties of the card instead of joining through the legalities and rulings entities (so it does not match the same records and returns 0 instead of 16)."
+    }
+  },
+  {
+    "question_id": 412,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output returns only six foreignName values that do not match the many French names in the gold standard (missing most expected rows and containing incorrect/non-matching entries such as 'Farm // Market'), so it is semantically incorrect."
+    }
+  },
+  {
+    "question_id": 414,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result contains only the set with null translation/language values and thus fails to retrieve the set_translations language entries (the SQL joins set_translations to return the ten languages); making the translation/language OPTIONAL (or not matching those triples) causes all required language values to be missing."
+    }
+  },
+  {
+    "question_id": 415,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query does not mirror the SQL logic: it selects format/status directly on the card instead of using the legalities relation and it checks hasContentWarning=\"No\" (string) rather than hasContentWarning = 0, producing incorrect counts and a 0% result instead of the expected 100%."
+    }
+  },
+  {
+    "question_id": 416,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts DISTINCT cards (and its total includes cards with no foreign_data) while the gold SQL uses an INNER JOIN and counts the joined rows (only cards with foreign_data, potentially duplicated by multiple foreign rows), so the denominator/numerator counting semantics do not match the SQL."
+    }
+  },
+  {
+    "question_id": 422,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The gold answer is 'French' for multiverseid 149934, but the SPARQL output returns 'Japanese' (and a None), so it does not return the correct language value."
+    }
+  },
+  {
+    "question_id": 424,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same proportion (cards with isTextless and layout='normal' divided by total cards, times 100) and yields the same numeric result (\u22480.202386), so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 427,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains exactly the same set of languages as the gold standard (no languages missing or extra), and the extra 'st' column is allowed."
+    }
+  },
+  {
+    "question_id": 440,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output includes the correct language 'Portuguese (Brazil)' (matching the gold result); the extra foreign IDs are irrelevant per the rules."
+    }
+  },
+  {
+    "question_id": 459,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns both cards with per-name MAX(cmc) and only orders them instead of returning the single highest-cost card; it groups by name rather than selecting/limiting to the overall max, so it does not match the SQL's single-row result ('Serra Angel')."
+    }
+  },
+  {
+    "question_id": 462,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the two Italian translations ('Set Base Decima Edizione' and 'Sentenza') matching the gold output; the extra 'set' column is allowed."
+    }
+  },
+  {
+    "question_id": 465,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query searches for card-level foreign data using a substring label match rather than checking set_translations for the set of the card with the exact name 'Ancestor''s Chosen', so it can miss the Korean set translation (gold answer = YES) and thus returns the wrong boolean."
+    }
+  },
+  {
+    "question_id": 466,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct cards in the specified 10E set with artist 'Adam Rex' (case-insensitive) and returns 12, matching the SQL's count for the set translation 'Hauptset Zehnte Edition' and artist 'Adam Rex'."
+    }
+  },
+  {
+    "question_id": 468,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output includes the required Simplified Chinese translation '\u6838\u5fc3\u7cfb\u5217\u7b2c\u516b\u7248', which matches the gold result (extra columns/IRIs are allowed)."
+    }
+  },
+  {
+    "question_id": 469,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "False: the SPARQL ASK returns no matching mtgoCode (boolean False) and collapses the per-card YES/NO results into a single existence check, whereas the SQL output contains multiple 'YES' rows showing some 'Angel of Mercy' cards do appear on MTGO."
+    }
+  },
+  {
+    "question_id": 472,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query does not require a non-null translation value (it omits any triple or filter for the translation text), so it can overcount sets with Italian translation entries that have no actual translation, producing 2 instead of the SQL's 1."
+    }
+  },
+  {
+    "question_id": 473,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "False \u2014 the SPARQL ASK tests that all sets for 'Adarkar Valkyrie' have foreignOnly = 'yes' (so returns true), but the gold SQL shows isForeignOnly = 0 (NO) for the card; the query's logic is therefore incorrect/inverted relative to the ground truth."
+    }
+  },
+  {
+    "question_id": 474,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query only checks for a translation record with language='Italian' and baseSetSize<100 but does not require the translation text to be non-null (translation IS NOT NULL) and thus misses the same selection as the SQL (producing 0 instead of 30)."
+    }
+  },
+  {
+    "question_id": 477,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns no results because it restricts cards to a specific set IRI (<http://cardgames.org/set/62>) and filters artist as string literals instead of matching the set by name 'Coldsnap' and the actual artist values, so it fails to retrieve the expected artists Chippy and Jeremy Jarvis."
+    }
+  },
+  {
+    "question_id": 479,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 0 vs the ground-truth 6 because it selects cards by a specific set URI (<.../CSP>) rather than matching the set by name 'Coldsnap' as in the SQL, so it likely targets the wrong set and misses the six matching cards (the rest of the logic for CMC and unknown power is equivalent)."
+    }
+  },
+  {
+    "question_id": 480,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns no results and therefore fails to retrieve the two Italian flavorText values; it filters by rdfs:label and lang 'it' (and/or a different property) instead of correctly joining the card to its Italian foreign_data flavorText entries, so the expected Italian strings are missing."
+    }
+  },
+  {
+    "question_id": 483,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=149, SPARQL row_count=0."
+    }
+  },
+  {
+    "question_id": 484,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=155, SPARQL row_count=1."
+    }
+  },
+  {
+    "question_id": 486,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result percentage (7.74194) matches the SQL ground truth (\u22487.741935) within rounding error, and the underlying counts (12 of 155) produce the same ratio."
+    }
+  },
+  {
+    "question_id": 487,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same ratio: it selects cards in the set named 'Coldsnap', counts distinct cards as denominator and sums cards with both cardKingdomId and cardKingdomFoilId bound as numerator, matching the SQL logic (null-checks \u2192 BOUND and division \u00d7100)."
+    }
+  },
+  {
+    "question_id": 518,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=546, SPARQL row_count=546."
+    }
+  },
+  {
+    "question_id": 522,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query does not filter for status = 'Banned' nor join to a legalities relation to return the banned formats (duel, legacy); instead it returns many printing variants of Sol Ring with no status/format values."
+    }
+  },
+  {
+    "question_id": 528,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1664, SPARQL row_count=219."
+    }
+  },
+  {
+    "question_id": 529,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=121, SPARQL row_count=0."
+    }
+  },
+  {
+    "question_id": 530,
+    "db_id": "card_games",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=83, SPARQL row_count=136."
+    }
+  },
+  {
+    "question_id": 195,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same most common bond type '-' (with an extra allowed count column) and uses grouping, counting, ordering, and LIMIT 1 as in the SQL, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 197,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query incorrectly restricts to molecules that have only '-' bonds (FILTER NOT EXISTS forbids any non-'-' bonds) rather than molecules that have at least one '-' bond as in the SQL, and it also uses element \"Oxygen\" instead of element 'o', so it computes a different average."
+    }
+  },
+  {
+    "question_id": 198,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes for each molecule the ratio single_bonds/atom_count and returns the average of that ratio (single bonds per atom), whereas the gold query returns the average COUNT of single bonds per molecule (single bonds per molecule), so the aggregation/normalization is incorrect."
+    }
+  },
+  {
+    "question_id": 200,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL selects molecules that have a '#' bond and are marked carcinogenic, returning the same molecules (TR041, TR499); the extra optional label column is allowed."
+    }
+  },
+  {
+    "question_id": 201,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is semantically incorrect: it filters element by the string \"carbon\" instead of element = 'c', omits DISTINCT when counting atoms (producing wrong counts), and returns a raw fraction (0.204) instead of the percentage (\u00d7100), leading to a value far from the gold ~38.81%."
+    }
+  },
+  {
+    "question_id": 206,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the element for the bond's atoms as 'Carbon' (for both connected atoms), which semantically matches the gold answer 'c' (carbon) and thus contains the correct element value."
+    }
+  },
+  {
+    "question_id": 207,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only a subset (Calcium, Carbon, Nitrogen, Oxygen, Sulfur) whereas the gold result includes many additional elements (e.g., Cl, H, P, F, Sn, Pb, Br, Cu), so the query is missing those elements."
+    }
+  },
+  {
+    "question_id": 208,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL groups by an atom's label property (property URI) and counts hydrogen atoms having that property, while the gold SQL groups by molecule.label and returns the most frequent molecule label value (e.g. '-'), so the SPARQL returns the wrong entity (property name) and counts different things."
+    }
+  },
+  {
+    "question_id": 212,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result identifies the same element (Calcium) as the gold result ('ca'), so despite differences in label formatting the returned value is semantically equivalent and matches the least numerous element."
+    }
+  },
+  {
+    "question_id": 213,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the bond's bondType '-' for the bond that connects TR004_8 and TR004_20 (it matches both atom orderings and extra columns are allowed), which semantically matches the gold result."
+    }
+  },
+  {
+    "question_id": 215,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL counts distinct atoms with element 'i' and 's' that are connected to bonds of type '-' and returns the same counts (3 and 77), so it is semantically equivalent to the SQL."
+    }
+  },
+  {
+    "question_id": 218,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 219,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes a bond-level ratio (triple bonds / total bonds) restricted to carcinogenic molecules, whereas the gold SQL computes a molecule-level percentage (count of carcinogenic molecules / count of molecules) among molecules that have at least one triple bond, so the numerator/denominator and filtering are incorrect."
+    }
+  },
+  {
+    "question_id": 220,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns toxicology property labels (e.g., 'Carcinogenic') and only one row rather than the molecule's atom.element values ('c','cl','h') expected in alphabetical order, so it selects the wrong predicates/objects and omits the correct element values and count."
+    }
+  },
+  {
+    "question_id": 226,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result yields 1 double bond out of 26 (1/26 * 100 = 3.84615), matching the gold SQL percentage to five decimal places."
+    }
+  },
+  {
+    "question_id": 227,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes (carcinogenic count / total molecules) * 100 and rounds to three decimals, producing the same percentage (44.315) as the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 228,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (22.0835%) does not match the gold 45.4545% because it counts 4034 hydrogens out of 18267 atoms rather than the gold counts (leading to ~45.45%), indicating the element matching or atom selection is incorrect (the FILTER lcase(str(?el)) = \"hydrogen\" || \"h\" or the atom selection logic does not reproduce the SQL WHERE element = 'h')."
+    }
+  },
+  {
+    "question_id": 230,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns unrelated molecule properties (carcinogenicity and an rdfs:label 'Molecule TR060') but does not return any atom elements (c, h, o, n, cl) and the label value does not match the expected '-' from the gold query."
+    }
+  },
+  {
+    "question_id": 231,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same majority bond type '-' as the gold standard (the extra carcinogenicity column is allowed)."
+    }
+  },
+  {
+    "question_id": 232,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same three molecule_ids (TR002, TR004, TR007) filtered for bond_type \"-\" and non-carcinogenic molecules, ordered and limited as in the SQL."
+    }
+  },
+  {
+    "question_id": 234,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (3) does not match the gold count (1041)\u2014the query only counts bonds that have a tox:connectsAtom triple to TR009_12 and partOfMolecule TR009, but the SQL counts any bond for molecule TR009 where either atom_id or atom_id2 equals 'TR009_12', so the SPARQL misses bonds represented in the other atom slot or with a different connection pattern."
+    }
+  },
+  {
+    "question_id": 236,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the correct bond type '-' and the two atoms TR001_6 and TR001_9 (as URIs), which semantically matches the gold answer (the gold's two mirrored rows represent the same atom pair)."
+    }
+  },
+  {
+    "question_id": 239,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1, SPARQL row_count=219."
+    }
+  },
+  {
+    "question_id": 240,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns a single toxicology property (hasCarcinogenicity = 'Non-Carcinogenic') for TR004 instead of the distinct atom element symbols (s, n, o, c, h, p) required by the gold query."
+    }
+  },
+  {
+    "question_id": 242,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=75, SPARQL row_count=75."
+    }
+  },
+  {
+    "question_id": 243,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains exactly the same set of bond identifiers as the gold SQL result, so the prediction is semantically correct."
+    }
+  },
+  {
+    "question_id": 244,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Model did not return valid JSON."
+    }
+  },
+  {
+    "question_id": 245,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query filters atoms by element \"Iodine\" instead of element = 'i' from the SQL, and it divides by COUNT(DISTINCT ?atom) rather than the non-distinct atom count after the join, so the selection and aggregation semantics do not match the gold query."
+    }
+  },
+  {
+    "question_id": 247,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output contains Chlorine, Hydrogen, Sodium and Unknown Element instead of the expected elements na, zn, k \u2014 it is missing zn and k and includes incorrect/extra elements."
+    }
+  },
+  {
+    "question_id": 248,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result contains the same atom pairs for TR041's triple bonds (TR041_10\u2013TR041_7 and TR041_8\u2013TR041_9); it omits the reversed duplicate rows by enforcing an ordering, but semantically matches the gold answer."
+    }
+  },
+  {
+    "question_id": 249,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the two elements Hydrogen and Carbon, which semantically correspond to the gold elements 'h' and 'c' (extra columns are allowed)."
+    }
+  },
+  {
+    "question_id": 253,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect \u2014 the SPARQL results include Carbon, Nitrogen and Phosphorus but return 'Unknown Element' instead of the expected 'y' element (gold has c, n, p, y), so one element is missing/mismatched."
+    }
+  },
+  {
+    "question_id": 255,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes 3078/7743*100 = 39.75203 for '-' bonds (carcinogenic count and total count), matching the SQL ground-truth value to five decimals."
+    }
+  },
+  {
+    "question_id": 260,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query counts all atoms in molecules that have a triple bond and contain an element labeled 'Phosphorus'/'Bromine' instead of restricting the counted atoms to those with element = 'p' or 'br' (it also uses different literal values), so it misfilters and overcounts."
+    }
+  },
+  {
+    "question_id": 263,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL counts atoms directly connected to single bonds (endpoints) and thus uses a different numerator/denominator set (and label 'Chlorine' vs 'cl') whereas the SQL measures all atoms in molecules that contain at least one single bond, so the computed percentage is not equivalent."
+    }
+  },
+  {
+    "question_id": 268,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the same elements (Carbon, Oxygen) corresponding to the gold elements ('c', 'o'), so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 273,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes the percentage of carcinogenic molecules that contain at least one chlorine atom (distinct molecule counts), while the gold SQL computes the percentage of atoms that are chlorine among all atoms in carcinogenic molecules, so the metrics differ."
+    }
+  },
+  {
+    "question_id": 281,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL output contains the correct element names but also includes an extra element (Sodium) not present in the gold set and returns aggregated counts instead of the distinct element list required, so the result set does not match the gold standard."
+    }
+  },
+  {
+    "question_id": 282,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same hydrogen ratio (17/47 \u2248 0.361702) and the same '+' label for molecule TR006, matching the SQL ground truth (minor rounding allowed)."
+    }
+  },
+  {
+    "question_id": 327,
+    "db_id": "toxicology",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=186, SPARQL row_count=186."
+    }
+  },
+  {
+    "question_id": 5,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query filters ?virtual by the string 'Exclusively Virtual' instead of matching Virtual = 'F' as in the gold SQL, so it does not select the same exclusively virtual schools."
+    }
+  },
+  {
+    "question_id": 11,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=7806, SPARQL row_count=7805."
+    }
+  },
+  {
+    "question_id": 12,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL replicates the SQL logic (filters SAT excellence > 0.3, joins FRPM by school, computes free/enrollment) and returns the same maximum rate (0.904908, matching the gold value within rounding)."
+    }
+  },
+  {
+    "question_id": 17,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=58, SPARQL row_count=58."
+    }
+  },
+  {
+    "question_id": 23,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1239, SPARQL row_count=1239."
+    }
+  },
+  {
+    "question_id": 24,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1165, SPARQL row_count=0."
+    }
+  },
+  {
+    "question_id": 25,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=6, SPARQL row_count=122."
+    }
+  },
+  {
+    "question_id": 26,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is incorrect because it filters mailCity = 'monterey' rather than County = 'Monterey' (and additionally uses gradesServed/schoolName matching instead of joining FRPM by CDSCode and filtering by High Schools), so it excludes the Salinas/Soledad schools in the gold result and returns no correct rows."
+    }
+  },
+  {
+    "question_id": 27,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=8574, SPARQL row_count=493."
+    }
+  },
+  {
+    "question_id": 28,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=57, SPARQL row_count=0."
+    }
+  },
+  {
+    "question_id": 31,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same two eligible free rates (0.134436 and 0.290589) for the 10th and 11th highest enrollments, matching the SQL output within allowable rounding and using the equivalent ORDER/OFFSET logic."
+    }
+  },
+  {
+    "question_id": 32,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL results (4 rows with very different FRPM rates) do not match the SQL ground truth (5 specific rates); the SPARQL query incorrectly filters FRPM records by low/high grade and reconstructs school URIs (excluding/mis-linking records), so it fails to compute the top-5 FRPM Count(K-12)/Enrollment(K-12) for SOC=66 as the SQL does."
+    }
+  },
+  {
+    "question_id": 37,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result returns null for Street/City/State/Zip (address fields missing) so it does not provide the complete address required for the school with the lowest excellence rate."
+    }
+  },
+  {
+    "question_id": 36,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same administrator full name (Michelle King) for the school with the highest NumGE1500 as the SQL ground truth, so the semantic answer matches."
+    }
+  },
+  {
+    "question_id": 39,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL filters on city (cs:city) instead of County='Fresno' and uses cs:numTestTakers on the school itself rather than averaging NumTstTakr from the satscores join, so it does not implement the same data source or join conditions as the SQL. "
+    }
+  },
+  {
+    "question_id": 40,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same phone number '(559) 248-5100' for the school with the minimum reading average in Fresno Unified, matching the gold SQL result."
+    }
+  },
+  {
+    "question_id": 41,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns only one school instead of the full set of top-5-per-county virtual schools from the SQL; its ranking logic (COUNT of strictly higher scores with FILTER ?numBetter < 5) misimplements the RANK() OVER (PARTITION BY County) semantics (and may mis-handle ties) so many qualifying schools in the gold result are missing."
+    }
+  },
+  {
+    "question_id": 45,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query fails to filter by the school's admin first and last name (it looks for an rdfs:label \"Ricci Ulrich\" instead), does not correctly join schools to their SAT scores (it only optionally looks for cs:avgScoreWriting and uses a generic ?school ?p ?admin link), and therefore returns no matching school/average-writing value compared to the SQL which joins schools to satscores for AdmFName1='Ricci' and AdmLName1='Ulrich'."
+    }
+  },
+  {
+    "question_id": 46,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the same school (California School for the Deaf-Fremont) with the highest K\u201312 enrollment (410), matching the gold SQL output, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 47,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the same aggregate (count = 17 \u2192 17/12 \u2248 1.41667) matching the SQL result, so the correct monthly average value is present (though repeated per-school in the output)."
+    }
+  },
+  {
+    "question_id": 48,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns counts of merged Orange County schools for DOC=54 (4) and DOC=52 (7), which yields the same ratio 4/7 \u2248 0.57142857 as the gold SQL result."
+    }
+  },
+  {
+    "question_id": 50,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "Correct \u2014 the SPARQL output returns the same postal street address '25 Churchill Avenue' for the school with the 7th-highest Math average, and the school name is null in both the gold and predicted results."
+    }
+  },
+  {
+    "question_id": 62,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (0) does not match the gold count (1); the query incorrectly checks cs:isCharter \"No\" (a string) instead of matching Charter = 0 (numeric) which likely excludes the correct school, causing the wrong count."
+    }
+  },
+  {
+    "question_id": 72,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query does not filter schools by City='Fremont' (and thus returns an extra enrollment 304.0), so its result set is not semantically equivalent to the gold SQL."
+    }
+  },
+  {
+    "question_id": 77,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL produced an empty result set and therefore did not return the two required Los Angeles K-9 schools or their computed FRPM percentages, so it failed to retrieve the matching schools and FRPM/enrollment data specified by the SQL."
+    }
+  },
+  {
+    "question_id": 79,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns San Diego with count 8 (and Santa Barbara 1), so it correctly identifies San Diego as having the most schools without a physical building, matching the gold standard result."
+    }
+  },
+  {
+    "question_id": 82,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL finds the school(s) with maximum absolute longitude and returns gradesOffered including 'K-8', which matches the gold result."
+    }
+  },
+  {
+    "question_id": 83,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=1, SPARQL row_count=455."
+    }
+  },
+  {
+    "question_id": 85,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL does not correctly join the frpm data to the school by matching CDSCode (it uses fragile URI substring checks and extra incorrect admin unions) so it fails to retrieve the same free-meal/enrollment values and district code required by the SQL."
+    }
+  },
+  {
+    "question_id": 87,
+    "db_id": "california_schools",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains the same two administrator email addresses ('a.lucero@realjourney.org' and 'j.hernandez@realjourney.org') as the gold standard, satisfying the query result semantically."
+    }
+  },
+  {
+    "question_id": 89,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies equivalent filters (region = 'east bohemia' and frequency = 'POPLATEK PO OBRATU'), counts the matching accounts, and returns the same result (13) as the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 92,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is semantically incorrect: it uses different predicates and the literal \"Female\" (instead of the SQL's gender='F' and district A11 field), applies strict >/< bounds (excluding possible boundary values) and mixes multiple schema patterns, causing it to return 0 rather than the expected count (69)."
+    }
+  },
+  {
+    "question_id": 93,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL applies the same filters (male clients in north Bohemia with avg salary > 8000) and returns the same count (280) as the gold SQL, so the result is semantically correct."
+    }
+  },
+  {
+    "question_id": 94,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The predicted output reports the correct gap (4431) but the account number is incorrect (3214 vs. expected 6), indicating the SPARQL query selected the wrong client/account (it also relies on hardcoded average values rather than deriving them), so it is not semantically equivalent to the gold SQL result."
+    }
+  },
+  {
+    "question_id": 95,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns accountId 1372 for a client who is the youngest within the district of maximal average salary, but the gold SQL expects account_id 2836 for the single globally youngest client with the highest average-salary criteria; the SPARQL misapplies per-district MAX(birthDate)/average-salary logic and thus does not select the same account."
+    }
+  },
+  {
+    "question_id": 98,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL queries for a separate fee Transaction whose purpose contains 'POPLATEK TYDNE' rather than checking the account's frequency = 'POPLATEK TYDNE' (and the MIN(amount) subquery is not correlated to accounts), so it fails to return the correct account (ground truth account_id 176)."
+    }
+  },
+  {
+    "question_id": 99,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns account 10451 (matching the gold result) and correctly filters loans with duration >12 and account creation in 1993, selecting the loan with the maximum amount as in the SQL."
+    }
+  },
+  {
+    "question_id": 100,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL returns the same numeric result (8) and applies equivalent filters for gender (female), birth date before 1950, and Sokolov district (it additionally restricts to clients with dispositions/accounts), so it semantically matches the gold standard."
+    }
+  },
+  {
+    "question_id": 112,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL result returns the districtLabel 'Tachov' for the female client born 1976-01-29, which semantically matches the gold SQL answer."
+    }
+  },
+  {
+    "question_id": 115,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL result (50.7357) does not match the gold percentage (44.2623); the SPARQL uses gender \"Male\" (and/or effectively selects different client counts for the chosen district) so the computed male and total counts differ from the SQL gold logic which filters gender = 'M', producing an incorrect percentage."
+    }
+  },
+  {
+    "question_id": 116,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes the minimum transaction date with purpose 'UVER' and picks accounts from that date instead of selecting the client whose loan date is '1993-07-05' as in the SQL, so it targets the wrong record (and returns no result)."
+    }
+  },
+  {
+    "question_id": 117,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes (sum of loanAmount where status='A') / (sum of all loanAmount) * 100, which is semantically equivalent to the SQL expression and matches the reported numeric result (up to rounding)."
+    }
+  },
+  {
+    "question_id": 118,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL computes percentage by loan amount (sum of amounts for status='C' / total loan amount) rather than percentage of accounts (count of status='C' rows / count of accounts) as in the SQL, so the aggregation logic is incorrect."
+    }
+  },
+  {
+    "question_id": 125,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query determines the district via the client (disp -> client -> livesInDistrict) rather than joining the account to the district as in the SQL (account.district_id = district.district_id), so it can return a different set of districts and is not semantically equivalent."
+    }
+  },
+  {
+    "question_id": 128,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output returns the same nine districts with matching female counts in descending order (and extra columns/patterns do not alter the correct aggregated results), so it is semantically equivalent to the gold SQL output."
+    }
+  },
+  {
+    "question_id": 136,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL query incorrectly filters by the account's creation date ( ?created ) and adds a status='A' constraint instead of using the loan's date (T2.date) as in the SQL, so it applies wrong/more restrictive conditions and yields an incorrect count."
+    }
+  },
+  {
+    "question_id": 129,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL aggregates and returns the top 10 districts by summed withdrawal amount (ORDER BY totalAmount DESC), whereas the gold SQL returns distinct district names ordered alphabetically (A2 ASC) without aggregation, so the query logic and ordering do not match."
+    }
+  },
+  {
+    "question_id": 137,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL query filters loans by status C or D, links them to accounts in district 1, and counts distinct accounts, producing the same result (47) as the SQL gold standard."
+    }
+  },
+  {
+    "question_id": 138,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns 81 instead of the expected 96, indicating a mismatch in filtering (it uses the literal \"Male\" and different property mappings) so it does not select the same set of male clients as the SQL which filters gender = 'M' in the district with the second-highest A15."
+    }
+  },
+  {
+    "question_id": 145,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=4484, SPARQL row_count=770."
+    }
+  },
+  {
+    "question_id": 149,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=461, SPARQL row_count=1."
+    }
+  },
+  {
+    "question_id": 152,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL aggregates at the region level (averaging crimes per region and filtering regions by that average) and checks for accounts in the same region, whereas the SQL filters individual districts with A15 > 4000 and requires accounts belonging to the same district opened from 1997, so the aggregation level and join condition are incorrect."
+    }
+  },
+  {
+    "question_id": 159,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=140, SPARQL row_count=140."
+    }
+  },
+  {
+    "question_id": 168,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is semantically incorrect: it navigates clients via disp/account->district (not the direct client->district join used in the SQL) and uses an OPTIONAL+BIND to collect female clients, which results in femaleCount = 0 and thus a wrong percentage instead of summing gender='F' over all clients in districts with A11>10000 as the SQL does."
+    }
+  },
+  {
+    "question_id": 169,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL is semantically incorrect: it sums Transaction 'Loan Payment' records and uses gender='male' but fails to restrict to client dispositions of type 'OWNER' and does not match the loans table semantics, producing a different growth rate (48.92 vs gold 25.30)."
+    }
+  },
+  {
+    "question_id": 173,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Incorrect: the SPARQL returns a numeric count of statement-request transactions rather than the account's frequency string, and it selects/counts transactions with amount = 3539 (and sums them) instead of returning the k_symbol whose total debits for the account equal 3539 as required by the gold query."
+    }
+  },
+  {
+    "question_id": 186,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL percentage (52.1277%) does not match the gold value (52.6316%); moreover the SPARQL omits the district join/constraint present in the SQL, causing a different client set and an incorrect result."
+    }
+  },
+  {
+    "question_id": 189,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "The SPARQL returns account 3214 (not the gold 1743) and is semantically incorrect because it hardcodes averageSalary = 8110 and does not compute the lowest district A11 nor properly combine that with the oldest female clients, so it doesn't implement the same selection logic as the SQL."
+    }
+  },
+  {
+    "question_id": 192,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL computes the average loan amount for loans with status C or D and accounts whose frequency equals 'POPLATEK PO OBRATU', matching the SQL logic; the numeric difference is a negligible rounding variation."
+    }
+  },
+  {
+    "question_id": 194,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=88, SPARQL row_count=88."
+    }
+  },
+  {
+    "question_id": 119,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": true,
+      "reasoning": "The SPARQL output contains all 21 expected account IDs with matching district names and regions and applies the same year (1993) and frequency ('POPLATEK PO OBRATU') filters as the gold SQL, so it is semantically correct."
+    }
+  },
+  {
+    "question_id": 120,
+    "db_id": "financial",
+    "judgment": {
+      "is_correct": false,
+      "reasoning": "Row count exceeds maximum allowed (50) to avoid context length errors: SQL row_count=364, SPARQL row_count=431."
+    }
+  }
+]

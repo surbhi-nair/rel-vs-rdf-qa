@@ -1,0 +1,221 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://debit_card_specializing.example/DB/> .
+
+######################################################################
+# Table: customers
+# PK: CustomerID
+######################################################################
+<#CustomersMapping>
+  rml:logicalSource [
+    rml:source "debit_card_specializing.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT \"CustomerID\", \"Segment\", \"Currency\" FROM \"customers\""
+  ] ;
+
+  # Subject IRI: Table/PK_Col=PK_Val
+  rr:subjectMap [
+    rr:template "http://debit_card_specializing.example/DB/customers/CustomerID={CustomerID}" ;
+    rr:class <http://debit_card_specializing.example/DB/customers>
+  ] ;
+
+  # Literal Properties
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/customers#CustomerID> ;
+    rr:objectMap [ rml:reference "CustomerID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/customers#Segment> ;
+    rr:objectMap [ rml:reference "Segment" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/customers#Currency> ;
+    rr:objectMap [ rml:reference "Currency" ]
+  ] .
+
+######################################################################
+# Table: gasstations
+# PK: GasStationID
+######################################################################
+<#GasStationsMapping>
+  rml:logicalSource [
+    rml:source "debit_card_specializing.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT \"GasStationID\", \"ChainID\", \"Country\", \"Segment\" FROM \"gasstations\""
+  ] ;
+
+  rr:subjectMap [
+    rr:template "http://debit_card_specializing.example/DB/gasstations/GasStationID={GasStationID}" ;
+    rr:class <http://debit_card_specializing.example/DB/gasstations>
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/gasstations#GasStationID> ;
+    rr:objectMap [ rml:reference "GasStationID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/gasstations#ChainID> ;
+    rr:objectMap [ rml:reference "ChainID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/gasstations#Country> ;
+    rr:objectMap [ rml:reference "Country" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/gasstations#Segment> ;
+    rr:objectMap [ rml:reference "Segment" ]
+  ] .
+
+######################################################################
+# Table: products
+# PK: ProductID
+######################################################################
+<#ProductsMapping>
+  rml:logicalSource [
+    rml:source "debit_card_specializing.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT \"ProductID\", \"Description\" FROM \"products\""
+  ] ;
+
+  rr:subjectMap [
+    rr:template "http://debit_card_specializing.example/DB/products/ProductID={ProductID}" ;
+    rr:class <http://debit_card_specializing.example/DB/products>
+  ] ;
+
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/products#ProductID> ;
+    rr:objectMap [ rml:reference "ProductID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/products#Description> ;
+    rr:objectMap [ rml:reference "Description" ]
+  ] .
+
+######################################################################
+# Table: transactions_1k
+# PK: TransactionID
+# FKs: CustomerID, GasStationID, ProductID
+######################################################################
+<#TransactionsMapping>
+  rml:logicalSource [
+    rml:source "debit_card_specializing.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT \"TransactionID\", \"Date\", \"Time\", \"CustomerID\", \"CardID\", \"GasStationID\", \"ProductID\", \"Amount\", \"Price\" FROM \"transactions_1k\""
+  ] ;
+
+  rr:subjectMap [
+    rr:template "http://debit_card_specializing.example/DB/transactions_1k/TransactionID={TransactionID}" ;
+    rr:class <http://debit_card_specializing.example/DB/transactions_1k>
+  ] ;
+
+  # --- Standard Literals ---
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#TransactionID> ;
+    rr:objectMap [ rml:reference "TransactionID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#Date> ;
+    rr:objectMap [ rml:reference "Date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#Time> ;
+    rr:objectMap [ rml:reference "Time" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#CardID> ;
+    rr:objectMap [ rml:reference "CardID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#Amount> ;
+    rr:objectMap [ rml:reference "Amount" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#Price> ;
+    rr:objectMap [ rml:reference "Price" ]
+  ] ;
+
+  # --- FOREIGN KEY 1: CustomerID ---
+  # 1. The Literal Value
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#CustomerID> ;
+    rr:objectMap [ rml:reference "CustomerID" ]
+  ] ;
+  # 2. The Reference Link (ref-Column)
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#ref-CustomerID> ;
+    rr:objectMap [
+      rr:template "http://debit_card_specializing.example/DB/customers/CustomerID={CustomerID}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+
+  # --- FOREIGN KEY 2: GasStationID ---
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#GasStationID> ;
+    rr:objectMap [ rml:reference "GasStationID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#ref-GasStationID> ;
+    rr:objectMap [
+      rr:template "http://debit_card_specializing.example/DB/gasstations/GasStationID={GasStationID}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+
+  # --- FOREIGN KEY 3: ProductID ---
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#ProductID> ;
+    rr:objectMap [ rml:reference "ProductID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/transactions_1k#ref-ProductID> ;
+    rr:objectMap [
+      rr:template "http://debit_card_specializing.example/DB/products/ProductID={ProductID}" ;
+      rr:termType rr:IRI
+    ]
+  ] .
+
+######################################################################
+# Table: yearmonth
+# PK (Composite): CustomerID, Date
+# FK: CustomerID -> customers
+######################################################################
+<#YearMonthMapping>
+  rml:logicalSource [
+    rml:source "debit_card_specializing.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT \"CustomerID\", \"Date\", \"Consumption\" FROM \"yearmonth\""
+  ] ;
+
+  # --- COMPOSITE KEY SUBJECT IRI ---
+  # W3C Standard: Separates PK columns with ';' (or similar delimiter) 
+  # Pattern: Table/Col1=Val1;Col2=Val2
+  rr:subjectMap [
+    rr:template "http://debit_card_specializing.example/DB/yearmonth/CustomerID={CustomerID};Date={Date}" ;
+    rr:class <http://debit_card_specializing.example/DB/yearmonth>
+  ] ;
+
+  # --- Literals ---
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/yearmonth#Date> ;
+    rr:objectMap [ rml:reference "Date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/yearmonth#Consumption> ;
+    rr:objectMap [ rml:reference "Consumption" ]
+  ] ;
+
+  # --- FOREIGN KEY: CustomerID ---
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/yearmonth#CustomerID> ;
+    rr:objectMap [ rml:reference "CustomerID" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://debit_card_specializing.example/DB/yearmonth#ref-CustomerID> ;
+    rr:objectMap [
+      rr:template "http://debit_card_specializing.example/DB/customers/CustomerID={CustomerID}" ;
+      rr:termType rr:IRI
+    ]
+  ] .

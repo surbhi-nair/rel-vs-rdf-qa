@@ -1,0 +1,437 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://superhero.org/> .
+
+######################################################################
+# Table: alignment
+######################################################################
+<#alignment_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "alignment" FROM "alignment"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/alignment/id={id}" ;
+    rr:class <http://superhero.org/alignment>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "alignment {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/alignment#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/alignment#alignment> ;
+    rr:objectMap [ rml:reference "alignment" ]
+  ]
+ .
+
+######################################################################
+# Table: attribute
+######################################################################
+<#attribute_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "attribute_name" FROM "attribute"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/attribute/id={id}" ;
+    rr:class <http://superhero.org/attribute>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "attribute {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/attribute#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/attribute#attribute_name> ;
+    rr:objectMap [ rml:reference "attribute_name" ]
+  ]
+ .
+
+######################################################################
+# Table: colour
+######################################################################
+<#colour_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "colour" FROM "colour"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/colour/id={id}" ;
+    rr:class <http://superhero.org/colour>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "colour {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/colour#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/colour#colour> ;
+    rr:objectMap [ rml:reference "colour" ]
+  ]
+ .
+
+######################################################################
+# Table: gender
+######################################################################
+<#gender_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "gender" FROM "gender"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/gender/id={id}" ;
+    rr:class <http://superhero.org/gender>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "gender {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/gender#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/gender#gender> ;
+    rr:objectMap [ rml:reference "gender" ]
+  ]
+ .
+
+######################################################################
+# Table: publisher
+######################################################################
+<#publisher_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "publisher_name" FROM "publisher"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/publisher/id={id}" ;
+    rr:class <http://superhero.org/publisher>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "publisher {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/publisher#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/publisher#publisher_name> ;
+    rr:objectMap [ rml:reference "publisher_name" ]
+  ]
+ .
+
+######################################################################
+# Table: race
+######################################################################
+<#race_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "race" FROM "race"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/race/id={id}" ;
+    rr:class <http://superhero.org/race>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "race {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/race#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/race#race> ;
+    rr:objectMap [ rml:reference "race" ]
+  ]
+ .
+
+######################################################################
+# Table: superhero
+######################################################################
+<#superhero_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/superhero/id={id}" ;
+    rr:class <http://superhero.org/superhero>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "superhero {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#superhero_name> ;
+    rr:objectMap [ rml:reference "superhero_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#full_name> ;
+    rr:objectMap [ rml:reference "full_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#gender_id> ;
+    rr:objectMap [ rml:reference "gender_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-gender_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/gender/id={gender_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#eye_colour_id> ;
+    rr:objectMap [ rml:reference "eye_colour_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-eye_colour_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/colour/id={eye_colour_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#hair_colour_id> ;
+    rr:objectMap [ rml:reference "hair_colour_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-hair_colour_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/colour/id={hair_colour_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#skin_colour_id> ;
+    rr:objectMap [ rml:reference "skin_colour_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-skin_colour_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/colour/id={skin_colour_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#race_id> ;
+    rr:objectMap [ rml:reference "race_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-race_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/race/id={race_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#publisher_id> ;
+    rr:objectMap [ rml:reference "publisher_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-publisher_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/publisher/id={publisher_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#alignment_id> ;
+    rr:objectMap [ rml:reference "alignment_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#ref-alignment_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/alignment/id={alignment_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#height_cm> ;
+    rr:objectMap [ rml:reference "height_cm" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superhero#weight_kg> ;
+    rr:objectMap [ rml:reference "weight_kg" ]
+  ]
+ .
+
+######################################################################
+# Table: hero_attribute
+######################################################################
+<#hero_attribute_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "hero_id", "attribute_id", "attribute_value" FROM "hero_attribute"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/hero_attribute/hero_id={hero_id}" ;
+    rr:class <http://superhero.org/hero_attribute>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "hero_attribute {hero_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_attribute#hero_id> ;
+    rr:objectMap [ rml:reference "hero_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_attribute#ref-hero_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/superhero/id={hero_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_attribute#attribute_id> ;
+    rr:objectMap [ rml:reference "attribute_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_attribute#ref-attribute_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/attribute/id={attribute_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_attribute#attribute_value> ;
+    rr:objectMap [ rml:reference "attribute_value" ]
+  ]
+ .
+
+######################################################################
+# Table: superpower
+######################################################################
+<#superpower_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "power_name" FROM "superpower"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/superpower/id={id}" ;
+    rr:class <http://superhero.org/superpower>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "superpower {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superpower#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/superpower#power_name> ;
+    rr:objectMap [ rml:reference "power_name" ]
+  ]
+ .
+
+######################################################################
+# Table: hero_power
+######################################################################
+<#hero_power_Mapping>
+  rml:logicalSource [
+    rml:source "superhero.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "hero_id", "power_id" FROM "hero_power"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://superhero.org/hero_power/hero_id={hero_id}" ;
+    rr:class <http://superhero.org/hero_power>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "hero_power {hero_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_power#hero_id> ;
+    rr:objectMap [ rml:reference "hero_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_power#ref-hero_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/superhero/id={hero_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_power#power_id> ;
+    rr:objectMap [ rml:reference "power_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://superhero.org/hero_power#ref-power_id> ;
+    rr:objectMap [
+      rr:template "http://superhero.org/superpower/id={power_id}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .

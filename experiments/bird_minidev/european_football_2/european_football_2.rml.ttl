@@ -1,0 +1,392 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rml:  <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql:   <http://semweb.mmlab.be/ns/ql#> .
+@prefix ef:   <http://europeanfootball.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+######################################################################
+# 1) Country Mapping
+######################################################################
+<#CountryMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, name FROM Country"
+  ] ;
+  rr:subjectMap [ rr:template "http://europeanfootball.org/country/{id}" ; rr:class ef:Country ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:countryId ; rr:objectMap [ rml:reference "id" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:countryName ; rr:objectMap [ rml:reference "name" ] ] .
+
+######################################################################
+# 2) League Mapping
+######################################################################
+<#LeagueMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, country_id, name FROM League"
+  ] ;
+  rr:subjectMap [ rr:template "http://europeanfootball.org/league/{id}" ; rr:class ef:League ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:leagueId ; rr:objectMap [ rml:reference "id" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:leagueName ; rr:objectMap [ rml:reference "name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:hostedInCountry ; rr:objectMap [ rr:template "http://europeanfootball.org/country/{country_id}" ; rr:termType rr:IRI ] ] .
+
+######################################################################
+# 3) Team Mapping
+######################################################################
+<#TeamMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query "SELECT id, team_api_id, team_fifa_api_id, team_long_name, team_short_name FROM Team"
+  ] ;
+  rr:subjectMap [ rr:template "http://europeanfootball.org/team/{team_api_id}" ; rr:class ef:Team ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{team_long_name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:teamLongName ; rr:objectMap [ rml:reference "team_long_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:teamShortName ; rr:objectMap [ rml:reference "team_short_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:teamFifaApiId ; rr:objectMap [ rml:reference "team_fifa_api_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:teamApiId ; rr:objectMap [ rml:reference "team_api_id" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 4) Team Attributes Mapping
+######################################################################
+<#TeamAttributesMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT 
+      id,
+      team_fifa_api_id,
+      team_api_id,
+      REPLACE(date,' ','T') as date,
+      buildUpPlaySpeed,
+      buildUpPlayDribbling,
+      buildUpPlayPassing,
+      buildUpPlayPositioningClass,
+      buildUpPlaySpeedClass,
+      buildUpPlayDribblingClass,
+      buildUpPlayPassingClass,
+      chanceCreationPassing,
+      chanceCreationCrossing,
+      chanceCreationShooting,
+      chanceCreationPositioningClass,
+      chanceCreationPassingClass,
+      chanceCreationCrossingClass,
+      chanceCreationShootingClass,
+      defencePressure,
+      defenceAggression,
+      defenceTeamWidth,
+      defenceDefenderLineClass,
+      defencePressureClass,
+      defenceAggressionClass,
+      defenceTeamWidthClass
+    FROM Team_Attributes
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://europeanfootball.org/teamAttributes/{team_api_id}-{date}" ; rr:class ef:TeamAttributes ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Team {team_api_id} attributes ({date})" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:forTeam ; rr:objectMap [ rr:template "http://europeanfootball.org/team/{team_api_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:teamFifaApiId ; rr:objectMap [ rml:reference "team_fifa_api_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlaySpeed ; rr:objectMap [ rml:reference "buildUpPlaySpeed" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlayDribbling ; rr:objectMap [ rml:reference "buildUpPlayDribbling" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlayPassing ; rr:objectMap [ rml:reference "buildUpPlayPassing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlayPositioningClass ; rr:objectMap [ rml:reference "buildUpPlayPositioningClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlaySpeedClass ; rr:objectMap [ rml:reference "buildUpPlaySpeedClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlayDribblingClass ; rr:objectMap [ rml:reference "buildUpPlayDribblingClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:buildUpPlayPassingClass ; rr:objectMap [ rml:reference "buildUpPlayPassingClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationPassing ; rr:objectMap [ rml:reference "chanceCreationPassing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationCrossing ; rr:objectMap [ rml:reference "chanceCreationCrossing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationShooting ; rr:objectMap [ rml:reference "chanceCreationShooting" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationPositioningClass ; rr:objectMap [ rml:reference "chanceCreationPositioningClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationPassingClass ; rr:objectMap [ rml:reference "chanceCreationPassingClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationCrossingClass ; rr:objectMap [ rml:reference "chanceCreationCrossingClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:chanceCreationShootingClass ; rr:objectMap [ rml:reference "chanceCreationShootingClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defencePressure ; rr:objectMap [ rml:reference "defencePressure" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defenceAggression ; rr:objectMap [ rml:reference "defenceAggression" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defenceTeamWidth ; rr:objectMap [ rml:reference "defenceTeamWidth" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defenceDefenderLineClass ; rr:objectMap [ rml:reference "defenceDefenderLineClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defencePressureClass ; rr:objectMap [ rml:reference "defencePressureClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defenceAggressionClass ; rr:objectMap [ rml:reference "defenceAggressionClass" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defenceTeamWidthClass ; rr:objectMap [ rml:reference "defenceTeamWidthClass" ] ] .
+
+######################################################################
+# 5) Player Mapping
+######################################################################
+<#PlayerMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT 
+      id,
+      player_api_id,
+      player_name,
+      player_fifa_api_id,
+      REPLACE(birthday,' ','T') as birthday,
+      height,
+      weight
+    FROM Player
+    """
+  ] ;
+  rr:subjectMap [ rr:template "http://europeanfootball.org/player/{player_api_id}" ; rr:class ef:Player ] ;
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "{player_name}" ; rr:termType rr:Literal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:playerApiId ; rr:objectMap [ rml:reference "player_api_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:playerFifaApiId ; rr:objectMap [ rml:reference "player_fifa_api_id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:playerName ; rr:objectMap [ rml:reference "player_name" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:birthDay ; rr:objectMap [ rml:reference "birthday" ; rr:datatype xsd:dateTime ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:height ; rr:objectMap [ rml:reference "height" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:weight ; rr:objectMap [ rml:reference "weight" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 6) Player Attributes Mapping (Complete)
+######################################################################
+<#PlayerAttributesMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT 
+      player_api_id,
+      REPLACE(date,' ','T') as date,
+      overall_rating,
+      potential,
+      preferred_foot,
+      attacking_work_rate,
+      defensive_work_rate,
+      crossing,
+      finishing,
+      heading_accuracy,
+      short_passing,
+      volleys,
+      dribbling,
+      curve,
+      free_kick_accuracy,
+      long_passing,
+      ball_control,
+      acceleration,
+      sprint_speed,
+      agility,
+      reactions,
+      balance,
+      shot_power,
+      jumping,
+      stamina,
+      strength,
+      long_shots,
+      aggression,
+      interceptions,
+      positioning,
+      vision,
+      penalties,
+      marking,
+      standing_tackle,
+      sliding_tackle,
+      gk_diving,
+      gk_handling,
+      gk_kicking,
+      gk_positioning,
+      gk_reflexes
+    FROM Player_Attributes
+    """
+  ] ;
+
+  rr:subjectMap [ 
+    rr:template "http://europeanfootball.org/playerAttributes/{player_api_id}-{date}" ; 
+    rr:class ef:PlayerAttributes 
+  ] ;
+
+  rr:predicateObjectMap [ rr:predicate rdfs:label ; rr:objectMap [ rr:template "Player {player_api_id} attributes ({date})" ; rr:termType rr:Literal ] ]  ;
+  rr:predicateObjectMap [ rr:predicate ef:forPlayer ; rr:objectMap [ rr:template "http://europeanfootball.org/player/{player_api_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:playerAttributesDate ; rr:objectMap [ rml:reference "date" ; rr:datatype xsd:dateTime ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:overallRating ; rr:objectMap [ rml:reference "overall_rating" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:potential ; rr:objectMap [ rml:reference "potential" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:preferredFoot ; rr:objectMap [ rml:reference "preferred_foot" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:attackingWorkRate ; rr:objectMap [ rml:reference "attacking_work_rate" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:defensiveWorkRate ; rr:objectMap [ rml:reference "defensive_work_rate" ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:crossing ; rr:objectMap [ rml:reference "crossing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:finishing ; rr:objectMap [ rml:reference "finishing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:headingAccuracy ; rr:objectMap [ rml:reference "heading_accuracy" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:shortPassing ; rr:objectMap [ rml:reference "short_passing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:volleys ; rr:objectMap [ rml:reference "volleys" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:dribbling ; rr:objectMap [ rml:reference "dribbling" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:curve ; rr:objectMap [ rml:reference "curve" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:freeKickAccuracy ; rr:objectMap [ rml:reference "free_kick_accuracy" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:longPassing ; rr:objectMap [ rml:reference "long_passing" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:ballControl ; rr:objectMap [ rml:reference "ball_control" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:acceleration ; rr:objectMap [ rml:reference "acceleration" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:sprintSpeed ; rr:objectMap [ rml:reference "sprint_speed" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:agility ; rr:objectMap [ rml:reference "agility" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:reactions ; rr:objectMap [ rml:reference "reactions" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:balance ; rr:objectMap [ rml:reference "balance" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:shotPower ; rr:objectMap [ rml:reference "shot_power" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:jumping ; rr:objectMap [ rml:reference "jumping" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:stamina ; rr:objectMap [ rml:reference "stamina" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:strength ; rr:objectMap [ rml:reference "strength" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:longShots ; rr:objectMap [ rml:reference "long_shots" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:aggression ; rr:objectMap [ rml:reference "aggression" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:interceptions ; rr:objectMap [ rml:reference "interceptions" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:positioning ; rr:objectMap [ rml:reference "positioning" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:vision ; rr:objectMap [ rml:reference "vision" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:penalties ; rr:objectMap [ rml:reference "penalties" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:marking ; rr:objectMap [ rml:reference "marking" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:standingTackle ; rr:objectMap [ rml:reference "standing_tackle" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:slidingTackle ; rr:objectMap [ rml:reference "sliding_tackle" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:gkDiving ; rr:objectMap [ rml:reference "gk_diving" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:gkHandling ; rr:objectMap [ rml:reference "gk_handling" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:gkKicking ; rr:objectMap [ rml:reference "gk_kicking" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:gkPositioning ; rr:objectMap [ rml:reference "gk_positioning" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:gkReflexes ; rr:objectMap [ rml:reference "gk_reflexes" ; rr:datatype xsd:integer ] ] .
+
+######################################################################
+# 7) Match Mapping (Complete)
+######################################################################
+<#MatchMapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query """
+    SELECT 
+      id,
+      country_id,
+      league_id,
+      season,
+      stage,
+      REPLACE(date,' ','T') as date,
+      match_api_id,
+      home_team_api_id,
+      away_team_api_id,
+      home_team_goal,
+      away_team_goal,
+      goal,
+      shoton,
+      shotoff,
+      foulcommit,
+      card,
+      cross,
+      corner,
+      possession,
+      B365H,
+      B365D,
+      B365A,
+      BWH,
+      BWD,
+      BWA,
+      IWH,
+      IWD,
+      IWA,
+      LBH,
+      LBD,
+      LBA,
+      PSH,
+      PSD,
+      PSA,
+      WHH,
+      WHD,
+      WHA,
+      SJH,
+      SJD,
+      SJA,
+      VCH,
+      VCD,
+      VCA,
+      GBH,
+      GBD,
+      GBA,
+      BSH,
+      BSD,
+      BSA
+    FROM Match
+    """
+  ] ;
+
+  rr:subjectMap [ 
+    rr:template "http://europeanfootball.org/match/{id}" ; 
+    rr:class ef:Match 
+  ] ;
+
+  # Label
+  rr:predicateObjectMap [ 
+    rr:predicate rdfs:label ; 
+    rr:objectMap [ rr:template "Match {id} ({season})" ; rr:termType rr:Literal ] 
+  ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:matchId ; rr:objectMap [ rml:reference "id" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:matchApiId ; rr:objectMap [ rml:reference "match_api_id" ; rr:datatype xsd:integer ] ] ;
+  # Temporal and organizational info
+  rr:predicateObjectMap [ rr:predicate ef:season ; rr:objectMap [ rml:reference "season" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:stage ; rr:objectMap [ rml:reference "stage" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:date ; rr:objectMap [ rml:reference "date" ; rr:datatype xsd:dateTime ] ] ;
+
+  # Entity relationships
+  rr:predicateObjectMap [ rr:predicate ef:playedInLeague ; rr:objectMap [ rr:template "http://europeanfootball.org/league/{league_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:playedInCountry ; rr:objectMap [ rr:template "http://europeanfootball.org/country/{country_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:homeTeamApiId ; rr:objectMap [ rr:template "http://europeanfootball.org/team/{home_team_api_id}" ; rr:termType rr:IRI ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:awayTeamApiId ; rr:objectMap [ rr:template "http://europeanfootball.org/team/{away_team_api_id}" ; rr:termType rr:IRI ] ] ;
+
+  # Goals and results
+  rr:predicateObjectMap [ rr:predicate ef:homeTeamGoal ; rr:objectMap [ rml:reference "home_team_goal" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:awayTeamGoal ; rr:objectMap [ rml:reference "away_team_goal" ; rr:datatype xsd:integer ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:matchResult ; rr:objectMap [ rr:template "{home_team_goal}-{away_team_goal}" ; rr:termType rr:Literal ] ] ;
+
+  # Match statistics
+  rr:predicateObjectMap [ rr:predicate ef:goalsJSON ; rr:objectMap [ rml:reference "goal" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:shotsOn ; rr:objectMap [ rml:reference "shoton" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:shotsOff ; rr:objectMap [ rml:reference "shotoff" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:foulsCommitted ; rr:objectMap [ rml:reference "foulcommit" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:cards ; rr:objectMap [ rml:reference "card" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:crosses ; rr:objectMap [ rml:reference "cross" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:corners ; rr:objectMap [ rml:reference "corner" ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:possession ; rr:objectMap [ rml:reference "possession" ] ] ;
+
+  # Betting odds (grouped semantically by source)
+  rr:predicateObjectMap [ rr:predicate ef:oddsB365Home ; rr:objectMap [ rml:reference "B365H" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsB365Draw ; rr:objectMap [ rml:reference "B365D" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsB365Away ; rr:objectMap [ rml:reference "B365A" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsBWHome ; rr:objectMap [ rml:reference "BWH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsBWDraw ; rr:objectMap [ rml:reference "BWD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsBWAway ; rr:objectMap [ rml:reference "BWA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsIWHome ; rr:objectMap [ rml:reference "IWH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsIWDraw ; rr:objectMap [ rml:reference "IWD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsIWAway ; rr:objectMap [ rml:reference "IWA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsLBHome ; rr:objectMap [ rml:reference "LBH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsLBDraw ; rr:objectMap [ rml:reference "LBD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsLBAway ; rr:objectMap [ rml:reference "LBA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsPSHome ; rr:objectMap [ rml:reference "PSH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsPSDraw ; rr:objectMap [ rml:reference "PSD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsPSAway ; rr:objectMap [ rml:reference "PSA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsWHHome ; rr:objectMap [ rml:reference "WHH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsWHDraw ; rr:objectMap [ rml:reference "WHD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsWHAway ; rr:objectMap [ rml:reference "WHA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsSJHome ; rr:objectMap [ rml:reference "SJH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsSJDraw ; rr:objectMap [ rml:reference "SJD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsSJAway ; rr:objectMap [ rml:reference "SJA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsVCHome ; rr:objectMap [ rml:reference "VCH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsVCDraw ; rr:objectMap [ rml:reference "VCD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsVCAway ; rr:objectMap [ rml:reference "VCA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsGBHome ; rr:objectMap [ rml:reference "GBH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsGBDraw ; rr:objectMap [ rml:reference "GBD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsGBAway ; rr:objectMap [ rml:reference "GBA" ; rr:datatype xsd:decimal ] ] ;
+
+  rr:predicateObjectMap [ rr:predicate ef:oddsBSHome ; rr:objectMap [ rml:reference "BSH" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsBSDraw ; rr:objectMap [ rml:reference "BSD" ; rr:datatype xsd:decimal ] ] ;
+  rr:predicateObjectMap [ rr:predicate ef:oddsBSAway ; rr:objectMap [ rml:reference "BSA" ; rr:datatype xsd:decimal ] ] .
+
+
+# Property-level comments for adding commonsense evidence
+ef:overall_rating rdfs:comment "The rating is between 0-100 which is calculated by FIFA. Higher overall rating means the player has a stronger overall strength." .
+ef:potential rdfs:comment "The potential score is between 0-100 which is calculated by FIFA. Higher potential score means that the player has more potential" .
+ef:attacking_work_rate rdfs:comment "high: implies that the player is going to be in all of your attack moves; medium: implies that the player will select the attack actions he will join in; low: remain in his position while the team attacks" .
+ef:crossing rdfs:comment "Cross is a long pass into the opponent's goal towards the header of sixth-yard teammate. The crossing score is between 0-100 which measures the tendency/frequency of crosses in the box. Higher potential score means that the player performs better in crossing actions." .

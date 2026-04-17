@@ -1,0 +1,8 @@
+{
+  "debit_card_specializing_db": "<http://debit_card_specializing.org/>",
+  "customers": "<http://debit_card_specializing.org/customers/>",
+  "gasstations": "<http://debit_card_specializing.org/gasstations/>",
+  "products": "<http://debit_card_specializing.org/products/>",
+  "transactions_1k": "<http://debit_card_specializing.org/transactions_1k/>",
+  "yearmonth": "<http://debit_card_specializing.org/yearmonth/>"
+}

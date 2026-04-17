@@ -1,0 +1,10 @@
+{
+    "type": "tool",
+    "name": "answer",
+    "args": {
+        "kg": "debit_card_specializing",
+        "sparql": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX sc: <http://debitcard.org/schema#>\nSELECT ?segment \n       (SUM(IF(SUBSTR(STR(?date),1,4) = \"2012\", ?value, 0)) AS ?sum2012)\n       (SUM(IF(SUBSTR(STR(?date),1,4) = \"2013\", ?value, 0)) AS ?sum2013)\n       ( ((SUM(IF(SUBSTR(STR(?date),1,4) = \"2013\", ?value, 0)) - SUM(IF(SUBSTR(STR(?date),1,4) = \"2012\", ?value, 0)))\n           / SUM(IF(SUBSTR(STR(?date),1,4) = \"2012\", ?value, 0))) * 100 AS ?pctIncrease)\nWHERE {\n  ?cons rdf:type sc:MonthlyConsumption ;\n        sc:consumptionValue ?value ;\n        sc:date ?date ;\n        sc:forCustomer ?cust .\n  ?cust sc:segment ?segment ;\n        sc:currency \"EUR\" .\n}\nGROUP BY ?segment\nHAVING (SUM(IF(SUBSTR(STR(?date),1,4) = \"2012\", ?value, 0)) > 0)\nORDER BY DESC(?pctIncrease)\n",
+        "answer": "SME has the biggest percentage increase (\u2248 734.71%). LAM has the lowest percentage increase (\u2248 539.83%). (Query aggregated EUR consumption by segment for 2012 and 2013 and computed percentage increases.)"
+    },
+    "result": "Stopping"
+}

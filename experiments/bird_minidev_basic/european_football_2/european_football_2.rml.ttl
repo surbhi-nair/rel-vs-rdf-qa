@@ -1,0 +1,1130 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://european_football_2.example/DB/> .
+
+######################################################################
+# Table: Player_Attributes
+######################################################################
+<#Player_Attributes_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "player_fifa_api_id", "player_api_id", "date", "overall_rating", "potential", "preferred_foot", "attacking_work_rate", "defensive_work_rate", "crossing", "finishing", "heading_accuracy", "short_passing", "volleys", "dribbling", "curve", "free_kick_accuracy", "long_passing", "ball_control", "acceleration", "sprint_speed", "agility", "reactions", "balance", "shot_power", "jumping", "stamina", "strength", "long_shots", "aggression", "interceptions", "positioning", "vision", "penalties", "marking", "standing_tackle", "sliding_tackle", "gk_diving", "gk_handling", "gk_kicking", "gk_positioning", "gk_reflexes" FROM "Player_Attributes"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/Player_Attributes/id={id}" ;
+    rr:class <http://european_football_2.example/DB/Player_Attributes>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#player_fifa_api_id> ;
+    rr:objectMap [ rml:reference "player_fifa_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#ref-player_fifa_api_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={player_fifa_api_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#player_api_id> ;
+    rr:objectMap [ rml:reference "player_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#ref-player_api_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={player_api_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#overall_rating> ;
+    rr:objectMap [ rml:reference "overall_rating" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#potential> ;
+    rr:objectMap [ rml:reference "potential" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#preferred_foot> ;
+    rr:objectMap [ rml:reference "preferred_foot" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#attacking_work_rate> ;
+    rr:objectMap [ rml:reference "attacking_work_rate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#defensive_work_rate> ;
+    rr:objectMap [ rml:reference "defensive_work_rate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#crossing> ;
+    rr:objectMap [ rml:reference "crossing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#finishing> ;
+    rr:objectMap [ rml:reference "finishing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#heading_accuracy> ;
+    rr:objectMap [ rml:reference "heading_accuracy" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#short_passing> ;
+    rr:objectMap [ rml:reference "short_passing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#volleys> ;
+    rr:objectMap [ rml:reference "volleys" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#dribbling> ;
+    rr:objectMap [ rml:reference "dribbling" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#curve> ;
+    rr:objectMap [ rml:reference "curve" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#free_kick_accuracy> ;
+    rr:objectMap [ rml:reference "free_kick_accuracy" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#long_passing> ;
+    rr:objectMap [ rml:reference "long_passing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#ball_control> ;
+    rr:objectMap [ rml:reference "ball_control" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#acceleration> ;
+    rr:objectMap [ rml:reference "acceleration" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#sprint_speed> ;
+    rr:objectMap [ rml:reference "sprint_speed" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#agility> ;
+    rr:objectMap [ rml:reference "agility" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#reactions> ;
+    rr:objectMap [ rml:reference "reactions" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#balance> ;
+    rr:objectMap [ rml:reference "balance" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#shot_power> ;
+    rr:objectMap [ rml:reference "shot_power" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#jumping> ;
+    rr:objectMap [ rml:reference "jumping" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#stamina> ;
+    rr:objectMap [ rml:reference "stamina" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#strength> ;
+    rr:objectMap [ rml:reference "strength" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#long_shots> ;
+    rr:objectMap [ rml:reference "long_shots" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#aggression> ;
+    rr:objectMap [ rml:reference "aggression" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#interceptions> ;
+    rr:objectMap [ rml:reference "interceptions" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#positioning> ;
+    rr:objectMap [ rml:reference "positioning" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#vision> ;
+    rr:objectMap [ rml:reference "vision" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#penalties> ;
+    rr:objectMap [ rml:reference "penalties" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#marking> ;
+    rr:objectMap [ rml:reference "marking" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#standing_tackle> ;
+    rr:objectMap [ rml:reference "standing_tackle" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#sliding_tackle> ;
+    rr:objectMap [ rml:reference "sliding_tackle" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#gk_diving> ;
+    rr:objectMap [ rml:reference "gk_diving" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#gk_handling> ;
+    rr:objectMap [ rml:reference "gk_handling" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#gk_kicking> ;
+    rr:objectMap [ rml:reference "gk_kicking" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#gk_positioning> ;
+    rr:objectMap [ rml:reference "gk_positioning" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player_Attributes#gk_reflexes> ;
+    rr:objectMap [ rml:reference "gk_reflexes" ]
+  ]
+ .
+
+######################################################################
+# Table: Player
+######################################################################
+<#Player_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "player_api_id", "player_name", "player_fifa_api_id", "birthday", "height", "weight" FROM "Player"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/Player/id={id}" ;
+    rr:class <http://european_football_2.example/DB/Player>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#player_api_id> ;
+    rr:objectMap [ rml:reference "player_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#player_name> ;
+    rr:objectMap [ rml:reference "player_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#player_fifa_api_id> ;
+    rr:objectMap [ rml:reference "player_fifa_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#birthday> ;
+    rr:objectMap [ rml:reference "birthday" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#height> ;
+    rr:objectMap [ rml:reference "height" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Player#weight> ;
+    rr:objectMap [ rml:reference "weight" ]
+  ]
+ .
+
+######################################################################
+# Table: League
+######################################################################
+<#League_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "country_id", "name" FROM "League"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/League/id={id}" ;
+    rr:class <http://european_football_2.example/DB/League>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/League#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/League#country_id> ;
+    rr:objectMap [ rml:reference "country_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/League#ref-country_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/country/id={country_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/League#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ]
+ .
+
+######################################################################
+# Table: Country
+######################################################################
+<#Country_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "name" FROM "Country"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/Country/id={id}" ;
+    rr:class <http://european_football_2.example/DB/Country>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Country#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Country#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ]
+ .
+
+######################################################################
+# Table: Team
+######################################################################
+<#Team_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "team_api_id", "team_fifa_api_id", "team_long_name", "team_short_name" FROM "Team"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/Team/id={id}" ;
+    rr:class <http://european_football_2.example/DB/Team>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team#team_api_id> ;
+    rr:objectMap [ rml:reference "team_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team#team_fifa_api_id> ;
+    rr:objectMap [ rml:reference "team_fifa_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team#team_long_name> ;
+    rr:objectMap [ rml:reference "team_long_name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team#team_short_name> ;
+    rr:objectMap [ rml:reference "team_short_name" ]
+  ]
+ .
+
+######################################################################
+# Table: Team_Attributes
+######################################################################
+<#Team_Attributes_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "team_fifa_api_id", "team_api_id", "date", "buildUpPlaySpeed", "buildUpPlaySpeedClass", "buildUpPlayDribbling", "buildUpPlayDribblingClass", "buildUpPlayPassing", "buildUpPlayPassingClass", "buildUpPlayPositioningClass", "chanceCreationPassing", "chanceCreationPassingClass", "chanceCreationCrossing", "chanceCreationCrossingClass", "chanceCreationShooting", "chanceCreationShootingClass", "chanceCreationPositioningClass", "defencePressure", "defencePressureClass", "defenceAggression", "defenceAggressionClass", "defenceTeamWidth", "defenceTeamWidthClass", "defenceDefenderLineClass" FROM "Team_Attributes"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/Team_Attributes/id={id}" ;
+    rr:class <http://european_football_2.example/DB/Team_Attributes>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#team_fifa_api_id> ;
+    rr:objectMap [ rml:reference "team_fifa_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#ref-team_fifa_api_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Team/id={team_fifa_api_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#team_api_id> ;
+    rr:objectMap [ rml:reference "team_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#ref-team_api_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Team/id={team_api_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlaySpeed> ;
+    rr:objectMap [ rml:reference "buildUpPlaySpeed" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlaySpeedClass> ;
+    rr:objectMap [ rml:reference "buildUpPlaySpeedClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlayDribbling> ;
+    rr:objectMap [ rml:reference "buildUpPlayDribbling" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlayDribblingClass> ;
+    rr:objectMap [ rml:reference "buildUpPlayDribblingClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlayPassing> ;
+    rr:objectMap [ rml:reference "buildUpPlayPassing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlayPassingClass> ;
+    rr:objectMap [ rml:reference "buildUpPlayPassingClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#buildUpPlayPositioningClass> ;
+    rr:objectMap [ rml:reference "buildUpPlayPositioningClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationPassing> ;
+    rr:objectMap [ rml:reference "chanceCreationPassing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationPassingClass> ;
+    rr:objectMap [ rml:reference "chanceCreationPassingClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationCrossing> ;
+    rr:objectMap [ rml:reference "chanceCreationCrossing" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationCrossingClass> ;
+    rr:objectMap [ rml:reference "chanceCreationCrossingClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationShooting> ;
+    rr:objectMap [ rml:reference "chanceCreationShooting" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationShootingClass> ;
+    rr:objectMap [ rml:reference "chanceCreationShootingClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#chanceCreationPositioningClass> ;
+    rr:objectMap [ rml:reference "chanceCreationPositioningClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defencePressure> ;
+    rr:objectMap [ rml:reference "defencePressure" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defencePressureClass> ;
+    rr:objectMap [ rml:reference "defencePressureClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defenceAggression> ;
+    rr:objectMap [ rml:reference "defenceAggression" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defenceAggressionClass> ;
+    rr:objectMap [ rml:reference "defenceAggressionClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defenceTeamWidth> ;
+    rr:objectMap [ rml:reference "defenceTeamWidth" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defenceTeamWidthClass> ;
+    rr:objectMap [ rml:reference "defenceTeamWidthClass" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Team_Attributes#defenceDefenderLineClass> ;
+    rr:objectMap [ rml:reference "defenceDefenderLineClass" ]
+  ]
+ .
+
+######################################################################
+# Table: Match
+######################################################################
+<#Match_Mapping>
+  rml:logicalSource [
+    rml:source "european_football_2.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "country_id", "league_id", "season", "stage", "date", "match_api_id", "home_team_api_id", "away_team_api_id", "home_team_goal", "away_team_goal", "home_player_X1", "home_player_X2", "home_player_X3", "home_player_X4", "home_player_X5", "home_player_X6", "home_player_X7", "home_player_X8", "home_player_X9", "home_player_X10", "home_player_X11", "away_player_X1", "away_player_X2", "away_player_X3", "away_player_X4", "away_player_X5", "away_player_X6", "away_player_X7", "away_player_X8", "away_player_X9", "away_player_X10", "away_player_X11", "home_player_Y1", "home_player_Y2", "home_player_Y3", "home_player_Y4", "home_player_Y5", "home_player_Y6", "home_player_Y7", "home_player_Y8", "home_player_Y9", "home_player_Y10", "home_player_Y11", "away_player_Y1", "away_player_Y2", "away_player_Y3", "away_player_Y4", "away_player_Y5", "away_player_Y6", "away_player_Y7", "away_player_Y8", "away_player_Y9", "away_player_Y10", "away_player_Y11", "home_player_1", "home_player_2", "home_player_3", "home_player_4", "home_player_5", "home_player_6", "home_player_7", "home_player_8", "home_player_9", "home_player_10", "home_player_11", "away_player_1", "away_player_2", "away_player_3", "away_player_4", "away_player_5", "away_player_6", "away_player_7", "away_player_8", "away_player_9", "away_player_10", "away_player_11", "goal", "shoton", "shotoff", "foulcommit", "card", "cross", "corner", "possession", "B365H", "B365D", "B365A", "BWH", "BWD", "BWA", "IWH", "IWD", "IWA", "LBH", "LBD", "LBA", "PSH", "PSD", "PSA", "WHH", "WHD", "WHA", "SJH", "SJD", "SJA", "VCH", "VCD", "VCA", "GBH", "GBD", "GBA", "BSH", "BSD", "BSA" FROM "Match"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://european_football_2.example/DB/Match/id={id}" ;
+    rr:class <http://european_football_2.example/DB/Match>
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#country_id> ;
+    rr:objectMap [ rml:reference "country_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-country_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Country/id={country_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#league_id> ;
+    rr:objectMap [ rml:reference "league_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-league_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/League/id={league_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#season> ;
+    rr:objectMap [ rml:reference "season" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#stage> ;
+    rr:objectMap [ rml:reference "stage" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#match_api_id> ;
+    rr:objectMap [ rml:reference "match_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_team_api_id> ;
+    rr:objectMap [ rml:reference "home_team_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_team_api_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Team/id={home_team_api_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_team_api_id> ;
+    rr:objectMap [ rml:reference "away_team_api_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_team_api_id> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Team/id={away_team_api_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_team_goal> ;
+    rr:objectMap [ rml:reference "home_team_goal" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_team_goal> ;
+    rr:objectMap [ rml:reference "away_team_goal" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X1> ;
+    rr:objectMap [ rml:reference "home_player_X1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X2> ;
+    rr:objectMap [ rml:reference "home_player_X2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X3> ;
+    rr:objectMap [ rml:reference "home_player_X3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X4> ;
+    rr:objectMap [ rml:reference "home_player_X4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X5> ;
+    rr:objectMap [ rml:reference "home_player_X5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X6> ;
+    rr:objectMap [ rml:reference "home_player_X6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X7> ;
+    rr:objectMap [ rml:reference "home_player_X7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X8> ;
+    rr:objectMap [ rml:reference "home_player_X8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X9> ;
+    rr:objectMap [ rml:reference "home_player_X9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X10> ;
+    rr:objectMap [ rml:reference "home_player_X10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_X11> ;
+    rr:objectMap [ rml:reference "home_player_X11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X1> ;
+    rr:objectMap [ rml:reference "away_player_X1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X2> ;
+    rr:objectMap [ rml:reference "away_player_X2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X3> ;
+    rr:objectMap [ rml:reference "away_player_X3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X4> ;
+    rr:objectMap [ rml:reference "away_player_X4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X5> ;
+    rr:objectMap [ rml:reference "away_player_X5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X6> ;
+    rr:objectMap [ rml:reference "away_player_X6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X7> ;
+    rr:objectMap [ rml:reference "away_player_X7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X8> ;
+    rr:objectMap [ rml:reference "away_player_X8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X9> ;
+    rr:objectMap [ rml:reference "away_player_X9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X10> ;
+    rr:objectMap [ rml:reference "away_player_X10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_X11> ;
+    rr:objectMap [ rml:reference "away_player_X11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y1> ;
+    rr:objectMap [ rml:reference "home_player_Y1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y2> ;
+    rr:objectMap [ rml:reference "home_player_Y2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y3> ;
+    rr:objectMap [ rml:reference "home_player_Y3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y4> ;
+    rr:objectMap [ rml:reference "home_player_Y4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y5> ;
+    rr:objectMap [ rml:reference "home_player_Y5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y6> ;
+    rr:objectMap [ rml:reference "home_player_Y6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y7> ;
+    rr:objectMap [ rml:reference "home_player_Y7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y8> ;
+    rr:objectMap [ rml:reference "home_player_Y8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y9> ;
+    rr:objectMap [ rml:reference "home_player_Y9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y10> ;
+    rr:objectMap [ rml:reference "home_player_Y10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_Y11> ;
+    rr:objectMap [ rml:reference "home_player_Y11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y1> ;
+    rr:objectMap [ rml:reference "away_player_Y1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y2> ;
+    rr:objectMap [ rml:reference "away_player_Y2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y3> ;
+    rr:objectMap [ rml:reference "away_player_Y3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y4> ;
+    rr:objectMap [ rml:reference "away_player_Y4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y5> ;
+    rr:objectMap [ rml:reference "away_player_Y5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y6> ;
+    rr:objectMap [ rml:reference "away_player_Y6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y7> ;
+    rr:objectMap [ rml:reference "away_player_Y7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y8> ;
+    rr:objectMap [ rml:reference "away_player_Y8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y9> ;
+    rr:objectMap [ rml:reference "away_player_Y9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y10> ;
+    rr:objectMap [ rml:reference "away_player_Y10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_Y11> ;
+    rr:objectMap [ rml:reference "away_player_Y11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_1> ;
+    rr:objectMap [ rml:reference "home_player_1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_1> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_1}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_2> ;
+    rr:objectMap [ rml:reference "home_player_2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_2> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_2}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_3> ;
+    rr:objectMap [ rml:reference "home_player_3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_3> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_3}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_4> ;
+    rr:objectMap [ rml:reference "home_player_4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_4> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_4}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_5> ;
+    rr:objectMap [ rml:reference "home_player_5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_5> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_5}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_6> ;
+    rr:objectMap [ rml:reference "home_player_6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_6> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_6}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_7> ;
+    rr:objectMap [ rml:reference "home_player_7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_7> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_7}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_8> ;
+    rr:objectMap [ rml:reference "home_player_8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_8> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_8}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_9> ;
+    rr:objectMap [ rml:reference "home_player_9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_9> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_9}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_10> ;
+    rr:objectMap [ rml:reference "home_player_10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_10> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_10}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#home_player_11> ;
+    rr:objectMap [ rml:reference "home_player_11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-home_player_11> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={home_player_11}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_1> ;
+    rr:objectMap [ rml:reference "away_player_1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_1> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_1}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_2> ;
+    rr:objectMap [ rml:reference "away_player_2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_2> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_2}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_3> ;
+    rr:objectMap [ rml:reference "away_player_3" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_3> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_3}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_4> ;
+    rr:objectMap [ rml:reference "away_player_4" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_4> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_4}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_5> ;
+    rr:objectMap [ rml:reference "away_player_5" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_5> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_5}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_6> ;
+    rr:objectMap [ rml:reference "away_player_6" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_6> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_6}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_7> ;
+    rr:objectMap [ rml:reference "away_player_7" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_7> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_7}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_8> ;
+    rr:objectMap [ rml:reference "away_player_8" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_8> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_8}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_9> ;
+    rr:objectMap [ rml:reference "away_player_9" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_9> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_9}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_10> ;
+    rr:objectMap [ rml:reference "away_player_10" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_10> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_10}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#away_player_11> ;
+    rr:objectMap [ rml:reference "away_player_11" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#ref-away_player_11> ;
+    rr:objectMap [
+      rr:template "http://european_football_2.example/DB/Player/id={away_player_11}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#goal> ;
+    rr:objectMap [ rml:reference "goal" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#shoton> ;
+    rr:objectMap [ rml:reference "shoton" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#shotoff> ;
+    rr:objectMap [ rml:reference "shotoff" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#foulcommit> ;
+    rr:objectMap [ rml:reference "foulcommit" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#card> ;
+    rr:objectMap [ rml:reference "card" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#cross> ;
+    rr:objectMap [ rml:reference "cross" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#corner> ;
+    rr:objectMap [ rml:reference "corner" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#possession> ;
+    rr:objectMap [ rml:reference "possession" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#B365H> ;
+    rr:objectMap [ rml:reference "B365H" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#B365D> ;
+    rr:objectMap [ rml:reference "B365D" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#B365A> ;
+    rr:objectMap [ rml:reference "B365A" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#BWH> ;
+    rr:objectMap [ rml:reference "BWH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#BWD> ;
+    rr:objectMap [ rml:reference "BWD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#BWA> ;
+    rr:objectMap [ rml:reference "BWA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#IWH> ;
+    rr:objectMap [ rml:reference "IWH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#IWD> ;
+    rr:objectMap [ rml:reference "IWD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#IWA> ;
+    rr:objectMap [ rml:reference "IWA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#LBH> ;
+    rr:objectMap [ rml:reference "LBH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#LBD> ;
+    rr:objectMap [ rml:reference "LBD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#LBA> ;
+    rr:objectMap [ rml:reference "LBA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#PSH> ;
+    rr:objectMap [ rml:reference "PSH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#PSD> ;
+    rr:objectMap [ rml:reference "PSD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#PSA> ;
+    rr:objectMap [ rml:reference "PSA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#WHH> ;
+    rr:objectMap [ rml:reference "WHH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#WHD> ;
+    rr:objectMap [ rml:reference "WHD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#WHA> ;
+    rr:objectMap [ rml:reference "WHA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#SJH> ;
+    rr:objectMap [ rml:reference "SJH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#SJD> ;
+    rr:objectMap [ rml:reference "SJD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#SJA> ;
+    rr:objectMap [ rml:reference "SJA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#VCH> ;
+    rr:objectMap [ rml:reference "VCH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#VCD> ;
+    rr:objectMap [ rml:reference "VCD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#VCA> ;
+    rr:objectMap [ rml:reference "VCA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#GBH> ;
+    rr:objectMap [ rml:reference "GBH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#GBD> ;
+    rr:objectMap [ rml:reference "GBD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#GBA> ;
+    rr:objectMap [ rml:reference "GBA" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#BSH> ;
+    rr:objectMap [ rml:reference "BSH" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#BSD> ;
+    rr:objectMap [ rml:reference "BSD" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://european_football_2.example/DB/Match#BSA> ;
+    rr:objectMap [ rml:reference "BSA" ]
+  ]
+ .

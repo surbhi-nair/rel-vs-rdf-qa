@@ -1,0 +1,8 @@
+{
+  "dcs": "http://debitcard.org/schema#",
+  "dcscu": "http://debitcard.org/customer#",
+  "dcsg": "http://debitcard.org/gasstation#",
+  "dcsp": "http://debitcard.org/product#",
+  "dcst": "http://debitcard.org/transaction#",
+  "dcsco": "http://debitcard.org/consumption#"
+}

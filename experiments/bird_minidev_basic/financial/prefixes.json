@@ -1,0 +1,11 @@
+{
+  "financial_db": "<http://financial.org/>",
+  "account": "<http://financial.org/account/>",
+  "card": "<http://financial.org/card/>",
+  "client": "<http://financial.org/client/>",
+  "disp": "<http://financial.org/disp/>",
+  "district": "<http://financial.org/district/>",
+  "loan": "<http://financial.org/loan/>",
+  "order": "<http://financial.org/order/>",
+  "trans": "<http://financial.org/trans/>"
+}

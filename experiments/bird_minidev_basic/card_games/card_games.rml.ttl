@@ -1,0 +1,632 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://card_games.org/> .
+
+######################################################################
+# Table: cards
+######################################################################
+<#cards_Mapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "artist", "asciiName", "availability", "borderColor", "cardKingdomFoilId", "cardKingdomId", "colorIdentity", "colorIndicator", "colors", "convertedManaCost", "duelDeck", "edhrecRank", "faceConvertedManaCost", "faceName", "flavorName", "flavorText", "frameEffects", "frameVersion", "hand", "hasAlternativeDeckLimit", "hasContentWarning", "hasFoil", "hasNonFoil", "isAlternative", "isFullArt", "isOnlineOnly", "isOversized", "isPromo", "isReprint", "isReserved", "isStarter", "isStorySpotlight", "isTextless", "isTimeshifted", "keywords", "layout", "leadershipSkills", "life", "loyalty", "manaCost", "mcmId", "mcmMetaId", "mtgArenaId", "mtgjsonV4Id", "mtgoFoilId", "mtgoId", "multiverseId", "name", "number", "originalReleaseDate", "originalText", "originalType", "otherFaceIds", "power", "printings", "promoTypes", "purchaseUrls", "rarity", "scryfallId", "scryfallIllustrationId", "scryfallOracleId", "setCode", "side", "subtypes", "supertypes", "tcgplayerProductId", "text", "toughness", "type", "types", "uuid", "variations", "watermark" FROM "cards"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://card_games.org/cards/id={id}" ;
+    rr:class <http://card_games.org/cards>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "cards {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#artist> ;
+    rr:objectMap [ rml:reference "artist" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#asciiName> ;
+    rr:objectMap [ rml:reference "asciiName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#availability> ;
+    rr:objectMap [ rml:reference "availability" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#borderColor> ;
+    rr:objectMap [ rml:reference "borderColor" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#cardKingdomFoilId> ;
+    rr:objectMap [ rml:reference "cardKingdomFoilId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#cardKingdomId> ;
+    rr:objectMap [ rml:reference "cardKingdomId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#colorIdentity> ;
+    rr:objectMap [ rml:reference "colorIdentity" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#colorIndicator> ;
+    rr:objectMap [ rml:reference "colorIndicator" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#colors> ;
+    rr:objectMap [ rml:reference "colors" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#convertedManaCost> ;
+    rr:objectMap [ rml:reference "convertedManaCost" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#duelDeck> ;
+    rr:objectMap [ rml:reference "duelDeck" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#edhrecRank> ;
+    rr:objectMap [ rml:reference "edhrecRank" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#faceConvertedManaCost> ;
+    rr:objectMap [ rml:reference "faceConvertedManaCost" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#faceName> ;
+    rr:objectMap [ rml:reference "faceName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#flavorName> ;
+    rr:objectMap [ rml:reference "flavorName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#flavorText> ;
+    rr:objectMap [ rml:reference "flavorText" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#frameEffects> ;
+    rr:objectMap [ rml:reference "frameEffects" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#frameVersion> ;
+    rr:objectMap [ rml:reference "frameVersion" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#hand> ;
+    rr:objectMap [ rml:reference "hand" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#hasAlternativeDeckLimit> ;
+    rr:objectMap [ rml:reference "hasAlternativeDeckLimit" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#hasContentWarning> ;
+    rr:objectMap [ rml:reference "hasContentWarning" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#hasFoil> ;
+    rr:objectMap [ rml:reference "hasFoil" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#hasNonFoil> ;
+    rr:objectMap [ rml:reference "hasNonFoil" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isAlternative> ;
+    rr:objectMap [ rml:reference "isAlternative" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isFullArt> ;
+    rr:objectMap [ rml:reference "isFullArt" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isOnlineOnly> ;
+    rr:objectMap [ rml:reference "isOnlineOnly" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isOversized> ;
+    rr:objectMap [ rml:reference "isOversized" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isPromo> ;
+    rr:objectMap [ rml:reference "isPromo" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isReprint> ;
+    rr:objectMap [ rml:reference "isReprint" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isReserved> ;
+    rr:objectMap [ rml:reference "isReserved" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isStarter> ;
+    rr:objectMap [ rml:reference "isStarter" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isStorySpotlight> ;
+    rr:objectMap [ rml:reference "isStorySpotlight" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isTextless> ;
+    rr:objectMap [ rml:reference "isTextless" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#isTimeshifted> ;
+    rr:objectMap [ rml:reference "isTimeshifted" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#keywords> ;
+    rr:objectMap [ rml:reference "keywords" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#layout> ;
+    rr:objectMap [ rml:reference "layout" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#leadershipSkills> ;
+    rr:objectMap [ rml:reference "leadershipSkills" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#life> ;
+    rr:objectMap [ rml:reference "life" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#loyalty> ;
+    rr:objectMap [ rml:reference "loyalty" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#manaCost> ;
+    rr:objectMap [ rml:reference "manaCost" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#mcmId> ;
+    rr:objectMap [ rml:reference "mcmId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#mcmMetaId> ;
+    rr:objectMap [ rml:reference "mcmMetaId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#mtgArenaId> ;
+    rr:objectMap [ rml:reference "mtgArenaId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#mtgjsonV4Id> ;
+    rr:objectMap [ rml:reference "mtgjsonV4Id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#mtgoFoilId> ;
+    rr:objectMap [ rml:reference "mtgoFoilId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#mtgoId> ;
+    rr:objectMap [ rml:reference "mtgoId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#multiverseId> ;
+    rr:objectMap [ rml:reference "multiverseId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#number> ;
+    rr:objectMap [ rml:reference "number" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#originalReleaseDate> ;
+    rr:objectMap [ rml:reference "originalReleaseDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#originalText> ;
+    rr:objectMap [ rml:reference "originalText" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#originalType> ;
+    rr:objectMap [ rml:reference "originalType" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#otherFaceIds> ;
+    rr:objectMap [ rml:reference "otherFaceIds" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#power> ;
+    rr:objectMap [ rml:reference "power" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#printings> ;
+    rr:objectMap [ rml:reference "printings" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#promoTypes> ;
+    rr:objectMap [ rml:reference "promoTypes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#purchaseUrls> ;
+    rr:objectMap [ rml:reference "purchaseUrls" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#rarity> ;
+    rr:objectMap [ rml:reference "rarity" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#scryfallId> ;
+    rr:objectMap [ rml:reference "scryfallId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#scryfallIllustrationId> ;
+    rr:objectMap [ rml:reference "scryfallIllustrationId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#scryfallOracleId> ;
+    rr:objectMap [ rml:reference "scryfallOracleId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#setCode> ;
+    rr:objectMap [ rml:reference "setCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#side> ;
+    rr:objectMap [ rml:reference "side" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#subtypes> ;
+    rr:objectMap [ rml:reference "subtypes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#supertypes> ;
+    rr:objectMap [ rml:reference "supertypes" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#tcgplayerProductId> ;
+    rr:objectMap [ rml:reference "tcgplayerProductId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#text> ;
+    rr:objectMap [ rml:reference "text" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#toughness> ;
+    rr:objectMap [ rml:reference "toughness" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#types> ;
+    rr:objectMap [ rml:reference "types" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#uuid> ;
+    rr:objectMap [ rml:reference "uuid" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#variations> ;
+    rr:objectMap [ rml:reference "variations" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/cards#watermark> ;
+    rr:objectMap [ rml:reference "watermark" ]
+  ]
+ .
+
+######################################################################
+# Table: foreign_data
+######################################################################
+<#foreign_data_Mapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "flavorText", "language", "multiverseid", "name", "text", "type", "uuid" FROM "foreign_data"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://card_games.org/foreign_data/id={id}" ;
+    rr:class <http://card_games.org/foreign_data>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "foreign_data {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#flavorText> ;
+    rr:objectMap [ rml:reference "flavorText" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#language> ;
+    rr:objectMap [ rml:reference "language" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#multiverseid> ;
+    rr:objectMap [ rml:reference "multiverseid" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#text> ;
+    rr:objectMap [ rml:reference "text" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#uuid> ;
+    rr:objectMap [ rml:reference "uuid" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/foreign_data#ref-uuid> ;
+    rr:objectMap [
+      rr:template "http://card_games.org/cards/id={uuid}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: legalities
+######################################################################
+<#legalities_Mapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "format", "status", "uuid" FROM "legalities"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://card_games.org/legalities/id={id}" ;
+    rr:class <http://card_games.org/legalities>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "legalities {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/legalities#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/legalities#format> ;
+    rr:objectMap [ rml:reference "format" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/legalities#status> ;
+    rr:objectMap [ rml:reference "status" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/legalities#uuid> ;
+    rr:objectMap [ rml:reference "uuid" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/legalities#ref-uuid> ;
+    rr:objectMap [
+      rr:template "http://card_games.org/cards/id={uuid}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: sets
+######################################################################
+<#sets_Mapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "baseSetSize", "block", "booster", "code", "isFoilOnly", "isForeignOnly", "isNonFoilOnly", "isOnlineOnly", "isPartialPreview", "keyruneCode", "mcmId", "mcmIdExtras", "mcmName", "mtgoCode", "name", "parentCode", "releaseDate", "tcgplayerGroupId", "totalSetSize", "type" FROM "sets"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://card_games.org/sets/id={id}" ;
+    rr:class <http://card_games.org/sets>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "sets {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#baseSetSize> ;
+    rr:objectMap [ rml:reference "baseSetSize" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#block> ;
+    rr:objectMap [ rml:reference "block" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#booster> ;
+    rr:objectMap [ rml:reference "booster" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#code> ;
+    rr:objectMap [ rml:reference "code" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#isFoilOnly> ;
+    rr:objectMap [ rml:reference "isFoilOnly" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#isForeignOnly> ;
+    rr:objectMap [ rml:reference "isForeignOnly" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#isNonFoilOnly> ;
+    rr:objectMap [ rml:reference "isNonFoilOnly" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#isOnlineOnly> ;
+    rr:objectMap [ rml:reference "isOnlineOnly" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#isPartialPreview> ;
+    rr:objectMap [ rml:reference "isPartialPreview" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#keyruneCode> ;
+    rr:objectMap [ rml:reference "keyruneCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#mcmId> ;
+    rr:objectMap [ rml:reference "mcmId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#mcmIdExtras> ;
+    rr:objectMap [ rml:reference "mcmIdExtras" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#mcmName> ;
+    rr:objectMap [ rml:reference "mcmName" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#mtgoCode> ;
+    rr:objectMap [ rml:reference "mtgoCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#parentCode> ;
+    rr:objectMap [ rml:reference "parentCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#releaseDate> ;
+    rr:objectMap [ rml:reference "releaseDate" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#tcgplayerGroupId> ;
+    rr:objectMap [ rml:reference "tcgplayerGroupId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#totalSetSize> ;
+    rr:objectMap [ rml:reference "totalSetSize" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/sets#type> ;
+    rr:objectMap [ rml:reference "type" ]
+  ]
+ .
+
+######################################################################
+# Table: set_translations
+######################################################################
+<#set_translations_Mapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "language", "setCode", "translation" FROM "set_translations"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://card_games.org/set_translations/id={id}" ;
+    rr:class <http://card_games.org/set_translations>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "set_translations {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/set_translations#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/set_translations#language> ;
+    rr:objectMap [ rml:reference "language" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/set_translations#setCode> ;
+    rr:objectMap [ rml:reference "setCode" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/set_translations#ref-setCode> ;
+    rr:objectMap [
+      rr:template "http://card_games.org/sets/id={setCode}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/set_translations#translation> ;
+    rr:objectMap [ rml:reference "translation" ]
+  ]
+ .
+
+######################################################################
+# Table: rulings
+######################################################################
+<#rulings_Mapping>
+  rml:logicalSource [
+    rml:source "card_games.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "id", "date", "text", "uuid" FROM "rulings"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://card_games.org/rulings/id={id}" ;
+    rr:class <http://card_games.org/rulings>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "rulings {id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/rulings#id> ;
+    rr:objectMap [ rml:reference "id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/rulings#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/rulings#text> ;
+    rr:objectMap [ rml:reference "text" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/rulings#uuid> ;
+    rr:objectMap [ rml:reference "uuid" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://card_games.org/rulings#ref-uuid> ;
+    rr:objectMap [
+      rr:template "http://card_games.org/cards/id={uuid}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .

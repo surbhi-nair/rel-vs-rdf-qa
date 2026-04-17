@@ -1,0 +1,9 @@
+{
+  "cg": "http://cardgames.org/schema#",
+  "cgr": "http://cardgames.org/ruling#",
+  "cgl": "http://cardgames.org/legality#",
+  "cgs": "http://cardgames.org/set#",
+  "cgst": "http://cardgames.org/settranslation#",
+  "cgc": "http://cardgames.org/card#",
+  "cgf": "http://cardgames.org/foreign#"
+}

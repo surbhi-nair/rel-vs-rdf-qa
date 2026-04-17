@@ -1,0 +1,177 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://toxicology.org/> .
+
+######################################################################
+# Table: atom
+######################################################################
+<#atom_Mapping>
+  rml:logicalSource [
+    rml:source "toxicology.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "atom_id", "molecule_id", "element" FROM "atom"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://toxicology.org/atom/atom_id={atom_id}" ;
+    rr:class <http://toxicology.org/atom>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "atom {atom_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/atom#atom_id> ;
+    rr:objectMap [ rml:reference "atom_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/atom#molecule_id> ;
+    rr:objectMap [ rml:reference "molecule_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/atom#ref-molecule_id> ;
+    rr:objectMap [
+      rr:template "http://toxicology.org/molecule/molecule_id={molecule_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/atom#element> ;
+    rr:objectMap [ rml:reference "element" ]
+  ]
+ .
+
+######################################################################
+# Table: bond
+######################################################################
+<#bond_Mapping>
+  rml:logicalSource [
+    rml:source "toxicology.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "bond_id", "molecule_id", "bond_type" FROM "bond"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://toxicology.org/bond/bond_id={bond_id}" ;
+    rr:class <http://toxicology.org/bond>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "bond {bond_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/bond#bond_id> ;
+    rr:objectMap [ rml:reference "bond_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/bond#molecule_id> ;
+    rr:objectMap [ rml:reference "molecule_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/bond#ref-molecule_id> ;
+    rr:objectMap [
+      rr:template "http://toxicology.org/molecule/molecule_id={molecule_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/bond#bond_type> ;
+    rr:objectMap [ rml:reference "bond_type" ]
+  ]
+ .
+
+######################################################################
+# Table: connected
+######################################################################
+<#connected_Mapping>
+  rml:logicalSource [
+    rml:source "toxicology.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "atom_id", "atom_id2", "bond_id" FROM "connected"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://toxicology.org/connected/atom_id={atom_id};atom_id2={atom_id2}" ;
+    rr:class <http://toxicology.org/connected>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "connected {atom_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/connected#atom_id> ;
+    rr:objectMap [ rml:reference "atom_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/connected#ref-atom_id> ;
+    rr:objectMap [
+      rr:template "http://toxicology.org/atom/atom_id={atom_id}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/connected#atom_id2> ;
+    rr:objectMap [ rml:reference "atom_id2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/connected#ref-atom_id2> ;
+    rr:objectMap [
+      rr:template "http://toxicology.org/atom/atom_id={atom_id2}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/connected#bond_id> ;
+    rr:objectMap [ rml:reference "bond_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/connected#ref-bond_id> ;
+    rr:objectMap [
+      rr:template "http://toxicology.org/bond/bond_id={bond_id}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .
+
+######################################################################
+# Table: molecule
+######################################################################
+<#molecule_Mapping>
+  rml:logicalSource [
+    rml:source "toxicology.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "molecule_id", "label" FROM "molecule"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://toxicology.org/molecule/molecule_id={molecule_id}" ;
+    rr:class <http://toxicology.org/molecule>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "molecule {molecule_id}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/molecule#molecule_id> ;
+    rr:objectMap [ rml:reference "molecule_id" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://toxicology.org/molecule#label> ;
+    rr:objectMap [ rml:reference "label" ]
+  ]
+ .

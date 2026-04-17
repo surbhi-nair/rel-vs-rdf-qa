@@ -1,0 +1,10 @@
+{
+  "sclub": "<http://studentclub.org/schema#",
+  "sclubmem": "<http://studentclub.org/member#",
+  "sclubev": "<http://studentclub.org/event#",
+  "sclubm": "<http://studentclub.org/major#",
+  "sclubzip": "<http://studentclub.org/zipcode#",
+  "sclubbudget": "<http://studentclub.org/budget#",
+  "sclubexp": "<http://studentclub.org/expense#",
+  "sclubinc": "<http://studentclub.org/income#"
+}

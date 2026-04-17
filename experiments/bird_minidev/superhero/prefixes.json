@@ -1,0 +1,13 @@
+{
+  "hero": "<http://superhero.org/schema#",
+  "superhero": "<http://superhero.org/superhero#",
+  "alignment": "<http://superhero.org/alignment#",
+  "attribute": "<http://superhero.org/attribute#",
+  "colour": "<http://superhero.org/colour#",
+  "gender": "<http://superhero.org/gender#",
+  "publisher": "<http://superhero.org/publisher#",
+  "race": "<http://superhero.org/race#",
+  "superpower": "<http://superhero.org/superpower#",
+  "heroAttribute": "<http://superhero.org/heroAttribute#",
+  "heroPower": "<http://superhero.org/heroPower#"
+}

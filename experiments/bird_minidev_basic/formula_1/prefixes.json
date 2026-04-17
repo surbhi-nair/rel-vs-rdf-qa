@@ -1,0 +1,16 @@
+{
+  "formula_1_db": "<http://formula_1.org/>",
+  "circuits": "<http://formula_1.org/circuits/>",
+  "constructors": "<http://formula_1.org/constructors/>",
+  "drivers": "<http://formula_1.org/drivers/>",
+  "seasons": "<http://formula_1.org/seasons/>",
+  "races": "<http://formula_1.org/races/>",
+  "constructorResults": "<http://formula_1.org/constructorResults/>",
+  "constructorStandings": "<http://formula_1.org/constructorStandings/>",
+  "driverStandings": "<http://formula_1.org/driverStandings/>",
+  "lapTimes": "<http://formula_1.org/lapTimes/>",
+  "pitStops": "<http://formula_1.org/pitStops/>",
+  "qualifying": "<http://formula_1.org/qualifying/>",
+  "status": "<http://formula_1.org/status/>",
+  "results": "<http://formula_1.org/results/>"
+}

@@ -1,0 +1,6 @@
+{
+  "tox": "<http://toxkg.org/schema#",
+  "toxm": "<http://moviedb/movie/molecule#",
+  "toxa": "<http://moviedb/movie/atom#",
+  "toxb": "<http://moviedb/movie/bond#"
+}

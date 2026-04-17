@@ -1,0 +1,312 @@
+[
+    {
+        "question_id": 1457,
+        "api_response": {
+            "request": {
+                "model": "gpt-5-mini",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an expert Database QA Judge. Your task is to evaluate two predicted queries (SQL and SPARQL) against a Gold Standard SQL query. You must judge semantic correctness, NOT syntactic or formatting similarity.\n    \n    Evaluation Criteria:\n    1. Ignore column names and output formatting.\n    2. Focus only on semantic equivalence of the values and row counts.\n    3. Allow small numeric rounding differences.\n    4. Extra columns in the SPARQL output are allowed if the correct answer is present.\n    5. Treat rows as unordered sets if no ordering is required by the question.\n\n    Output strictly in JSON format ONLY as follows:\n    {\n      \"sql_eval\": {\n        \"reasoning\": \"Step-by-step analysis of why the SQL is correct or incorrect.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\"\n      },\n      \"sparql_eval\": {\n        \"reasoning\": \"Step-by-step analysis. If results are empty, check if it's a Schema Mismatch (wrong predicates) vs Logic Error.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\" | \"SCHEMA_MISMATCH\",\n        \"error_category\": \"NONE\" | \"SYNTAX\" | \"SCHEMA\" | \"LOGIC\" | \"HALLUCINATION\"\n      },\n      \"comparison\": {\n        \"summary\": \"One sentence summary.\",\n        \"winner\": \"SQL\" | \"SPARQL\" | \"TIE_BOTH_CORRECT\" | \"TIE_BOTH_INCORRECT\"\n      }\n    }"
+                    },
+                    {
+                        "role": "user",
+                        "content": "\n    DB Context: student_club\n    Question: Give the full name and contact number of members who had to spend more than average on each expense.\n\n    --- GROUND TRUTH ---\n    Gold SQL: SELECT DISTINCT T3.first_name, T3.last_name, T3.phone FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN member AS T3 ON T3.member_id = T1.link_to_member WHERE T1.cost > ( SELECT AVG(T1.cost) FROM expense AS T1 INNER JOIN budget AS T2 ON T1.link_to_budget = T2.budget_id INNER JOIN member AS T3 ON T3.member_id = T1.link_to_member )\n    Output:\n    Columns: ['first_name', 'last_name', 'phone']\nTotal Rows: 3\n--------------------\n{'first_name': 'Sacha', 'last_name': 'Harrison', 'phone': '840-555-4781'}\n{'first_name': 'Phillip', 'last_name': 'Cullen', 'phone': '905-555-5035'}\n{'first_name': 'Elijah', 'last_name': 'Allen', 'phone': '724-555-5721'}\n\n\n    --- PRED A (SQL) ---\n    Query: SELECT m.first_name || ' ' || m.last_name AS full_name, m.phone FROM member AS m INNER JOIN expense AS e ON m.member_id = e.link_to_member GROUP BY m.member_id, m.first_name, m.last_name, m.phone HAVING AVG(e.cost) > (SELECT AVG(cost) FROM expense);\n    Output:\n    Columns: ['full_name', 'phone']\nTotal Rows: 2\n--------------------\n{'full_name': 'Sacha Harrison', 'phone': '840-555-4781'}\n{'full_name': 'Elijah Allen', 'phone': '724-555-5721'}\n\n\n    --- PRED B (SPARQL) ---\n    Query: PREFIX sc: <http://studentclub.org/schema#>\nSELECT DISTINCT ?member ?fullName ?phone ?desc WHERE {\n  {\n    SELECT ?desc ( AVG( ?c ) AS ?avgCost ) WHERE {\n      ?e a sc:Expense ; sc:expenseDescription ?desc ; sc:cost ?c .\n    }\n    GROUP BY ?desc\n  }\n  ?exp a sc:Expense ; sc:expenseDescription ?desc ; sc:cost ?cost ; sc:incurredBy ?member .\n  FILTER ( ?cost > ?avgCost ) OPTIONAL {\n    ?member sc:firstName ?first\n  }\n  OPTIONAL {\n    ?member sc:lastName ?last\n  }\n  OPTIONAL {\n    ?member sc:phoneNumber ?phone\n  }\n  BIND( CONCAT ( COALESCE ( ?first , \"\" ) , \" \" , COALESCE ( ?last , \"\" ) ) AS ?fullName )\n}\nORDER BY ?desc ?fullName\n    Output:\n    Columns: ['member', 'fullName', 'phone', 'desc']\nTotal Rows: 6\n--------------------\n{'member': 'http://studentclub.org/member/recro8T1MPMwRadVH', 'fullName': 'Elijah Allen', 'phone': '724-555-5721', 'desc': 'Pizza'}\n{'member': 'http://studentclub.org/member/recD078PnS3x2doBe', 'fullName': 'Phillip Cullen', 'phone': '905-555-5035', 'desc': 'Pizza'}\n{'member': 'http://studentclub.org/member/rec4BLdZHS2Blfp4v', 'fullName': 'Sacha Harrison', 'phone': '840-555-4781', 'desc': 'Pizza'}\n{'member': 'http://studentclub.org/member/rec4BLdZHS2Blfp4v', 'fullName': 'Sacha Harrison', 'phone': '840-555-4781', 'desc': 'Posters'}\n{'member': 'http://studentclub.org/member/recD078PnS3x2doBe', 'fullName': 'Phillip Cullen', 'phone': '905-555-5035', 'desc': 'Water, chips, cookies'}\n{'member': 'http://studentclub.org/member/rec4BLdZHS2Blfp4v', 'fullName': 'Sacha Harrison', 'phone': '840-555-4781', 'desc': 'Water, chips, cookies'}\n\n    "
+                    }
+                ],
+                "response_format": {
+                    "type": "json_object"
+                },
+                "reasoning_effort": "low"
+            },
+            "response": {
+                "id": "chatcmpl-DRh0v934atMZ9fviifJcr3PDs9N0Y",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "index": 0,
+                        "logprobs": null,
+                        "message": {
+                            "content": "{\n  \"sql_eval\": {\n    \"reasoning\": \"Gold asks for members who had any expense with cost > overall average cost across all expenses, returning distinct members (3 rows). Pred A computes for each member the AVG(e.cost) and checks if the member's average expense > overall average expense. This is a different predicate: gold checks per-expense cost > overall average, Pred A checks per-member average > overall average. Because of that semantic mismatch Pred A returns 2 members (Sacha and Elijah) and omits Phillip who in the gold result had at least one individual expense above the overall average. Therefore Pred A is semantically incorrect relative to the gold query.\",\n    \"status\": \"WRONG_ANSWER\"\n  },\n  \"sparql_eval\": {\n    \"reasoning\": \"Pred B uses a subquery computing AVG(?c) grouped by expense description (?desc) and then selects expenses whose cost > the average for that description. Gold requires comparing each expense cost to the overall average across all expenses (no grouping by description). Thus Pred B is using the wrong aggregation scope (per-description average instead of global average). The SPARQL returns multiple rows per member/expense description and duplicates members across different descriptions; although the schema predicates used (firstName, lastName, phoneNumber, cost, etc.) appear consistent with the DB context, the core logic is incorrect. This is a logic error rather than a schema mismatch or syntax error.\",\n    \"status\": \"WRONG_ANSWER\",\n    \"error_category\": \"LOGIC\"\n  },\n  \"comparison\": {\n    \"summary\": \"Both predictions use the wrong comparison: SQL aggregates per-member avg, SPARQL aggregates per-description avg, while the gold compares each expense to the global average; therefore both are incorrect.\",\n    \"winner\": \"TIE_BOTH_INCORRECT\"\n  }\n}",
+                            "refusal": null,
+                            "role": "assistant",
+                            "annotations": [],
+                            "audio": null,
+                            "function_call": null,
+                            "tool_calls": null
+                        }
+                    }
+                ],
+                "created": 1775492573,
+                "model": "gpt-5-mini-2025-08-07",
+                "object": "chat.completion",
+                "service_tier": "default",
+                "system_fingerprint": null,
+                "usage": {
+                    "completion_tokens": 581,
+                    "prompt_tokens": 1282,
+                    "total_tokens": 1863,
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 192,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    }
+                }
+            },
+            "timestamp": "2026-04-06T18:23:10.513035"
+        }
+    },
+    {
+        "question_id": 1239,
+        "api_response": {
+            "request": {
+                "model": "gpt-5-mini",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an expert Database QA Judge. Your task is to evaluate two predicted queries (SQL and SPARQL) against a Gold Standard SQL query. You must judge semantic correctness, NOT syntactic or formatting similarity.\n    \n    Evaluation Criteria:\n    1. Ignore column names and output formatting.\n    2. Focus only on semantic equivalence of the values and row counts.\n    3. Allow small numeric rounding differences.\n    4. Extra columns in the SPARQL output are allowed if the correct answer is present.\n    5. Treat rows as unordered sets if no ordering is required by the question.\n\n    Output strictly in JSON format ONLY as follows:\n    {\n      \"sql_eval\": {\n        \"reasoning\": \"Step-by-step analysis of why the SQL is correct or incorrect.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\"\n      },\n      \"sparql_eval\": {\n        \"reasoning\": \"Step-by-step analysis. If results are empty, check if it's a Schema Mismatch (wrong predicates) vs Logic Error.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\" | \"SCHEMA_MISMATCH\",\n        \"error_category\": \"NONE\" | \"SYNTAX\" | \"SCHEMA\" | \"LOGIC\" | \"HALLUCINATION\"\n      },\n      \"comparison\": {\n        \"summary\": \"One sentence summary.\",\n        \"winner\": \"SQL\" | \"SPARQL\" | \"TIE_BOTH_CORRECT\" | \"TIE_BOTH_INCORRECT\"\n      }\n    }"
+                    },
+                    {
+                        "role": "user",
+                        "content": "\n    DB Context: thrombosis_prediction\n    Question: Name the ID and age of patient with two or more laboratory examinations which show their hematoclit level exceeded the normal range.\n\n    --- GROUND TRUTH ---\n    Gold SQL: SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T1.ID IN ( SELECT ID FROM Laboratory WHERE HCT >= 52 GROUP BY ID HAVING COUNT(ID) >= 2 )\n    Output:\n    Columns: ['ID', \"STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday)\"]\nTotal Rows: 3\n--------------------\n{'ID': 2307640, \"STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday)\": 73}\n{'ID': 3182521, \"STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday)\": 74}\n{'ID': 4007151, \"STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday)\": 58}\n\n\n    --- PRED A (SQL) ---\n    Query: SELECT T1.ID, CAST(STRFTIME('%Y', MAX(T2.Date)) AS INTEGER) - CAST(STRFTIME('%Y', T1.Birthday) AS INTEGER) AS age\nFROM Patient AS T1\nINNER JOIN Laboratory AS T2 ON T1.ID = T2.ID\nWHERE T2.HCT IS NOT NULL AND T2.HCT > 52 AND T1.Birthday IS NOT NULL\nGROUP BY T1.ID\nHAVING COUNT(*) >= 2;\n    Output:\n    Columns: ['ID', 'age']\nTotal Rows: 3\n--------------------\n{'ID': 2307640, 'age': 31}\n{'ID': 3182521, 'age': 33}\n{'ID': 4007151, 'age': 21}\n\n\n    --- PRED B (SPARQL) ---\n    Query: PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?patient ( ( xsd:integer ( substr( str( ?firstVisitDate ) , 1 , 4 ) ) - xsd:integer ( substr( str( ?birthDate ) , 1 , 4 ) ) ) AS ?age ) WHERE {\n  ?lt a <http://thrombosis.org/schema#LaboratoryTest> ; <http://thrombosis.org/schema#forPatient> ?patient ; <http://thrombosis.org/schema#HCT> ?hct .\n  ?patient <http://thrombosis.org/schema#birthDate> ?birthDate ; <http://thrombosis.org/schema#firstVisitDate> ?firstVisitDate ; <http://thrombosis.org/schema#hasSex> ?sex .\n  FILTER ( ( str( ?sex ) = \"Male\" && xsd:decimal ( ?hct ) > 52 ) || ( str( ?sex ) = \"Female\" && xsd:decimal ( ?hct ) > 48 ) ) OPTIONAL {\n    ?patient rdfs:label ?label\n  }\n}\nGROUP BY ?patient ?birthDate ?firstVisitDate\nHAVING ( COUNT( DISTINCT ?lt ) >= 2 )\nORDER BY ?patient\n    Output:\n    Columns: ['patient', 'age']\nTotal Rows: 10\n--------------------\n{'patient': 'http://thrombosis.org/patient/1078741', 'age': 55}\n{'patient': 'http://thrombosis.org/patient/1923445', 'age': 22}\n{'patient': 'http://thrombosis.org/patient/2307640', 'age': 28}\n{'patient': 'http://thrombosis.org/patient/2315140', 'age': 58}\n{'patient': 'http://thrombosis.org/patient/250391', 'age': 11}\n{'patient': 'http://thrombosis.org/patient/3182521', 'age': 44}\n{'patient': 'http://thrombosis.org/patient/3398281', 'age': 17}\n{'patient': 'http://thrombosis.org/patient/4007151', 'age': 23}\n{'patient': 'http://thrombosis.org/patient/5093771', 'age': 30}\n{'patient': 'http://thrombosis.org/patient/5405581', 'age': 39}\n\n    "
+                    }
+                ],
+                "response_format": {
+                    "type": "json_object"
+                },
+                "reasoning_effort": "low"
+            },
+            "response": {
+                "id": "chatcmpl-DRh1CBgZ2bA9PSszsjLnWSA6on3GH",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "index": 0,
+                        "logprobs": null,
+                        "message": {
+                            "content": "{\n  \"sql_eval\": {\n    \"reasoning\": \"The SQL returns the correct set of patient IDs (2307640, 3182521, 4007151) matching the gold result counts and membership. However, it has two semantic issues: (1) it uses T2.HCT > 52 instead of >= 52 (minor threshold difference), and (2) it computes age as the difference between the year of MAX(T2.Date) and the birth year rather than using the current year as in the gold query. Because the age values do not match the gold computation, the overall result values are not semantically equivalent to the gold answer.\",\n    \"status\": \"WRONG_ANSWER\"\n  },\n  \"sparql_eval\": {\n    \"reasoning\": \"The SPARQL result set is quite different from the gold. It returns 10 patients (not 3) and uses logic that differs from the gold in multiple ways: (1) it applies sex-specific HCT thresholds (male>52, female>48) instead of the gold's single threshold HCT >= 52 for all, (2) it computes age from firstVisitDate minus birthDate rather than current year minus birth year, and (3) many returned patients are not present in the gold result. The query therefore demonstrates a logic mismatch rather than a mere schema or syntax issue.\",\n    \"status\": \"WRONG_ANSWER\",\n    \"error_category\": \"LOGIC\"\n  },\n  \"comparison\": {\n    \"summary\": \"Both predictions are incorrect; the SQL returns the correct patient IDs but computes ages incorrectly and uses a strict > threshold, while the SPARQL returns many incorrect patients and applies different logic (sex-based thresholds and wrong age source).\",\n    \"winner\": \"SQL\"\n  }\n}",
+                            "refusal": null,
+                            "role": "assistant",
+                            "annotations": [],
+                            "audio": null,
+                            "function_call": null,
+                            "tool_calls": null
+                        }
+                    }
+                ],
+                "created": 1775492590,
+                "model": "gpt-5-mini-2025-08-07",
+                "object": "chat.completion",
+                "service_tier": "default",
+                "system_fingerprint": null,
+                "usage": {
+                    "completion_tokens": 633,
+                    "prompt_tokens": 1338,
+                    "total_tokens": 1971,
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 256,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    }
+                }
+            },
+            "timestamp": "2026-04-06T18:23:21.620310"
+        }
+    },
+    {
+        "question_id": 1031,
+        "api_response": {
+            "request": {
+                "model": "gpt-5-mini",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an expert Database QA Judge. Your task is to evaluate two predicted queries (SQL and SPARQL) against a Gold Standard SQL query. You must judge semantic correctness, NOT syntactic or formatting similarity.\n    \n    Evaluation Criteria:\n    1. Ignore column names and output formatting.\n    2. Focus only on semantic equivalence of the values and row counts.\n    3. Allow small numeric rounding differences.\n    4. Extra columns in the SPARQL output are allowed if the correct answer is present.\n    5. Treat rows as unordered sets if no ordering is required by the question.\n\n    Output strictly in JSON format ONLY as follows:\n    {\n      \"sql_eval\": {\n        \"reasoning\": \"Step-by-step analysis of why the SQL is correct or incorrect.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\"\n      },\n      \"sparql_eval\": {\n        \"reasoning\": \"Step-by-step analysis. If results are empty, check if it's a Schema Mismatch (wrong predicates) vs Logic Error.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\" | \"SCHEMA_MISMATCH\",\n        \"error_category\": \"NONE\" | \"SYNTAX\" | \"SCHEMA\" | \"LOGIC\" | \"HALLUCINATION\"\n      },\n      \"comparison\": {\n        \"summary\": \"One sentence summary.\",\n        \"winner\": \"SQL\" | \"SPARQL\" | \"TIE_BOTH_CORRECT\" | \"TIE_BOTH_INCORRECT\"\n      }\n    }"
+                    },
+                    {
+                        "role": "user",
+                        "content": "\n    DB Context: european_football_2\n    Question: At present, calculate for the player's age who have a sprint speed of no less than 97 between 2013 to 2015.\n\n    --- GROUND TRUTH ---\n    Gold SQL: SELECT DISTINCT DATETIME() - T2.birthday age FROM Player_Attributes AS t1 INNER JOIN Player AS t2 ON t1.player_api_id = t2.player_api_id WHERE STRFTIME('%Y',t1.`date`) >= '2013' AND STRFTIME('%Y',t1.`date`) <= '2015' AND t1.sprint_speed >= 97\n    Output:\n    Columns: ['age']\nTotal Rows: 1\n--------------------\n{'age': 36}\n\n\n    --- PRED A (SQL) ---\n    Query: SELECT (CAST(STRFTIME('%Y','now') AS INTEGER) - CAST(STRFTIME('%Y', P.birthday) AS INTEGER) - CASE WHEN STRFTIME('%m%d','now') < STRFTIME('%m%d', P.birthday) THEN 1 ELSE 0 END) AS age\nFROM Player AS P\nINNER JOIN Player_Attributes AS PA ON P.player_api_id = PA.player_api_id\nWHERE PA.sprint_speed IS NOT NULL\n  AND PA.sprint_speed >= 97\n  AND STRFTIME('%Y', PA.date) BETWEEN '2013' AND '2015';\n    Output:\n    Columns: ['age']\nTotal Rows: 23\n--------------------\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n{'age': 35}\n\n\n    --- PRED B (SPARQL) ---\n    Query: PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT DISTINCT ?player ?playerLabel ?age WHERE {\n  ?attr <http://europeanfootball.org/schema#forPlayer> ?player ; <http://europeanfootball.org/schema#playerAttributesDate> ?attrDate ; <http://europeanfootball.org/schema#sprintSpeed> ?sprint .\n  FILTER ( ?sprint >= 97 ) .\n  FILTER ( ?attrDate >= \"2013-01-01T00:00:00\" ^^ xsd:dateTime && ?attrDate <= \"2015-12-31T23:59:59\" ^^ xsd:dateTime ) .\n  ?player <http://europeanfootball.org/schema#birthDay> ?birth .\n  OPTIONAL {\n    ?player rdfs:label ?playerLabel .\n  }\n  BIND( ( YEAR( NOW () ) - YEAR( ?birth ) - IF( ( MONTH( NOW () ) < MONTH( ?birth ) ) || ( MONTH( NOW () ) = MONTH( ?birth ) && DAY( NOW () ) < DAY( ?birth ) ) , 1 , 0 ) ) AS ?age )\n}\nORDER BY DESC ( ?age )\n    Output:\n    Columns: ['player', 'playerLabel', 'age']\nTotal Rows: 1\n--------------------\n{'player': 'http://europeanfootball.org/player/120428', 'playerLabel': 'Mathis Bolly', 'age': 35}\n\n    "
+                    }
+                ],
+                "response_format": {
+                    "type": "json_object"
+                },
+                "reasoning_effort": "low"
+            },
+            "response": {
+                "id": "chatcmpl-DRh1OQtSORXg6CgUtb7dt40Q7lapJ",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "index": 0,
+                        "logprobs": null,
+                        "message": {
+                            "content": "{\n  \"sql_eval\": {\n    \"reasoning\": \"Gold returns a single distinct age value (36). Pred A returns 23 rows all with age = 35. Problems: (1) Pred A does not use DISTINCT so it returns one row per matching Player_Attributes row instead of a single distinct age \u2014 producing 23 rows rather than 1. (2) The computed age value is 35, not 36 as in the gold output (off by one), so the numeric result does not match. These differences mean the predicted SQL does not match the gold semantics (both wrong row count and wrong value).\",\n    \"status\": \"WRONG_ANSWER\"\n  },\n  \"sparql_eval\": {\n    \"reasoning\": \"SPARQL returns a single row for one player (Mathis Bolly) with age = 35, matching the gold in row count (one) and identifying a specific player. However, the gold age value is 36 while the SPARQL age is 35 (off by one). There is no indication of schema mismatch or syntax error \u2014 the query logic and predicates appear correct but the computed age disagrees with the gold result (likely a date/rounding or calculation difference). Therefore it is not semantically equivalent to the gold output.\",\n    \"status\": \"WRONG_ANSWER\",\n    \"error_category\": \"LOGIC\"\n  },\n  \"comparison\": {\n    \"summary\": \"Both predictions fail to match the gold: the SQL returns many duplicate rows and the wrong age, the SPARQL returns a single row but with the incorrect age.\",\n    \"winner\": \"TIE_BOTH_INCORRECT\"\n  }\n}",
+                            "refusal": null,
+                            "role": "assistant",
+                            "annotations": [],
+                            "audio": null,
+                            "function_call": null,
+                            "tool_calls": null
+                        }
+                    }
+                ],
+                "created": 1775492602,
+                "model": "gpt-5-mini-2025-08-07",
+                "object": "chat.completion",
+                "service_tier": "default",
+                "system_fingerprint": null,
+                "usage": {
+                    "completion_tokens": 545,
+                    "prompt_tokens": 1150,
+                    "total_tokens": 1695,
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 192,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    }
+                }
+            },
+            "timestamp": "2026-04-06T18:23:31.270303"
+        }
+    },
+    {
+        "question_id": 801,
+        "api_response": {
+            "request": {
+                "model": "gpt-5-mini",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an expert Database QA Judge. Your task is to evaluate two predicted queries (SQL and SPARQL) against a Gold Standard SQL query. You must judge semantic correctness, NOT syntactic or formatting similarity.\n    \n    Evaluation Criteria:\n    1. Ignore column names and output formatting.\n    2. Focus only on semantic equivalence of the values and row counts.\n    3. Allow small numeric rounding differences.\n    4. Extra columns in the SPARQL output are allowed if the correct answer is present.\n    5. Treat rows as unordered sets if no ordering is required by the question.\n\n    Output strictly in JSON format ONLY as follows:\n    {\n      \"sql_eval\": {\n        \"reasoning\": \"Step-by-step analysis of why the SQL is correct or incorrect.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\"\n      },\n      \"sparql_eval\": {\n        \"reasoning\": \"Step-by-step analysis. If results are empty, check if it's a Schema Mismatch (wrong predicates) vs Logic Error.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\" | \"SCHEMA_MISMATCH\",\n        \"error_category\": \"NONE\" | \"SYNTAX\" | \"SCHEMA\" | \"LOGIC\" | \"HALLUCINATION\"\n      },\n      \"comparison\": {\n        \"summary\": \"One sentence summary.\",\n        \"winner\": \"SQL\" | \"SPARQL\" | \"TIE_BOTH_CORRECT\" | \"TIE_BOTH_INCORRECT\"\n      }\n    }"
+                    },
+                    {
+                        "role": "user",
+                        "content": "\n    DB Context: superhero\n    Question: Find the ratio between male superheroes and female superheroes.\n\n    --- GROUND TRUTH ---\n    Gold SQL: SELECT CAST(COUNT(CASE WHEN T2.gender = 'Male' THEN T1.id ELSE NULL END) AS REAL) / COUNT(CASE WHEN T2.gender = 'Female' THEN T1.id ELSE NULL END) FROM superhero AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.id\n    Output:\n    Columns: [\"CAST(COUNT(CASE WHEN T2.gender = 'Male' THEN T1.id ELSE NULL END) AS REAL) / COUNT(CASE WHEN T2.gender = 'Female' THEN T1.id ELSE NULL END)\"]\nTotal Rows: 1\n--------------------\n{\"CAST(COUNT(CASE WHEN T2.gender = 'Male' THEN T1.id ELSE NULL END) AS REAL) / COUNT(CASE WHEN T2.gender = 'Female' THEN T1.id ELSE NULL END)\": 2.5566502463054186}\n\n\n    --- PRED A (SQL) ---\n    Query: SELECT CAST(SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END) AS FLOAT) / NULLIF(SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END), 0) FROM superhero AS s INNER JOIN gender AS g ON s.gender_id = g.id;\n    Output:\n    Columns: [\"CAST(SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END) AS FLOAT) / NULLIF(SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END), 0)\"]\nTotal Rows: 1\n--------------------\n{\"CAST(SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END) AS FLOAT) / NULLIF(SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END), 0)\": 2.5566502463054186}\n\n\n    --- PRED B (SPARQL) ---\n    Query: PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nSELECT ?maleGender ?femaleGender ?maleLabel ?femaleLabel ?maleCount ?femaleCount ?ratio WHERE {\n  BIND( <http://superhero.org/gender/1> AS ?maleGender ) BIND( <http://superhero.org/gender/2> AS ?femaleGender ) OPTIONAL {\n    ?maleGender rdfs:label ?maleLabel\n  }\n  OPTIONAL {\n    ?femaleGender rdfs:label ?femaleLabel\n  }\n  {\n    SELECT ( COUNT( ?m ) AS ?maleCount ) WHERE {\n      ?m a <http://superhero.org/schema#Superhero> ; <http://superhero.org/schema#hasGender> ?maleGender .\n    }\n  }\n  {\n    SELECT ( COUNT( ?f ) AS ?femaleCount ) WHERE {\n      ?f a <http://superhero.org/schema#Superhero> ; <http://superhero.org/schema#hasGender> ?femaleGender .\n    }\n  }\n  BIND( xsd:decimal ( ?maleCount ) / xsd:decimal ( ?femaleCount ) AS ?ratio )\n}\n    Output:\n    Columns: ['maleGender', 'femaleGender', 'maleLabel', 'femaleLabel', 'maleCount', 'femaleCount', 'ratio']\nTotal Rows: 1\n--------------------\n{'maleGender': 'http://superhero.org/gender/1', 'femaleGender': 'http://superhero.org/gender/2', 'maleLabel': 'Male', 'femaleLabel': 'Female', 'maleCount': 750, 'femaleCount': 750, 'ratio': 1.0}\n\n    "
+                    }
+                ],
+                "response_format": {
+                    "type": "json_object"
+                },
+                "reasoning_effort": "low"
+            },
+            "response": {
+                "id": "chatcmpl-DRh1XseNqqqi7F8m8g2he0JB1SzSY",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "index": 0,
+                        "logprobs": null,
+                        "message": {
+                            "content": "{\n  \"sql_eval\": {\n    \"reasoning\": \"The predicted SQL computes SUM(CASE WHEN g.gender = 'Male' THEN 1 ELSE 0 END) and SUM(CASE WHEN g.gender = 'Female' THEN 1 ELSE 0 END) and divides them (casting numerator to FLOAT and guarding denominator with NULLIF). This is semantically equivalent to counting male and female superhero ids and taking their ratio as in the gold query. The numeric result matches the gold output (2.5566502463054186). The use of NULLIF only affects division-by-zero safety and does not change correctness for this dataset.\",\n    \"status\": \"CORRECT\"\n  },\n  \"sparql_eval\": {\n    \"reasoning\": \"The SPARQL query attempts to count male and female superheroes and compute their ratio, which is the correct intention. However the returned counts are maleCount = 750 and femaleCount = 750 giving ratio = 1.0, which does not match the gold ratio (~2.55665). The query appears to bind specific IRIs for genders (<.../gender/1> and <.../gender/2>) and therefore likely mis-maps or uses incorrect gender identifiers relative to the SQL dataset, resulting in incorrect counts and ratio. This is a logic/data-mapping error rather than a pure syntax or empty-result/schema problem.\",\n    \"status\": \"WRONG_ANSWER\",\n    \"error_category\": \"LOGIC\"\n  },\n  \"comparison\": {\n    \"summary\": \"The SQL prediction is semantically correct and matches the gold ratio; the SPARQL prediction returns incorrect counts/ratio (logic/mapping error).\",\n    \"winner\": \"SQL\"\n  }\n}",
+                            "refusal": null,
+                            "role": "assistant",
+                            "annotations": [],
+                            "audio": null,
+                            "function_call": null,
+                            "tool_calls": null
+                        }
+                    }
+                ],
+                "created": 1775492611,
+                "model": "gpt-5-mini-2025-08-07",
+                "object": "chat.completion",
+                "service_tier": "default",
+                "system_fingerprint": null,
+                "usage": {
+                    "completion_tokens": 487,
+                    "prompt_tokens": 1145,
+                    "total_tokens": 1632,
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 128,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    }
+                }
+            },
+            "timestamp": "2026-04-06T18:23:40.052499"
+        }
+    },
+    {
+        "question_id": 486,
+        "api_response": {
+            "request": {
+                "model": "gpt-5-mini",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are an expert Database QA Judge. Your task is to evaluate two predicted queries (SQL and SPARQL) against a Gold Standard SQL query. You must judge semantic correctness, NOT syntactic or formatting similarity.\n    \n    Evaluation Criteria:\n    1. Ignore column names and output formatting.\n    2. Focus only on semantic equivalence of the values and row counts.\n    3. Allow small numeric rounding differences.\n    4. Extra columns in the SPARQL output are allowed if the correct answer is present.\n    5. Treat rows as unordered sets if no ordering is required by the question.\n\n    Output strictly in JSON format ONLY as follows:\n    {\n      \"sql_eval\": {\n        \"reasoning\": \"Step-by-step analysis of why the SQL is correct or incorrect.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\"\n      },\n      \"sparql_eval\": {\n        \"reasoning\": \"Step-by-step analysis. If results are empty, check if it's a Schema Mismatch (wrong predicates) vs Logic Error.\",\n        \"status\": \"CORRECT\" | \"WRONG_ANSWER\" | \"EXECUTION_ERROR\" | \"SCHEMA_MISMATCH\",\n        \"error_category\": \"NONE\" | \"SYNTAX\" | \"SCHEMA\" | \"LOGIC\" | \"HALLUCINATION\"\n      },\n      \"comparison\": {\n        \"summary\": \"One sentence summary.\",\n        \"winner\": \"SQL\" | \"SPARQL\" | \"TIE_BOTH_CORRECT\" | \"TIE_BOTH_INCORRECT\"\n      }\n    }"
+                    },
+                    {
+                        "role": "user",
+                        "content": "\n    DB Context: card_games\n    Question: What is the percentage of the cards with a converted mana cost of 7 in the set Coldsnap?\n\n    --- GROUND TRUTH ---\n    Gold SQL: SELECT CAST(SUM(CASE WHEN T1.convertedManaCost = 7 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM cards AS T1 INNER JOIN sets AS T2 ON T2.code = T1.setCode WHERE T2.name = 'Coldsnap'\n    Output:\n    Columns: ['CAST(SUM(CASE WHEN T1.convertedManaCost = 7 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id)']\nTotal Rows: 1\n--------------------\n{'CAST(SUM(CASE WHEN T1.convertedManaCost = 7 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id)': 7.741935483870968}\n\n\n    --- PRED A (SQL) ---\n    Query: SELECT 100.0 * SUM(CASE WHEN T2.convertedManaCost = 7 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0) FROM sets AS T1 INNER JOIN cards AS T2 ON T1.code = T2.setCode WHERE T1.name = 'Coldsnap';\n    Output:\n    Columns: ['100.0 * SUM(CASE WHEN T2.convertedManaCost = 7 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0)']\nTotal Rows: 1\n--------------------\n{'100.0 * SUM(CASE WHEN T2.convertedManaCost = 7 THEN 1 ELSE 0 END) / NULLIF(COUNT(*),0)': 7.741935483870968}\n\n\n    --- PRED B (SPARQL) ---\n    Query: PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nSELECT ( COUNT( ?card ) AS ?total ) ( SUM( ?is7 ) AS ?count7 ) ( ( xsd:decimal ( SUM( ?is7 ) ) / xsd:decimal ( COUNT( ?card ) ) ) * 100 AS ?percentage ) WHERE {\n  ?card <http://cardgames.org/schema#setCode> \"CSP\" .\n  BIND( IF( EXISTS {\n    ?card <http://cardgames.org/schema#convertedManaCost> ?cmc .\n    FILTER ( xsd:decimal ( ?cmc ) = 7 )\n  }\n  , 1 , 0 ) AS ?is7 )\n}\n    Output:\n    Columns: ['total', 'count7', 'percentage']\nTotal Rows: 1\n--------------------\n{'total': 166, 'count7': 12, 'percentage': 7.22892}\n\n    "
+                    }
+                ],
+                "response_format": {
+                    "type": "json_object"
+                },
+                "reasoning_effort": "low"
+            },
+            "response": {
+                "id": "chatcmpl-DRh1ghxhVFvtWjfoXsFjq38kSEOqL",
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "index": 0,
+                        "logprobs": null,
+                        "message": {
+                            "content": "{\n  \"sql_eval\": {\n    \"reasoning\": \"The predicted SQL computes 100 * SUM(CASE WHEN convertedManaCost = 7 THEN 1 ELSE 0 END) / COUNT(*) for rows in the set named 'Coldsnap' by joining sets to cards. This matches the Gold query's logic (count cards with convertedManaCost = 7 divided by total cards in Coldsnap, multiplied by 100). The numeric output (7.741935483870968) is identical to the Gold output, and NULLIF only protects against division by zero without changing the result here. Therefore the SQL is semantically correct.\",\n    \"status\": \"CORRECT\"\n  },\n  \"sparql_eval\": {\n    \"reasoning\": \"The SPARQL returns a total of 166 cards, 12 with convertedManaCost = 7, and percentage 7.22892. The Gold result indicates a percentage of 7.741935... (which corresponds to a different numerator/denominator). The SPARQL produced a non-empty result but its numeric percentage does not match the Gold answer. The query appears to use the setCode value \\\"CSP\\\" to identify Coldsnap and checks CMC = 7, but the resulting counts differ from the Gold SQL's counts. Because the result is present but incorrect, this is a logic/data-matching error rather than a schema/syntax issue.\",\n    \"status\": \"WRONG_ANSWER\",\n    \"error_category\": \"LOGIC\"\n  },\n  \"comparison\": {\n    \"summary\": \"The SQL prediction exactly matches the Gold result; the SPARQL returns an incorrect percentage (wrong counts), so the SQL is the winner.\",\n    \"winner\": \"SQL\"\n  }\n}",
+                            "refusal": null,
+                            "role": "assistant",
+                            "annotations": [],
+                            "audio": null,
+                            "function_call": null,
+                            "tool_calls": null
+                        }
+                    }
+                ],
+                "created": 1775492620,
+                "model": "gpt-5-mini-2025-08-07",
+                "object": "chat.completion",
+                "service_tier": "default",
+                "system_fingerprint": null,
+                "usage": {
+                    "completion_tokens": 560,
+                    "prompt_tokens": 937,
+                    "total_tokens": 1497,
+                    "completion_tokens_details": {
+                        "accepted_prediction_tokens": 0,
+                        "audio_tokens": 0,
+                        "reasoning_tokens": 192,
+                        "rejected_prediction_tokens": 0
+                    },
+                    "prompt_tokens_details": {
+                        "audio_tokens": 0,
+                        "cached_tokens": 0
+                    }
+                }
+            },
+            "timestamp": "2026-04-06T18:23:48.662270"
+        }
+    }
+]

@@ -1,0 +1,814 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://formula_1.org/> .
+
+######################################################################
+# Table: circuits
+######################################################################
+<#circuits_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "circuitId", "circuitRef", "name", "location", "country", "lat", "lng", "alt", "url" FROM "circuits"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/circuits/circuitId={circuitId}" ;
+    rr:class <http://formula_1.org/circuits>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "circuits {circuitId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#circuitId> ;
+    rr:objectMap [ rml:reference "circuitId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#circuitRef> ;
+    rr:objectMap [ rml:reference "circuitRef" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#location> ;
+    rr:objectMap [ rml:reference "location" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#country> ;
+    rr:objectMap [ rml:reference "country" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#lat> ;
+    rr:objectMap [ rml:reference "lat" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#lng> ;
+    rr:objectMap [ rml:reference "lng" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#alt> ;
+    rr:objectMap [ rml:reference "alt" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/circuits#url> ;
+    rr:objectMap [ rml:reference "url" ]
+  ]
+ .
+
+######################################################################
+# Table: constructors
+######################################################################
+<#constructors_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/constructors/constructorId={constructorId}" ;
+    rr:class <http://formula_1.org/constructors>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "constructors {constructorId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructors#constructorId> ;
+    rr:objectMap [ rml:reference "constructorId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructors#constructorRef> ;
+    rr:objectMap [ rml:reference "constructorRef" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructors#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructors#nationality> ;
+    rr:objectMap [ rml:reference "nationality" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructors#url> ;
+    rr:objectMap [ rml:reference "url" ]
+  ]
+ .
+
+######################################################################
+# Table: drivers
+######################################################################
+<#drivers_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "driverId", "driverRef", "number", "code", "forename", "surname", "dob", "nationality", "url" FROM "drivers"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/drivers/driverId={driverId}" ;
+    rr:class <http://formula_1.org/drivers>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "drivers {driverId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#driverId> ;
+    rr:objectMap [ rml:reference "driverId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#driverRef> ;
+    rr:objectMap [ rml:reference "driverRef" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#number> ;
+    rr:objectMap [ rml:reference "number" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#code> ;
+    rr:objectMap [ rml:reference "code" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#forename> ;
+    rr:objectMap [ rml:reference "forename" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#surname> ;
+    rr:objectMap [ rml:reference "surname" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#dob> ;
+    rr:objectMap [ rml:reference "dob" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#nationality> ;
+    rr:objectMap [ rml:reference "nationality" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/drivers#url> ;
+    rr:objectMap [ rml:reference "url" ]
+  ]
+ .
+
+######################################################################
+# Table: seasons
+######################################################################
+<#seasons_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "year", "url" FROM "seasons"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/seasons/year={year}" ;
+    rr:class <http://formula_1.org/seasons>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "seasons {year}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/seasons#year> ;
+    rr:objectMap [ rml:reference "year" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/seasons#url> ;
+    rr:objectMap [ rml:reference "url" ]
+  ]
+ .
+
+######################################################################
+# Table: races
+######################################################################
+<#races_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "raceId", "year", "round", "circuitId", "name", "date", "time", "url" FROM "races"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/races/raceId={raceId}" ;
+    rr:class <http://formula_1.org/races>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "races {raceId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#year> ;
+    rr:objectMap [ rml:reference "year" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#ref-year> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/seasons/year={year}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#round> ;
+    rr:objectMap [ rml:reference "round" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#circuitId> ;
+    rr:objectMap [ rml:reference "circuitId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#ref-circuitId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/circuits/circuitId={circuitId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#name> ;
+    rr:objectMap [ rml:reference "name" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#date> ;
+    rr:objectMap [ rml:reference "date" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#time> ;
+    rr:objectMap [ rml:reference "time" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/races#url> ;
+    rr:objectMap [ rml:reference "url" ]
+  ]
+ .
+
+######################################################################
+# Table: constructorResults
+######################################################################
+<#constructorResults_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "constructorResultsId", "raceId", "constructorId", "points", "status" FROM "constructorResults"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/constructorResults/constructorResultsId={constructorResultsId}" ;
+    rr:class <http://formula_1.org/constructorResults>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "constructorResults {constructorResultsId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#constructorResultsId> ;
+    rr:objectMap [ rml:reference "constructorResultsId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#constructorId> ;
+    rr:objectMap [ rml:reference "constructorId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#ref-constructorId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/constructors/constructorId={constructorId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#points> ;
+    rr:objectMap [ rml:reference "points" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorResults#status> ;
+    rr:objectMap [ rml:reference "status" ]
+  ]
+ .
+
+######################################################################
+# Table: constructorStandings
+######################################################################
+<#constructorStandings_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/constructorStandings/constructorStandingsId={constructorStandingsId}" ;
+    rr:class <http://formula_1.org/constructorStandings>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "constructorStandings {constructorStandingsId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#constructorStandingsId> ;
+    rr:objectMap [ rml:reference "constructorStandingsId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#constructorId> ;
+    rr:objectMap [ rml:reference "constructorId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#ref-constructorId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/constructors/constructorId={constructorId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#points> ;
+    rr:objectMap [ rml:reference "points" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#position> ;
+    rr:objectMap [ rml:reference "position" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#positionText> ;
+    rr:objectMap [ rml:reference "positionText" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/constructorStandings#wins> ;
+    rr:objectMap [ rml:reference "wins" ]
+  ]
+ .
+
+######################################################################
+# Table: driverStandings
+######################################################################
+<#driverStandings_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "driverStandingsId", "raceId", "driverId", "points", "position", "positionText", "wins" FROM "driverStandings"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/driverStandings/driverStandingsId={driverStandingsId}" ;
+    rr:class <http://formula_1.org/driverStandings>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "driverStandings {driverStandingsId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#driverStandingsId> ;
+    rr:objectMap [ rml:reference "driverStandingsId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#driverId> ;
+    rr:objectMap [ rml:reference "driverId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#ref-driverId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/drivers/driverId={driverId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#points> ;
+    rr:objectMap [ rml:reference "points" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#position> ;
+    rr:objectMap [ rml:reference "position" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#positionText> ;
+    rr:objectMap [ rml:reference "positionText" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/driverStandings#wins> ;
+    rr:objectMap [ rml:reference "wins" ]
+  ]
+ .
+
+######################################################################
+# Table: lapTimes
+######################################################################
+<#lapTimes_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "raceId", "driverId", "lap", "position", "time", "milliseconds" FROM "lapTimes"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/lapTimes/raceId={raceId};driverId={driverId};lap={lap}" ;
+    rr:class <http://formula_1.org/lapTimes>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "lapTimes {raceId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#driverId> ;
+    rr:objectMap [ rml:reference "driverId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#ref-driverId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/drivers/driverId={driverId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#lap> ;
+    rr:objectMap [ rml:reference "lap" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#position> ;
+    rr:objectMap [ rml:reference "position" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#time> ;
+    rr:objectMap [ rml:reference "time" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/lapTimes#milliseconds> ;
+    rr:objectMap [ rml:reference "milliseconds" ]
+  ]
+ .
+
+######################################################################
+# Table: pitStops
+######################################################################
+<#pitStops_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "raceId", "driverId", "stop", "lap", "time", "duration", "milliseconds" FROM "pitStops"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/pitStops/raceId={raceId};driverId={driverId};stop={stop}" ;
+    rr:class <http://formula_1.org/pitStops>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "pitStops {raceId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#driverId> ;
+    rr:objectMap [ rml:reference "driverId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#ref-driverId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/drivers/driverId={driverId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#stop> ;
+    rr:objectMap [ rml:reference "stop" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#lap> ;
+    rr:objectMap [ rml:reference "lap" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#time> ;
+    rr:objectMap [ rml:reference "time" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#duration> ;
+    rr:objectMap [ rml:reference "duration" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/pitStops#milliseconds> ;
+    rr:objectMap [ rml:reference "milliseconds" ]
+  ]
+ .
+
+######################################################################
+# Table: qualifying
+######################################################################
+<#qualifying_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "qualifyId", "raceId", "driverId", "constructorId", "number", "position", "q1", "q2", "q3" FROM "qualifying"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/qualifying/qualifyId={qualifyId}" ;
+    rr:class <http://formula_1.org/qualifying>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "qualifying {qualifyId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#qualifyId> ;
+    rr:objectMap [ rml:reference "qualifyId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#driverId> ;
+    rr:objectMap [ rml:reference "driverId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#ref-driverId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/drivers/driverId={driverId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#constructorId> ;
+    rr:objectMap [ rml:reference "constructorId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#ref-constructorId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/constructors/constructorId={constructorId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#number> ;
+    rr:objectMap [ rml:reference "number" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#position> ;
+    rr:objectMap [ rml:reference "position" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#q1> ;
+    rr:objectMap [ rml:reference "q1" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#q2> ;
+    rr:objectMap [ rml:reference "q2" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/qualifying#q3> ;
+    rr:objectMap [ rml:reference "q3" ]
+  ]
+ .
+
+######################################################################
+# Table: status
+######################################################################
+<#status_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "statusId", "status" FROM "status"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/status/statusId={statusId}" ;
+    rr:class <http://formula_1.org/status>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "status {statusId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/status#statusId> ;
+    rr:objectMap [ rml:reference "statusId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/status#status> ;
+    rr:objectMap [ rml:reference "status" ]
+  ]
+ .
+
+######################################################################
+# Table: results
+######################################################################
+<#results_Mapping>
+  rml:logicalSource [
+    rml:source "formula_1.sqlite" ;
+    rml:referenceFormulation ql:SQL ;
+    rml:query '''SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results"'''
+  ] ;
+  rr:subjectMap [
+    rr:template "http://formula_1.org/results/resultId={resultId}" ;
+    rr:class <http://formula_1.org/results>
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [
+      rr:template "results {resultId}" ;
+      rr:termType rr:Literal
+    ]
+  ]
+ ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#resultId> ;
+    rr:objectMap [ rml:reference "resultId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#raceId> ;
+    rr:objectMap [ rml:reference "raceId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#ref-raceId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/races/raceId={raceId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#driverId> ;
+    rr:objectMap [ rml:reference "driverId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#ref-driverId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/drivers/driverId={driverId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#constructorId> ;
+    rr:objectMap [ rml:reference "constructorId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#ref-constructorId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/constructors/constructorId={constructorId}" ;
+      rr:termType rr:IRI
+    ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#number> ;
+    rr:objectMap [ rml:reference "number" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#grid> ;
+    rr:objectMap [ rml:reference "grid" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#position> ;
+    rr:objectMap [ rml:reference "position" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#positionText> ;
+    rr:objectMap [ rml:reference "positionText" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#positionOrder> ;
+    rr:objectMap [ rml:reference "positionOrder" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#points> ;
+    rr:objectMap [ rml:reference "points" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#laps> ;
+    rr:objectMap [ rml:reference "laps" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#time> ;
+    rr:objectMap [ rml:reference "time" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#milliseconds> ;
+    rr:objectMap [ rml:reference "milliseconds" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#fastestLap> ;
+    rr:objectMap [ rml:reference "fastestLap" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#rank> ;
+    rr:objectMap [ rml:reference "rank" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#fastestLapTime> ;
+    rr:objectMap [ rml:reference "fastestLapTime" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#fastestLapSpeed> ;
+    rr:objectMap [ rml:reference "fastestLapSpeed" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#statusId> ;
+    rr:objectMap [ rml:reference "statusId" ]
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate <http://formula_1.org/results#ref-statusId> ;
+    rr:objectMap [
+      rr:template "http://formula_1.org/status/statusId={statusId}" ;
+      rr:termType rr:IRI
+    ]
+  ]
+ .

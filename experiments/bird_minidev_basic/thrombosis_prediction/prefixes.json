@@ -1,0 +1,6 @@
+{
+  "thrombosis_prediction_db": "<http://thrombosis_prediction.org/>",
+  "Examination": "<http://thrombosis_prediction.org/Examination/>",
+  "Patient": "<http://thrombosis_prediction.org/Patient/>",
+  "Laboratory": "<http://thrombosis_prediction.org/Laboratory/>"
+}

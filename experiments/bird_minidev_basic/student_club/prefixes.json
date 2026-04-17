@@ -1,0 +1,11 @@
+{
+  "student_club_db": "<http://student_club.org/>",
+  "event": "<http://student_club.org/event/>",
+  "major": "<http://student_club.org/major/>",
+  "zip_code": "<http://student_club.org/zip_code/>",
+  "attendance": "<http://student_club.org/attendance/>",
+  "budget": "<http://student_club.org/budget/>",
+  "expense": "<http://student_club.org/expense/>",
+  "income": "<http://student_club.org/income/>",
+  "member": "<http://student_club.org/member/>"
+}

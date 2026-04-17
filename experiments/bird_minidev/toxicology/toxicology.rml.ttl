@@ -1,0 +1,165 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix tox: <http://toxkg.org/schema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+######################################################################
+# Molecule Mapping
+######################################################################
+<#MoleculeMapping>
+    rml:logicalSource [
+        rml:source "toxicology.sqlite" ;
+        rml:referenceFormulation ql:SQL ;
+        rml:query """
+        SELECT molecule_id,
+               CASE label WHEN '+' THEN 'Carcinogenic'
+                          WHEN '-' THEN 'Non-Carcinogenic'
+                          ELSE 'Unknown' END AS carcinogenicity
+        FROM molecule
+        """
+    ] ;
+
+    rr:subjectMap [
+        rr:template "http://toxkg.org/molecule/{molecule_id}" ;
+        rr:class tox:Molecule ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate tox:hasCarcinogenicity ;
+        rr:objectMap [ rml:reference "carcinogenicity" ]
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rr:template "Molecule {molecule_id}" ]
+    ] .
+
+######################################################################
+# Atom Mapping
+######################################################################
+<#AtomMapping>
+    rml:logicalSource [
+        rml:source "toxicology.sqlite" ;
+        rml:referenceFormulation ql:SQL ;
+        rml:query """
+        SELECT atom_id,
+               molecule_id,
+               LOWER(element) AS element_abbrev,
+               CASE LOWER(element)
+                    WHEN 'cl' THEN 'Chlorine'
+                    WHEN 'c'  THEN 'Carbon'
+                    WHEN 'h'  THEN 'Hydrogen'
+                    WHEN 'o'  THEN 'Oxygen'
+                    WHEN 's'  THEN 'Sulfur'
+                    WHEN 'n'  THEN 'Nitrogen'
+                    WHEN 'p'  THEN 'Phosphorus'
+                    WHEN 'na' THEN 'Sodium'
+                    WHEN 'br' THEN 'Bromine'
+                    WHEN 'f'  THEN 'Fluorine'
+                    WHEN 'i'  THEN 'Iodine'
+                    WHEN 'sn' THEN 'Tin'
+                    WHEN 'pb' THEN 'Lead'
+                    WHEN 'te' THEN 'Tellurium'
+                    WHEN 'ca' THEN 'Calcium'
+                    ELSE 'Unknown Element'
+               END AS element_name
+        FROM atom
+        """
+    ] ;
+
+    rr:subjectMap [
+        rr:template "http://toxkg.org/atom/{atom_id}" ;
+        rr:class tox:Atom ;
+    ] ;
+
+    # Link atom → molecule
+    rr:predicateObjectMap [
+        rr:predicate tox:partOfMolecule ;
+        rr:objectMap [ rr:template "http://toxkg.org/molecule/{molecule_id}" ; rr:termType rr:IRI ]
+    ] ;
+
+    # Store element name
+    rr:predicateObjectMap [
+        rr:predicate tox:element ;
+        rr:objectMap [ rml:reference "element_name" ]
+    ] ;
+
+    # Human-readable index label for GRASP
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [
+            rr:template "Atom {atom_id} ({element_name})"
+        ]
+    ] .
+
+######################################################################
+# Bond Mapping
+######################################################################
+<#BondMapping>
+    rml:logicalSource [
+        rml:source "toxicology.sqlite" ;
+        rml:referenceFormulation ql:SQL ;
+        rml:query """
+        SELECT bond_id,
+               molecule_id,
+               CASE bond_type
+                    WHEN '-' THEN 'single bond'
+                    WHEN '=' THEN 'double bond'
+                    WHEN '#' THEN 'triple bond'
+                    ELSE 'unknown bond'
+               END AS bond_type
+        FROM bond
+        """
+    ] ;
+
+    rr:subjectMap [
+        rr:template "http://toxkg.org/bond/{bond_id}" ;
+        rr:class tox:Bond ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate tox:partOfMolecule ;
+        rr:objectMap [ rr:template "http://toxkg.org/molecule/{molecule_id}" ; rr:termType rr:IRI ]
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate tox:bondType ;
+        rr:objectMap [ rml:reference "bond_type" ]
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rr:template "Bond {bond_id} ({bond_type})" ]
+    ] .
+
+
+######################################################################
+# Connectivity Mapping: Bond connects two atoms
+######################################################################
+<#ConnectivityMapping>
+    rml:logicalSource [
+        rml:source "toxicology.sqlite" ;
+        rml:referenceFormulation ql:SQL ;
+        rml:query """
+        SELECT atom_id,
+               atom_id2,
+               bond_id
+        FROM connected
+        """
+    ] ;
+
+    rr:subjectMap [
+        rr:template "http://toxkg.org/bond/{bond_id}" ;
+        rr:termType rr:IRI
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate tox:connectsAtom ;
+        rr:objectMap [ rr:template "http://toxkg.org/atom/{atom_id}" ; rr:termType rr:IRI ]
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate tox:connectsAtom ;
+        rr:objectMap [ rr:template "http://toxkg.org/atom/{atom_id2}" ; rr:termType rr:IRI ]
+    ] .

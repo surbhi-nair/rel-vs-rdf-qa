@@ -1,0 +1,11 @@
+{
+  "codebase_community_db": "<http://codebase_community.org/>",
+  "badges": "<http://codebase_community.org/badges/>",
+  "comments": "<http://codebase_community.org/comments/>",
+  "postHistory": "<http://codebase_community.org/postHistory/>",
+  "postLinks": "<http://codebase_community.org/postLinks/>",
+  "posts": "<http://codebase_community.org/posts/>",
+  "tags": "<http://codebase_community.org/tags/>",
+  "users": "<http://codebase_community.org/users/>",
+  "votes": "<http://codebase_community.org/votes/>"
+}

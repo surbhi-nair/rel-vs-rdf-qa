@@ -1,0 +1,9 @@
+{
+  "card_games_db": "<http://card_games.org/>",
+  "cards": "<http://card_games.org/cards/>",
+  "foreign_data": "<http://card_games.org/foreign_data/>",
+  "legalities": "<http://card_games.org/legalities/>",
+  "sets": "<http://card_games.org/sets/>",
+  "set_translations": "<http://card_games.org/set_translations/>",
+  "rulings": "<http://card_games.org/rulings/>"
+}
