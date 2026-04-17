@@ -24,7 +24,7 @@ We take 500 questions from the BIRD-SQL Mini-dev benchmark across 11 databases, 
 | Strict F1 | **65.33%** | 21.25% |
 | Relaxed F1 | **71.90%** | 47.69% |
 | LLM accuracy judge | **~66%** | ~51% |
-| LLM preference judge | 31.4% | **64.1%** |
+| LLM preference judge | 31.4% | **64%** |
 | Cost per 500 questions | ~$40 | **~$5** |
 
 ---
