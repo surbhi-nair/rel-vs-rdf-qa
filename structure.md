@@ -40,14 +40,14 @@ Contains the main experiment folders and their outputs.
 		- `Qleverfile` - configuration for Qlever to run on the generated RDF data.
 		- `prefixes.json` - JSON file containing prefixes used in GRASP evaluation
 	- `results/` - holds all results from GRASP runs and evaluation results
-		- `8` - contains results from experiments done with evidence
-		- `10` - contains results from experiments done without evidence
+		- `evidence` - contains results from experiments done with evidence
+		- `no_evidence` - contains results from experiments done without evidence
 
 ## Key Result Files:
-- `experiments/bird_minidev/results/8/f1_all_scores.json` - Contains the **F1 scores** for all evaluated questions for the experiment with evidence.
-- `experiments/bird_minidev/results/8/judge_results/judgec_results.json` - Contains the LLM-Judge(*Accuracy*) results for the experiments with evidence.
-- `experiments/bird_minidev/results/8/judge_results/13/judge_3_evaluation_results.json` - Contains the LLM-Judge(*Preference*) results for the experiments with evidence.
-- `experiments/bird_minidev/results/8/judge_results/13/merged_output.json` - Contains the merged output of the LLM-Judge(*Preference*) results along with the LLM-Judge(*Accuracy*) results for the experiments with evidence.
+- `experiments/bird_minidev/results/evidence/f1_all_scores.json` - Contains the **F1 scores** for all evaluated questions for the experiment with evidence.
+- `experiments/bird_minidev/results/evidence/judge_results/judge_1_evaluation_results.json` - Contains the LLM-Judge(*Accuracy*) results for the experiments with evidence.
+- `experiments/bird_minidev/results/evidence/judge_results/judge_3_evaluation_results.json` - Contains the LLM-Judge(*Preference*) results for the experiments with evidence.
+- `experiments/bird_minidev/results/evidence/judge_results/0/merged_output.json` - Contains the merged output of the LLM-Judge(*Preference*) results along with the LLM-Judge(*Accuracy*) results for the experiments with evidence.
 - `CHESS/results/dev` - Contains the results from CHESS experiment alone.
 
 ## CHESS
